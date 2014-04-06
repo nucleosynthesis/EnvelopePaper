@@ -18,6 +18,17 @@ $^1$Imperial College London, $^2$CERN}
 
 \maketitle
 
+\begin{abstract}
+A common problem in data analysis is measuring a narrow signal on a smoothly
+varying background. In cases where the background functional form is not
+{\it a priori} known, then some extra uncertainty must be assigned to the
+signal parameters because of this lack of knowledge.
+A method for assigning an error from this cause is presented. It is based on
+treating the function uncertainty as a discrete nuisance parameter and finding
+an ``envelope'' which encompasses the lowest log-likelihood values for any given
+signal parameter. The bias and coverage of this method are shown to be good.
+\end{abstract}
+
 \tableofcontents
 \newpage
 
@@ -27,6 +38,11 @@ $^1$Imperial College London, $^2$CERN}
 \input correction.tex
 \input discussion.tex
 \input conclusions.tex
+
+\section{Ackowledgements}
+We thank Louis Lyons for informative discussions. This work was partially
+supported by STFC, UK.
+
 \input references.tex
 
 \end{document}
