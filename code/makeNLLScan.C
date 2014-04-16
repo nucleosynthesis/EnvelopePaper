@@ -1,8 +1,8 @@
 // Simple Macro to produce the NLL scan of the Toy Data
 #include "RooAbsArg.h"
 TGraph *nll2scan(double corr=0.5, RooAbsData *dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
-   double xlow = -10.;
-   double xhigh= 10.;
+   double xlow = -3.;
+   double xhigh= 6.;
    double xstep= 0.1;
 
    double cfactor = corr*(pdf->getParameters(*dat)->getSize());
@@ -18,6 +18,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData *dat, RooAbsPdf &pdf, RooRealVar &m
 	graph.SetPoint(cpoint,x,2*(nll.getVal()+cfactor));
 	cpoint++;
    }
+   graph->SetLineWidth(2);
    graph->GetXaxis()->SetTitle("#mu");
 
    return graph;   
@@ -34,8 +35,8 @@ void makeNLLScan(){
 
    // Build signal model
    RooRealVar mean("mean","mean",125); mean.setConstant();
-   RooRealVar sigma("sigma","sigma",1.2); sigma.setConstant();
-   RooRealVar nsignal_const("nsignal_const","nsignal_const",20); nsignal_const.setConstant();
+   RooRealVar sigma("sigma","sigma",1.19); sigma.setConstant();
+   RooRealVar nsignal_const("nsignal_const","nsignal_const",50.8); nsignal_const.setConstant();
 
    RooGaussian sig_pdf("gaus","gaus",*x,mean,sigma);
    
@@ -72,6 +73,60 @@ void makeNLLScan(){
 	gr->SetLineStyle(style);
 	
 	if (pdfit_c == 0) gr->Draw("ALP");
+	else gr->Draw("LP");
+	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
+	listofpdfs.Add(gr);
+        pdfit_c++;
+	
+   }
+   //  
+   //while (arg = (RooAbsArg*)pdfit->Next()) {
+   for (int typeco=0;typeco<maxpdfs;typeco++){
+ 	// The pdf made from the new background model
+        RooAbsPdf *bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_exp%d",typeco));
+	if (!bkg_pdf) continue;
+   	RooAddPdf spdf("splusb","splusb",RooArgList(sig_pdf,*bkg_pdf),RooArgList(nsig,nbkg));
+	TGraph *gr = nll2scan(0.5,datatoy,spdf,mu);
+	if (pdfit_c!=0 && pdfit_c%6==0) style++;
+	gr->SetLineColor(color[pdfit_c%7]);
+	gr->SetLineStyle(style);
+	
+	if (pdfit_c == 0) gr->Draw("LP");
+	else gr->Draw("LP");
+	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
+	listofpdfs.Add(gr);
+        pdfit_c++;
+	
+   }
+   //while (arg = (RooAbsArg*)pdfit->Next()) {
+   for (int typeco=0;typeco<maxpdfs;typeco++){
+ 	// The pdf made from the new background model
+        RooAbsPdf *bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_pow%d",typeco));
+	if (!bkg_pdf) continue;
+   	RooAddPdf spdf("splusb","splusb",RooArgList(sig_pdf,*bkg_pdf),RooArgList(nsig,nbkg));
+	TGraph *gr = nll2scan(0.5,datatoy,spdf,mu);
+	if (pdfit_c!=0 && pdfit_c%6==0) style++;
+	gr->SetLineColor(color[pdfit_c%7]);
+	gr->SetLineStyle(style);
+	
+	if (pdfit_c == 0) gr->Draw("LP");
+	else gr->Draw("LP");
+	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
+	listofpdfs.Add(gr);
+        pdfit_c++;
+	
+   }
+   for (int typeco=0;typeco<maxpdfs;typeco++){
+ 	// The pdf made from the new background model
+        RooAbsPdf *bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_lau%d",typeco));
+	if (!bkg_pdf) continue;
+   	RooAddPdf spdf("splusb","splusb",RooArgList(sig_pdf,*bkg_pdf),RooArgList(nsig,nbkg));
+	TGraph *gr = nll2scan(0.5,datatoy,spdf,mu);
+	if (pdfit_c!=0 && pdfit_c%6==0) style++;
+	gr->SetLineColor(color[pdfit_c%7]);
+	gr->SetLineStyle(style);
+	
+	if (pdfit_c == 0) gr->Draw("LP");
 	else gr->Draw("LP");
 	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
 	listofpdfs.Add(gr);
