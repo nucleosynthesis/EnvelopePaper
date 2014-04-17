@@ -10,17 +10,22 @@ TGraph *nll2scan(double corr=0.5, RooAbsData *dat, RooAbsPdf &pdf, RooRealVar &m
    TGraph *graph = new TGraph();
    RooAbsReal *nll = pdf.createNLL(*dat);
    RooMinimizer minim(*nll);
-
+   double minnll = 10;
+   double minmu=-1;
    int cpoint=0;
    for (double x=xlow;x<=xhigh;x+=xstep) {
 	mu.setVal(x);
 	minim.minimize("Minuit","migrad");	
 	graph.SetPoint(cpoint,x,2*(nll.getVal()+cfactor));
+	if (nll.getVal() < minnll) {
+		minnll=nll.getVal();
+		minmu = x;
+	}
 	cpoint++;
    }
    graph->SetLineWidth(2);
    graph->GetXaxis()->SetTitle("#mu");
-
+   mu.setVal(minmu);
    return graph;   
 }
 
@@ -46,6 +51,9 @@ void makeNLLScan(){
    RooRealVar mu("r","r",1,-10,10);
    RooFormulaVar nsig("nsig","nsig","@0*@1",RooArgList(mu,nsignal_const));
    mu.setConstant();
+
+   RooPlot *pl = x->frame();
+   datatoy->plotOn(pl,RooFit::Binning(80));
 
    TCanvas *can = new TCanvas();
    // Loop through and build pdfs!, would have done this from a rooargset but roofit refuses to make one without randomly adding additional crap from the library!?!!?!?!
@@ -74,6 +82,7 @@ void makeNLLScan(){
 	
 	if (pdfit_c == 0) gr->Draw("ALP");
 	else gr->Draw("LP");
+	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
 	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
 	listofpdfs.Add(gr);
         pdfit_c++;
@@ -93,6 +102,7 @@ void makeNLLScan(){
 	
 	if (pdfit_c == 0) gr->Draw("LP");
 	else gr->Draw("LP");
+	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
 	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
 	listofpdfs.Add(gr);
         pdfit_c++;
@@ -111,6 +121,7 @@ void makeNLLScan(){
 	
 	if (pdfit_c == 0) gr->Draw("LP");
 	else gr->Draw("LP");
+	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
 	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
 	listofpdfs.Add(gr);
         pdfit_c++;
@@ -128,11 +139,17 @@ void makeNLLScan(){
 	
 	if (pdfit_c == 0) gr->Draw("LP");
 	else gr->Draw("LP");
+	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
 	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
 	listofpdfs.Add(gr);
         pdfit_c++;
 	
    }
    leg->Draw();
+
+   TCanvas *can_fits = new TCanvas();
+   pl->SetTitle("");
+   pl->GetXaxis()->SetTitle("m_{#gamma#gamma}");
+   pl->Draw();
    
 }
