@@ -1,2 +1,55 @@
-\section{Discussion}
+\section{Discussion (3 pages)}
 \label{sec:discussion}
+
+\subsection{Application to real world case}
+\label{sec:discussion:higgs}
+
+HOW APPLIED TO HIGGS ANALYSIS.
+
+The actual $H \rightarrow \gamma\gamma$ analysis is significantly more
+complex than the simplified version used here. In particular, the 2011 data
+sample is split into five categories (which become nine for the 2012 data).
+Because the categories (by definition) have different selection criteria,
+they can have different background shapes.
+There is no {\it a priori} reason to make any assumptions that the functions
+used in each category should be the same. Hence, each category should be
+tested with all functions, in a similar way to the above.
+
+However, the major complication arises because there are common systematics 
+across the categories, arising from nuisance parameters in the signal
+model.
+In the absence of these common nuisance parameters,
+the different categories could be profiled independently, using the
+minimum envelope technique to produce a curve per category. These could then
+be summed to give the overall profile curve. However, with common
+nuisance parameters, all categories must be profiled at the same time.
+Since minimisation code to handle the 
+discrete nuisance parameter identifying the
+function seems difficult, in practical terms, this means that all possible
+combinations of each function in each category must be fitted.
+The minimum envelope made from the results of all these combinations would
+then be found. While this is conceptually straightforward, the actual
+implementation is probably prohibitive. For example, using the 16 functions
+discussed above, then there would be $16^5 \sim$ 1M combinations of functions
+to be fitted for the 2011 data (and $16^9 \sim$ 70B combinations for the
+2012 data).
+
+It happens that the correlations of the nuisance parameters
+are relatively small.
+It may be a good approximation 
+to first identify the two or three most likely functions in each category
+which will contribute to the minimum envelope, ignoring the correlations.
+Only these functions would then be used in the full fit, giving at most
+$3^5 \sim 200$ or $3^9 \sim$ 20k combinations. Studies into the 
+implementation are ongoing.
+
+\subsection{Envelope smoothing}
+\label{sec:discussion:smoothing}
+
+DISCRETE FUNCTIONS MEAN NON-SMOOTH ENVELOPE
+
+APPLY SMOOTHING USING [SUM 2NLL EXP(-2NLL/2)]/[SUM EXP(-2NLL/2)]?
+
+
+\subsection{Bayesian equivalent method}
+\label{sec:discussion:bayesian}
