@@ -1,9 +1,45 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Introduction; basic concept and parallel with continuous nuisance parameters.
+A very common problem in data analysis is to determine the parameters of
+a narrow signal which occurs on a wide, smoothly varying background. If the
+background function shape is not know {\it a priori}, then there will be 
+some uncertainty in the signal parameters resulting from the uncetainty in
+the function to use. This issue is exacerbated in the case of a small signal to
+background ratio.
 
-Mention CMS Higgs analysis~\cite{ref:introduction:higgs}.
+A common approach is to try various different plausible functions and 
+determine the spread of the signal parameters when using these functions.
+However, these methods tend to have some degree of arbitrariness and so
+a new approach is discussed in this paper.
+This method was developed as part of the analysis of data at the CMS experiment
+which resulted in the discovery of the Higgs
+boson and was applied to the case where the Higgs decays to two photons, which
+results in a narrow signal on a large background~\cite{ref:introduction:higgs}.
 
-Outline of paper; section~\ref{sec:concept} explains the basic concept in more
-detail.
+This method tries to be less 
+arbitrary and treats the uncertainty associated with the
+background shape function in a way
+which is more like the other
+uncertainties associated with the measurement, i.e. as a systematic error
+which is handled as a nuisance parameter.
+There are two major new parts to this approach, namely the method for
+treating the choice of function as a nuisance parameter, and how to compare 
+functions with different numbers of parameters.
+
+
+The concept of this approach is described in Section~\ref{sec:concept}.
+The application of the method to functions with the same number of parameters
+is described in Section~\ref{sec:functions} and to functions with different
+numbers of paremeters in Section~\ref{sec:correction}. Further discussion on
+the method, including its practical application to the real-world problem of
+the Higgs measurements, is given in Section~\ref{sec:discussion}.
+
+Within this paper, twice the negative of the logarithm of the likelihood
+function is denoted by 2NLL. The fits discussed are binned and the 
+likelihood used for each bin is actually the likelihood ratio to the best
+possible likelihood given the observed data, i.e.
+\begin{displaymath}
+{\rm 2NLL} = \mu_i - n_i + n_i \log\left(\frac{n_i}{\mu_i}\right)
+\end{displaymath}
+
