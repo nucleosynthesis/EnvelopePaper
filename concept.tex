@@ -60,7 +60,9 @@ The critical point is that the original 2NLL minimum profile curve as a function
 of $\mu$ encloses the curves for all possible values of the nuisance
 parameters.
 
-Now consider finding the profile curve in a different way. Each set of nuisance
+Now consider finding the profile curve in a different way, illustrated
+in figure~\ref{fig:concept:cartoon}.
+Each set of nuisance
 parameter values will result in a curve, the steepness of which reflects 
 the statistical error only. Consider picking many different sets of nuisance
 parameter values; each gives one such curve. Drawing an envelope around the
@@ -71,8 +73,20 @@ principle, sampling the parameter space and then finding the enclosing
 minimum envelope should give the profile curve required.
 Note, it would of course be possible to mix the two methods, i.e.
 choose sets of only some of the parameter values and fit for the others.
-
-NEED GOOD VERSIONS OF CARTOONS OF ENVELOPE
+%
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.6\textwidth]{concept/envelope_cartoon.pdf}
+\caption{Illustration of construction of the envelope (green, dot-dashed line)
+by choosing several fixed values of the nuisance parameters (red, dashed lines)
+when performing a profile likelihood scan for a variable of interest $x$.
+The 2NLL profile curve for the nuisance parameters fixed to the best fit
+values is shown by the blue, solid line. The full profile curve allowing the
+nuisance parameters to be fitted for every value of $x$ is shown by the 
+black, solid line. For many fixed values of the nuisance parameters,
+the envelope approximates the full profile curve.}
+\label{fig:concept:cartoon}
+\end{figure}
 
 \subsection{Background function uncertainty}
 \label{sec:concept:functions}

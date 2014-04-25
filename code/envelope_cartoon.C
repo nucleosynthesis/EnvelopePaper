@@ -69,7 +69,7 @@ void envelope_cartoon(){
   TGraph *envelope = new TGraph();
   envelope->SetLineWidth(3);
   envelope->SetLineStyle(4);
-  envelope->SetLineColor(kMagenta);
+  envelope->SetLineColor(kGreen);
   int npoints = 500;
   double x,y;
   for (int p=0; p<npoints; p++){
@@ -101,5 +101,5 @@ void envelope_cartoon(){
   leg->Draw("same");
   c.Update();
   c.Modified();
-  c.Print("envelope_cartoon.pdf");
+  c.Print("../concept/envelope_cartoon.pdf");
 }
