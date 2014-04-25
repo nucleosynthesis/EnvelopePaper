@@ -44,7 +44,7 @@ C = \chi^{\prime 2} = - 2\ln(L) + \chi^{\prime 2} - \chi^2
 Besides being a function of the number of bins and parameters,
 the size of the correction $\chi^{\prime 2} - \chi^2$
 depends on the original fit quality
-(or equivalently p-value). Figure~\ref{fig:parameters:ChisqConv1}
+(or equivalently p-value). Figure~\ref{fig:correction:DeltaChiSq}
 shows examples of the size of the correction as a function of the
 fit p-value, when correcting for various numbers of parameters. It
 is seen that the correction is approximately given by
@@ -52,6 +52,18 @@ is seen that the correction is approximately given by
 \chi^{\prime 2} - \chi^2 \approx N_{\rm par}
 \end{displaymath}
 for the central range of p-values.
+%
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.45\textwidth]{correction/DeltaChiSq1.pdf}
+\includegraphics[width=0.45\textwidth]{correction/DeltaChiSq2.pdf}
+\caption{Change of $\chi^2$ when correcting for between one and five parameters
+in a fit with 320 bins. The change to the $\chi^2$ as a function of the
+original p-value is shown on the left. The distribution of the change of
+the $\chi^2$ assuming a flat p-value distribution is shown on the right.}
+\label{fig:correction:DeltaChiSq}
+\end{figure}
+
 
 The correction is monotonically increasing as the p-value gets smaller.
 Hence, when correcting the 2NLL profile curve, the fits further away from

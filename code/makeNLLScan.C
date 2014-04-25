@@ -146,10 +146,11 @@ void makeNLLScan(){
 	
    }
    leg->Draw();
+   can->Print("Profiles.png");
 
    TCanvas *can_fits = new TCanvas();
    pl->SetTitle("");
    pl->GetXaxis()->SetTitle("m_{#gamma#gamma}");
    pl->Draw();
-   
+   can_fits->Print("BestFits.png");
 }

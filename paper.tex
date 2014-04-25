@@ -1,24 +1,16 @@
-\documentclass[11pt,a4paper]{article}
-\usepackage{graphicx}
-\usepackage{rotating}
+\pdfoutput=1 % only if pdf/png/jpg images are used
+\documentclass{JINST}
 
-\oddsidemargin=0pt           % No extra space wasted after first inch.
-\evensidemargin=0pt          % Ditto (for two-sided output).
-\topmargin=0pt               % Same for top of page.
-\headheight=0pt              % Don't waste any space on unused headers.
-\headsep=0pt
-\textwidth=16cm              % Effectively controls the right margin.
-\textheight=24cm
+\title{Handling uncertainties in background shapes: the envelope method}
 
-\begin{document}
-\title{
-\Large \bf Handling uncertainties in background shapes: the envelope method}
-\author{P.~D.~Dauncey$^1$, G.~J.~Davies$^1$, M.~''Sandy''~Kenzie$^2$, N.~Wardle$^2$\\
-$^1$Imperial College London, $^2$CERN}
+\author{P.~D.~Dauncey$^a$\thanks{Corresponding author.},
+M.~Kenzie$^b$, N.~Wardle$^b$ and G.~J.~Davies$^a$\\
+\llap{$^a$}Department of Physics, Imperial College London, London, UK.\\
+\llap{$^b$}CERN, Geneva, Switzerland.\\
+E-mail: \email{P.Dauncey@imperial.ac.uk}}
 
-\maketitle
 
-\begin{abstract}
+\abstract{
 A common problem in data analysis is measuring a narrow signal on a smoothly
 varying background. In cases where the background functional form is not
 {\it a priori} known, then some extra uncertainty must be assigned to the
@@ -27,10 +19,11 @@ A method for assigning an error from this cause is presented. It is based on
 treating the function uncertainty as a discrete nuisance parameter and finding
 an ``envelope'' which encompasses the lowest log-likelihood values for any given
 signal parameter. The bias and coverage of this method are shown to be good.
-\end{abstract}
+}
 
-\tableofcontents
-\newpage
+\keywords{Analysis and statistical methods; Simulation methods and programs}
+
+\begin{document}
 
 \input introduction.tex
 \input concept.tex
@@ -39,12 +32,12 @@ signal parameter. The bias and coverage of this method are shown to be good.
 \input discussion.tex
 \input conclusions.tex
 
-\section{Ackowledgements}
+\acknowledgments
 We thank Chris Seez and Louis Lyons for informative discussions.
 This work was partially supported by the Science and Technology Facilities
 Council, UK.
 
-\bibliographystyle{unsrt}
+\bibliographystyle{JHEP}
 \bibliography{paper}
 %\input{paper.bbl}
 
