@@ -29,6 +29,7 @@ using namespace std;
 using namespace RooFit;
 
 void envelope_cartoon(){
+  gROOT->ProcessLine(".x paperStyle.C");
   // PLOT 1
   TH1F dummy("d","",1,120,130);
   dummy.GetYaxis()->SetRangeUser(0.,5.5);

@@ -23,7 +23,7 @@
   hggStyle->SetCanvasDefX(0);   //POsition on screen
   hggStyle->SetCanvasDefY(0);
 
-  hggStyle->SetPadLeftMargin(0.13);//0.16);
+  hggStyle->SetPadLeftMargin(0.16);//0.16);
   hggStyle->SetPadRightMargin(0.1);//0.02);
   hggStyle->SetPadTopMargin(0.085);//0.02);
   hggStyle->SetPadBottomMargin(0.12);//0.02);
@@ -31,9 +31,9 @@
     // For hgg axis titles:
   hggStyle->SetTitleColor(1, "XYZ");
   hggStyle->SetTitleFont(42, "XYZ");
-  hggStyle->SetTitleSize(0.05, "XYZ");
+  hggStyle->SetTitleSize(0.045, "XYZ");
   hggStyle->SetTitleXOffset(0.95);//0.9);
-  hggStyle->SetTitleYOffset(1.18); // => 1.15 if exponents
+  hggStyle->SetTitleYOffset(1.4); // => 1.15 if exponents
 
   // For hgg axis labels:
   hggStyle->SetLabelColor(1, "XYZ");
