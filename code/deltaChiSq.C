@@ -1,8 +1,9 @@
 void deltaChiSq() {
-  gROOT->SetStyle("Plain");
+  gROOT->ProcessLine(".x paperStyle.C");
+  //gROOT->SetStyle("Plain");
   TCanvas *canv(new TCanvas());
   gStyle->SetOptStat(0);
-  gStyle->SetPalette(1);
+  //gStyle->SetPalette(1);
 
   //TFile *file=TFile::Open("RooDumb1249.root");
   TH1F *h1;
