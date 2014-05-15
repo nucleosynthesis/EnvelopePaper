@@ -8,12 +8,13 @@
 #include "RooFitResult.h"
 #include "TF1.h"
 #include "TMatrixD.h"
+#include "TAxis.h"
 
 #include "../interface/ProfileMultiplePdfs.h"
 
 ProfileMultiplePdfs::ProfileMultiplePdfs(bool verbose):
 	verbose_(verbose),
-	corr_pdof_(0.)
+	alreadyChecked_(false)
 {
   listOfPdfs.clear();
   //listOfPdfs = new RooArgList();
@@ -124,10 +125,23 @@ void ProfileMultiplePdfs::saveProfiles(TFile *outfile){
 	}
 }
 
-void ProfileMultiplePdfs::addProfile(TGraph* graph, int npars){
-	profileGraphsWithNPars.insert(make_pair(string(graph->GetName()),make_pair(graph,npars)));
+void ProfileMultiplePdfs::addProfile(TGraph* graph, float corr_val){
+	TGraph *correction = new TGraph();
+	double x,y;
+	for (int p=0; p<graph->GetN(); p++) {
+		graph->GetPoint(p,x,y);
+		correction->SetPoint(p,x,corr_val);
+	}
+	// this will need to be cleaned up later
+	cleanUp_.push_back(correction);
+	addProfile(graph,correction);
 }
 
+void ProfileMultiplePdfs::addProfile(TGraph* graph, TGraph* correction){
+	profileGraphsWithCorrectionGraph.insert(make_pair(string(graph->GetName()),make_pair(graph,correction)));
+}
+
+/*
 void ProfileMultiplePdfs::printProfilesWithNPars(){
 	
 	cout << "List of profiles with n free params" << endl;
@@ -135,38 +149,75 @@ void ProfileMultiplePdfs::printProfilesWithNPars(){
 		cout << it->first << " : " << it->second.first->GetName() << " -- " << it->second.second << " -- " << it->second.first->GetN() << endl;
 	}
 }
+*/
+
+void ProfileMultiplePdfs::printProfilesWithCorrectionGraph(){
+	
+	cout << "List of profiles with corrections" << endl;
+	for (map<string,pair<TGraph*,TGraph*> >::iterator it=profileGraphsWithCorrectionGraph.begin(); it!=profileGraphsWithCorrectionGraph.end(); it++){
+		cout << it->first << " : " << it->second.first->GetName() << " -- " << it->second.second->GetName() << " -- " << it->second.first->GetN() << " -- " << it->second.second->GetN() << endl;
+	}
+}
+
+void ProfileMultiplePdfs::checkPointsInGraphs() {
+	
+	if (alreadyChecked_) return;
+	else {
+		int npoints = profileGraphsWithCorrectionGraph.begin()->second.first->GetN();
+		for (map<string,pair<TGraph*,TGraph*> >::iterator it=profileGraphsWithCorrectionGraph.begin(); it!=profileGraphsWithCorrectionGraph.end(); it++){
+			if (it->second.first->GetN()!=npoints){
+				cerr << "Unequal numbers of points between graphs to sum. Ahhh!" << endl;
+				exit(1);
+			}
+			if (it->second.second->GetN()!=npoints){
+				cerr << "Unequal number of points between graph and correction graph. Ahhh!" << endl;
+				exit(1);
+			}
+		}
+	}
+}
 
 void ProfileMultiplePdfs::constructEnvelope(string ext){
 
-	if (profileGraphsWithNPars.size()==0) {
+	if (profileGraphsWithCorrectionGraph.size()==0) {
 		cerr << "No graphs to return envelope for! " << endl;
 		exit(1);
 	}
-	else if (profileGraphsWithNPars.size()==1) {
-		envelope_ = profileGraphsWithNPars.begin()->second.first;
+	else if (profileGraphsWithCorrectionGraph.size()==1) {
+		envelope_ = profileGraphsWithCorrectionGraph.begin()->second.first;
 	}
 	else {
-		// check graphs have same number of points
+		// check graphs (and correction graphs) have same number of points
 		// also find global best fit value for final graph
 		envelope_ = new TGraph();
-		envelope_->SetName(Form("envelope_c%3.1f%s",corr_pdof_,ext.c_str()));
-		map<string,pair<TGraph*,int> >::iterator checker = profileGraphsWithNPars.begin();
+		envelope_->SetName(Form("envelope_%s",ext.c_str()));
+		map<string,pair<TGraph*,TGraph*> >::iterator checker = profileGraphsWithCorrectionGraph.begin();
 		int np=checker->second.first->GetN();
 		envelopeMinNll_ = 9999.;
 		envelopeBestFitName_ = "notfound";
 		envelopeBestFitVal_ = 999.;
 
-		for (map<string,pair<TGraph*,int> >::iterator it=profileGraphsWithNPars.begin(); it!=profileGraphsWithNPars.end(); it++){
+		for (map<string,pair<TGraph*,TGraph*> >::iterator it=profileGraphsWithCorrectionGraph.begin(); it!=profileGraphsWithCorrectionGraph.end(); it++){
 			TGraph *graph = it->second.first;
-			int dof = it->second.second;
+			TGraph *correction = it->second.second;
 			if (graph->GetN()!=np) {
 				cerr << "Graphs for envelope computation have different number of points. Can't deal with this. Sorry!" << endl;
 				exit(1);
 			}
+			if (correction->GetN()!=np){
+				cerr << "Correction graph has different number of points to profile graph. Can't deal with this. Sorry!" << endl;
+				exit(1);
+			}
 			double x,y;
+			double x_corr, y_corr;
 			for (int p=0; p<np; p++){
 				graph->GetPoint(p,x,y);
-				double corrNll = y+(corr_pdof_*dof);
+				correction->GetPoint(p,x_corr,y_corr);
+				if (TMath::Abs(x-x_corr)>1.e-3) {
+					cerr << "x-values for points between profile graph and correction graph seem to far away. Can't cope. Sorry!" << endl;
+					exit(1);
+				}
+				double corrNll = y+y_corr;
 				if (corrNll < envelopeMinNll_) {
 					envelopeMinNll_ = corrNll;
 					envelopeBestFitName_ = it->first;
@@ -178,12 +229,12 @@ void ProfileMultiplePdfs::constructEnvelope(string ext){
 		for (int p=0; p<np; p++){
 			double x,y;
 			// get x value from best fit
-			profileGraphsWithNPars[envelopeBestFitName_].first->GetPoint(p,x,y);
+			profileGraphsWithCorrectionGraph[envelopeBestFitName_].first->GetPoint(p,x,y);
 			double minNll = 9999.;
-			for (map<string,pair<TGraph*,int> >::iterator it=profileGraphsWithNPars.begin(); it!=profileGraphsWithNPars.end(); it++){
+			for (map<string,pair<TGraph*,TGraph*> >::iterator it=profileGraphsWithCorrectionGraph.begin(); it!=profileGraphsWithCorrectionGraph.end(); it++){
 				TGraph *graph = it->second.first;
-				int npars = it->second.second;
-				double correctedNll = graph->Eval(x)+(npars*corr_pdof_);
+				TGraph *correction = it->second.second;
+				double correctedNll = graph->Eval(x)+correction->Eval(x);
 				if (correctedNll<minNll) minNll=correctedNll;
 			}
 			envelope_->SetPoint(p,x,minNll);
@@ -251,11 +302,6 @@ double ProfileMultiplePdfs::getEnvelopeErrorDn(double sigma){
 	return val;
 }
 
-void ProfileMultiplePdfs::setCorrPdof(double corr){
-	corr_pdof_ = corr;
-}
-
-
 TGraph* ProfileMultiplePdfs::shiftGraph(TGraph *graph, double shiftBy){
 	
 	TGraph *ret_graph = new TGraph();
@@ -267,19 +313,35 @@ TGraph* ProfileMultiplePdfs::shiftGraph(TGraph *graph, double shiftBy){
 	return ret_graph;
 }
 
-void ProfileMultiplePdfs::drawEnvelope(string name, bool shiftToZero){
+void ProfileMultiplePdfs::drawEnvelope(string name, string xaxis, bool shiftToZero){
 	TCanvas *canv = new TCanvas();
-	TGraph* envelope = shiftGraph(envelope_,envelopeMinNll_);
+	TGraph *envelope;
+	if (shiftToZero) envelope = shiftGraph(envelope_,envelopeMinNll_);
+	else envelope = envelope_;
 	envelope->SetLineColor(kBlue);
 	envelope->SetLineWidth(3);
 	envelope->SetLineStyle(kDashed);
+	envelope->GetYaxis()->SetTitle("-2#DeltaLL");
+	envelope->GetXaxis()->SetTitle(xaxis.c_str());
 	envelope->Draw("ALP");
-	for (map<string,pair<TGraph*,int> >::iterator it=profileGraphsWithNPars.begin(); it!=profileGraphsWithNPars.end(); it++){
-		int dof = it->second.second;
-		TGraph *graph = shiftGraph(it->second.first,envelopeMinNll_-dof*corr_pdof_);
-		graph->SetLineColor(kRed);
-		graph->SetLineWidth(2);
-		graph->Draw("LPsame");
+	for (map<string,pair<TGraph*,TGraph*> >::iterator it=profileGraphsWithCorrectionGraph.begin(); it!=profileGraphsWithCorrectionGraph.end(); it++){
+		TGraph *graph = it->second.first;
+		TGraph *correction = it->second.second;
+		TGraph *graphWithCorrection = new TGraph();
+		double x,y;
+		double x_corr, y_corr;
+		for (int p=0; p<graph->GetN(); p++){
+			graph->GetPoint(p,x,y);
+			correction->GetPoint(p,x_corr,y_corr);
+			assert(TMath::Abs(x_corr-x)<1.e-3);
+			graphWithCorrection->SetPoint(p,x,y+y_corr);
+		}
+		TGraph *graphDraw;
+		if (shiftToZero) graphDraw = shiftGraph(graphWithCorrection,envelopeMinNll_);
+		else graphDraw = graphWithCorrection;
+		graphDraw->SetLineColor(kRed);
+		graphDraw->SetLineWidth(2);
+		graphDraw->Draw("LPsame");
 	}
 	envelope->Draw("LPsame");
 	canv->Print(name.c_str());

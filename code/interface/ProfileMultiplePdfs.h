@@ -31,11 +31,13 @@ class ProfileMultiplePdfs {
 		map<string,TGraph*> returnProfiles();
 		void printProfiles();
 		void saveProfiles(TFile *outfile);
-		void addProfile(TGraph* graph, int npars);
-		void printProfilesWithNPars();
-		void setCorrPdof(double corr);
+		void addProfile(TGraph* graph, float corr_val);
+		void addProfile(TGraph* graph, TGraph *correction);
+		//void printProfilesWithNPars();
+		void printProfilesWithCorrectionGraph();
 		void constructEnvelope(string ext="");
-		void drawEnvelope(string name, bool shiftToZero=false);
+		void checkPointsInGraphs();
+		void drawEnvelope(string name, string xaxis, bool shiftToZero=false);
 		TGraph* shiftGraph(TGraph *graph, double shiftBy);
 		TGraph *getEnvelopeGraph();
 		double getEnvelopeBestFitValue();
@@ -47,16 +49,19 @@ class ProfileMultiplePdfs {
     
     map<string,pair<RooAbsPdf*,float> > listOfPdfs;
 		map<string,TGraph*> profileGraphs;
-		map<string,pair<TGraph*,int> > profileGraphsWithNPars;
+		//map<string,pair<TGraph*,float> > profileGraphsWithNPars;
+		map<string,pair<TGraph*,TGraph*> > profileGraphsWithCorrectionGraph;
 
 		void printProgressBar(float val, float low, float high, bool asBar=true);
 		bool verbose_;
-		double corr_pdof_;
+		bool alreadyChecked_;
 		TGraph *envelope_;
 		double envelopeMinNll_;
 		string envelopeBestFitName_;
 		double envelopeBestFitVal_;
     RooArgList *pdfsArgSet;
+
+		vector<TGraph*> cleanUp_;
 };
   
 #endif

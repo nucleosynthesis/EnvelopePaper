@@ -21,6 +21,7 @@ class config:
 		self.poi_scan_range = [-5.,5.]
 		self.points_in_scan = 10
 		self.plotsForEachToy = False
+		self.corrVals = [0.,1.,2.]
 		# ---- end of setting defaults ----
 
 		self.parseDatFile(datfilename)
