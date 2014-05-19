@@ -75,11 +75,14 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 		int p=0;
 		
 		// if best fit val is < low scan point add to graph
-		if (bestFitVal<=poiLow) {
-				profileGraphs[pdf_name]->SetPoint(p,bestFitVal,2.*bestFitNll);
-				p++;
-		}
-		// scan
+		//if (bestFitVal<=poiLow) {
+		//		profileGraphs[pdf_name]->SetPoint(p,bestFitVal,2.*bestFitNll);
+		//		p++;
+		//}
+		// scan centered at best fit
+		poiLow = bestFitVal - fabs(poiLow);
+		poiHigh = bestFitVal + fabs(poiHigh);
+
 		cout << "Scanning.... [" << profileCurve->GetName() << " to " << data->GetName() << "]" << endl;
 		for (float val=poiLow; val<poiHigh+(step_size/2.); val+=step_size) {
 			if (printProgress) printProgressBar(val,poiLow,poiHigh);
@@ -98,10 +101,10 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 		}
 		if (printProgress) cout << endl;
 		// if best fit val is > high scan point add to graph
-		if (bestFitVal>=poiHigh){
-				profileGraphs[pdf_name]->SetPoint(p,bestFitVal,2.*bestFitNll);
-				p++;
-		}
+		//if (bestFitVal>=poiHigh){
+		//		profileGraphs[pdf_name]->SetPoint(p,bestFitVal,2.*bestFitNll);
+		//		p++;
+		//}
 		cout << "Best fit at: x = " << bestFitVal << " 2nll = " << 2.*bestFitNll << endl;
 	}
 }

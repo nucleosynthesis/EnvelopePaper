@@ -2,24 +2,26 @@
 
 # setup here
 store_directory = "batch_jobs"
-infile_name = 'envelopews.root'
+infile_name = 'envelopews_wsignal_toy1.root'
 ws_name = 'multipdf'
 inv_mass_name = 'CMS_hgg_mass'
-fit_gen_to_data_first='roohist_data_mass_cat1_toy__CMS_hgg_mass'
+fit_gen_to_data_first='roohist_data_mass_cat1_toy1__CMS_hgg_mass'
 
-gen_pdfs = ['env_pdf_1_8TeV_exp1','env_pdf_1_8TeV_pow1','env_pdf_1_8TeV_lau1','env_pdf_1_8TeV_bern1']
-inj_mu_vals = [-2.,-1.5,-1.,-0.5,0.,0.5,1.,1.5,2.]
+#gen_pdfs = ['env_pdf_1_8TeV_exp1','env_pdf_1_8TeV_pow1','env_pdf_1_8TeV_lau1','env_pdf_1_8TeV_bern1']
+gen_pdfs = ['env_pdf_1_8TeV_pow1']
+#inj_mu_vals = [0.,0.5,1.,1.5,2.]
+inj_mu_vals = [1]
 env_pdfs = ['env_pdf_1_8TeV_exp1','env_pdf_1_8TeV_exp3','env_pdf_1_8TeV_exp5',
 						'env_pdf_1_8TeV_pow1','env_pdf_1_8TeV_pow3','env_pdf_1_8TeV_pow5',
 						'env_pdf_1_8TeV_bern1','env_pdf_1_8TeV_bern2','env_pdf_1_8TeV_bern3',
 						'env_pdf_1_8TeV_lau1','env_pdf_1_8TeV_lau2','env_pdf_1_8TeV_lau3']
 
-njobs=1
-ntoysperjob=10
+njobs=10
+ntoysperjob=100
 points_in_scan=100
 seed=0
 poi_range='-5.,5.'
-poi_scan_range='-2.,2.'
+poi_scan_range='-3.,3.'
 corrVals='0.,1.,2.'
 
 import os
