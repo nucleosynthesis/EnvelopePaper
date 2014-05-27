@@ -1,7 +1,8 @@
 #!/bin/bash
 
-version=`cat /proc/version | awk -F " " '{print $3}'`
-if version=='2.6.32-431.17.1.el6.x86_64'; then
+#version=`cat /proc/version | awk -F " " '{print $3}'`
+verion=$SCRAM_ARCH
+if [[ $version -eq "slc6_amd64_gcc472" ]] ; then
 	# SLC 6
 	echo 'Setting up for SLC6'
 	. /afs/cern.ch/sw/lcg/external/gcc/4.7/x86_64-slc6-gcc47-opt/setup.sh

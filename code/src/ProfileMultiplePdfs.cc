@@ -80,8 +80,13 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 		//		p++;
 		//}
 		// scan centered at best fit
-		poiLow = bestFitVal - fabs(poiLow);
-		poiHigh = bestFitVal + fabs(poiHigh);
+		double cen  = 0.5*(poiHigh+poiLow);
+
+		double diff = bestFitVal-cen;
+
+		poiLow  += diff ;// bestFitVal - fabs(poiLow);
+		poiHigh += diff ;//+ fabs(poiHigh);
+		step_size = (poiHigh-poiLow)/float(npoints);
 
 		cout << "Scanning.... [" << profileCurve->GetName() << " to " << data->GetName() << "]" << endl;
 		for (float val=poiLow; val<poiHigh+(step_size/2.); val+=step_size) {
