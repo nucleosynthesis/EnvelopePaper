@@ -10,9 +10,7 @@ BASEDIR = $(shell pwd)
 
 $(shell mkdir -p lib)
 $(shell mkdir -p obj)
-$(shell . setup_root_lxplus.sh)
 
-BOOSTPATH=/afs/cern.ch/sw/lcg/external/Boost/1.53.0_python2.7/x86_64-slc5-gcc47-opt
 USERINCLUDES += -I$(ROOTSYS)/include
 USERINCLUDES += -I$(ROOFITSYS)/include
 USERINCLUDES += -I$(BOOSTPATH)/include

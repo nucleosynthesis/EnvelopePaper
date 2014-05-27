@@ -1,8 +1,10 @@
+#!/usr/bin/env python
 # vim: ts=2 sw=2
 
 import ROOT as r
 import array
 r.gROOT.ProcessLine('.L lib/libEnvelopeCode.so')
+r.gROOT.ProcessLine(".x paperStyle.C")
 
 def pullPlot(outfile,pull_hist,corrName,genpdf_name,gen_inj_sig):
 	
@@ -172,6 +174,7 @@ def envelopeComputation(outfile_name,list_of_files,list_of_corrs,genpdf_name,gen
 				profiler = r.ProfileMultiplePdfs()
 				for pdf_name in env_pdfs:
 					graph = infile.Get('%s_toy%d'%(pdf_name,toy))
+					print graph.GetName(), ' -- ', graph.GetN()
 					if c==0:
 						outfile.cd('ProfileCurves')
 						graph.Write()

@@ -1,7 +1,11 @@
 #!/usr/bin/env python
 
+import sys
+dryRun=False
+if len(sys.argv)>1 and sys.argv[1]=='--dryRun': dryRun=True
+
 # setup here
-store_directory = "batch_jobs"
+store_directory = "batch_jobs_v2"
 infile_name = 'envelopews_wsignal_toy1.root'
 ws_name = 'multipdf'
 inv_mass_name = 'CMS_hgg_mass'
@@ -16,8 +20,8 @@ env_pdfs = ['env_pdf_1_8TeV_exp1','env_pdf_1_8TeV_exp3','env_pdf_1_8TeV_exp5',
 						'env_pdf_1_8TeV_bern1','env_pdf_1_8TeV_bern2','env_pdf_1_8TeV_bern3',
 						'env_pdf_1_8TeV_lau1','env_pdf_1_8TeV_lau2','env_pdf_1_8TeV_lau3']
 
-njobs=10
-ntoysperjob=100
+njobs=40
+ntoysperjob=50
 points_in_scan=100
 seed=0
 poi_range='-5.,5.'
@@ -30,7 +34,7 @@ def writeDatFile(name,gen_pdf,mu_val,outfile):
 	f = open(name,'w')
 	f.write('batchmode=True\n')
 	f.write('suppressRooFitOutput=True\n')
-	f.write('printScanProgress=True\n')
+	f.write('printScanProgress=False\n')
 	f.write('plotsForEachToy=False\n')
 	f.write('infile_name=%s\n'%infile_name)
 	f.write('ws_name=%s\n'%ws_name)
@@ -78,6 +82,8 @@ def writeSubScript(scriptname,datfilename,outfilename):
 	f.write('cp %s %s/%s/outfiles/\n'%(outfilename,os.getcwd(),store_directory))
 	f.close()
 	os.system('chmod +x %s'%f.name)
+	if not dryRun:
+		os.system('bsub -q 8nh -o %s.log %s'%(f.name,f.name))
 
 
 os.system('mkdir -p %s'%store_directory)
@@ -92,4 +98,5 @@ for mu_val in inj_mu_vals:
 			scriptname = 'sub_mu%3.1f_gen%s_job%d.sh'%(mu_val,gen_pdf,job)
 			writeDatFile(store_directory+'/dat/'+datfilename,gen_pdf,mu_val,outfilename)	
 			writeSubScript(scriptname,datfilename,outfilename)
+
 		
