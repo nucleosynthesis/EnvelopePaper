@@ -6,11 +6,14 @@ parser.add_option("-o","--outfilename")
 parser.add_option("-c","--list_of_corrs",type="str",default="1,2")
 parser.add_option("-g","--gen_pdf_name",type="str")
 parser.add_option("-u","--gen_inj_sig",type="float")
+parser.add_option("-b","--isBatch",action="store_true",default=False)
 (options,args) = parser.parse_args()
 
 import sys
 import ROOT as r
 from python.computeEnvelope import *
+
+if options.isBatch: r.gROOT.SetBatch()
 
 files = [ x for x in sys.argv[1:] if '.root' in x and options.outfilename not in x]
 if len(files)==0:

@@ -10,7 +10,7 @@ def pullPlot(outfile,pull_hist,corrName,genpdf_name,gen_inj_sig):
 	
 	# make pull plot
 	canv = r.TCanvas()
-	pull_fit = r.TF1('pull_fit','gaus',gen_inj_sig-3,gen_inj_sig+3)
+	pull_fit = r.TF1('pull_fit','gaus',-3,3)
 	pull_hist.Fit(pull_fit,"QN")
 	pull_hist.SetLineColor(r.kBlue+2)
 	pull_hist.SetLineWidth(2)
@@ -40,7 +40,7 @@ def pullPlot(outfile,pull_hist,corrName,genpdf_name,gen_inj_sig):
 	box.DrawBox(-0.14,0.,0.14,pull_hist.GetBinContent(pull_hist.FindBin(0)))
 	fit_mean.DrawArrow(pull_fit.GetParameter(1),0.,pull_fit.GetParameter(1),0.25*pull_hist.GetBinContent(pull_hist.FindBin(pull_fit.GetParameter(1))),0.015,'<')
 	hist_mean.DrawArrow(pull_hist.GetMean(),0.,pull_hist.GetMean(),0.25*pull_hist.GetBinContent(pull_hist.FindBin(pull_fit.GetParameter(1))),0.015,'<')
-	atgen.DrawLine(gen_inj_sig,0.,gen_inj_sig,pull_hist.GetBinContent(pull_hist.FindBin(0)))
+	atgen.DrawLine(0.,0.,0.,pull_hist.GetBinContent(pull_hist.FindBin(0)))
 	pull_hist.Draw("LEPsame")
 	pull_fit.Draw("Lsame")
 
@@ -143,7 +143,7 @@ def envelopeComputation(outfile_name,list_of_files,list_of_corrs,genpdf_name,gen
 
 	pull_hist={}
 	for cval in list_of_corrs:
-		pull_hist[cval] = r.TH1F('pull_hist_%s'%corrName[cval],'',50,gen_inj_sig-3,gen_inj_sig+3)
+		pull_hist[cval] = r.TH1F('pull_hist_%s'%corrName[cval],'',50,-3,3)
 		pull_hist[cval].GetXaxis().SetTitle("Pull (#mu)")
 		pull_hist[cval].GetYaxis().SetTitle("Number of toy experiments")
 
