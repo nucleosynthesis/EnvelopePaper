@@ -5,7 +5,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData *dat, RooAbsPdf &pdf, RooRealVar &m
    double xhigh= 6.;
    double xstep= 0.1;
 
-   double cfactor = corr*(pdf->getParameters(*dat)->getSize());
+   double cfactor = corr*(pdf.getParameters(*dat)->getSize());
 
    TGraph *graph = new TGraph();
    RooAbsReal *nll = pdf.createNLL(*dat);
@@ -13,6 +13,9 @@ TGraph *nll2scan(double corr=0.5, RooAbsData *dat, RooAbsPdf &pdf, RooRealVar &m
    double minnll = 10;
    double minmu=-1;
    int cpoint=0;
+   RooArgSet bfparams;
+   RooArgSet *nllparams = pdf.getParameters(*dat);
+   nllparams->snapshot(bfparams);
    for (double x=xlow;x<=xhigh;x+=xstep) {
 	mu.setVal(x);
 	minim.minimize("Minuit","migrad");	
@@ -20,12 +23,16 @@ TGraph *nll2scan(double corr=0.5, RooAbsData *dat, RooAbsPdf &pdf, RooRealVar &m
 	if (nll.getVal() < minnll) {
 		minnll=nll.getVal();
 		minmu = x;
+		bfparams.assignValueOnly(*nllparams);
 	}
 	cpoint++;
    }
    graph->SetLineWidth(2);
    graph->GetXaxis()->SetTitle("#mu");
    mu.setVal(minmu);
+   // Set all parameters to best fit ones 
+   nllparams->assignValueOnly(bfparams);
+
    return graph;   
 }
 
