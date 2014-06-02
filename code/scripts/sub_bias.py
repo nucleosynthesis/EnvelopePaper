@@ -1,35 +1,31 @@
 #!/usr/bin/env python
+# vim: ts=2 sw=2 noexpandtab
 
 import sys
-dryRun=False
-if len(sys.argv)>1 and sys.argv[1]=='--dryRun': dryRun=True
-
-# setup here
-store_directory = "batch_jobs_week2"
-infile_name = 'envelopews_wsignal_toy1.root'
-ws_name = 'multipdf'
-inv_mass_name = 'CMS_hgg_mass'
-fit_gen_to_data_first='roohist_data_mass_cat1_toy1__CMS_hgg_mass'
-
-#gen_pdfs = ['env_pdf_1_8TeV_exp1','env_pdf_1_8TeV_pow1','env_pdf_1_8TeV_lau1','env_pdf_1_8TeV_bern1']
-gen_pdfs = ['env_pdf_1_8TeV_exp1','env_pdf_1_8TeV_pow1','env_pdf_1_8TeV_bern1','env_pdf_1_8TeV_lau1']
-inj_mu_vals = [-1.0,-0.75,-0.5,-0.25,0.,0.25,0.5,0.75,1.,1.25,1.5,1.75,2.0] 
-#inj_mu_vals = [1]
-env_pdfs = ['env_pdf_1_8TeV_exp1','env_pdf_1_8TeV_pow1','env_pdf_1_8TeV_bern1','env_pdf_1_8TeV_lau1']
-#env_pdfs = ['env_pdf_1_8TeV_exp1','env_pdf_1_8TeV_exp3','env_pdf_1_8TeV_exp5',
-#						'env_pdf_1_8TeV_pow1','env_pdf_1_8TeV_pow3',#'env_pdf_1_8TeV_pow5',
-#						'env_pdf_1_8TeV_bern1','env_pdf_1_8TeV_bern2','env_pdf_1_8TeV_bern3',
-#						'env_pdf_1_8TeV_lau1','env_pdf_1_8TeV_lau2','env_pdf_1_8TeV_lau3']
-
-njobs=5
-ntoysperjob=1000
-points_in_scan=50
-seed=0
-poi_range='-5.,5.'
-poi_scan_range='-3.,3.'
-corrVals='0.,1.,2.'
-
 import os
+cfg = {}
+
+from optparse import OptionParser
+parser = OptionParser()
+parser.add_option("-d","--datfile",type="str")
+parser.add_option("--dryRun",default=False,action="store_true")
+(options,args) = parser.parse_args()
+
+def readConfig(datfile):
+  
+  f = open(datfile)
+  for line in f.readlines():
+    if line.startswith('#'): continue
+    if '=' not in line: continue
+    line = line.strip('\n')
+    option = line.split('=')[0]
+    value = line.split('=')[1]
+    cfg[option] = value
+	f.close()
+
+def printConfig():
+  for key, item in cfg.items():
+    print key, ' -- ', item
 
 def writeDatFile(name,gen_pdf,mu_val,outfile):
 	f = open(name,'w')
@@ -37,29 +33,29 @@ def writeDatFile(name,gen_pdf,mu_val,outfile):
 	f.write('suppressRooFitOutput=True\n')
 	f.write('printScanProgress=False\n')
 	f.write('plotsForEachToy=False\n')
-	f.write('infile_name=%s\n'%infile_name)
-	f.write('ws_name=%s\n'%ws_name)
-	f.write('inv_mass_name=%s\n'%inv_mass_name)
+	f.write('infile_name=%s\n'%cfg['infile_name'])
+	f.write('ws_name=%s\n'%cfg['ws_name'])
+	f.write('inv_mass_name=%s\n'%cfg['inv_mass_name'])
 	f.write('genpdf_name=%s\n'%gen_pdf)
-	f.write('gen_inj_sig=%3.1f\n'%mu_val)
-	f.write('fit_gen_to_data_first=%s\n'%fit_gen_to_data_first)
-	f.write('envpdf_names=')
-	for env_pdf in env_pdfs:
-		f.write('%s'%env_pdf)
-		if env_pdf!=env_pdfs[-1]:
-			f.write(',')
-	f.write('\n')
+	f.write('gen_inj_sig=%4.2f\n'%mu_val)
+	f.write('fit_gen_to_data_first=%s\n'%cfg['fit_gen_to_data_first'])
+	f.write('envpdf_names=%s\n'%cfg['env_pdfs'])
 	f.write('outfile_name=%s\n'%outfile)
-	f.write('ntoys=%d\n'%ntoysperjob)
-	f.write('seed=%d\n'%seed)
-	f.write('poi_range=%s\n'%poi_range)
-	f.write('poi_scan_range=%s\n'%poi_scan_range)
-	f.write('points_in_scan=%d\n'%points_in_scan)
-	f.write('corrVals=%s\n'%corrVals)
+	f.write('ntoys=%d\n'%int(cfg['ntoysperjob']))
+	f.write('seed=%d\n'%int(cfg['seed']))
+	f.write('poi_range=%s\n'%cfg['poi_range'])
+	f.write('poi_scan_range=%s\n'%cfg['poi_scan_range'])
+	f.write('points_in_scan=%d\n'%int(cfg['points_in_scan']))
+	f.write('corrVals=%s\n'%cfg['corrVals'])
+	if 'savePVal' in cfg.keys():
+		if cfg['savePVal']=='True' or cfg['savePVal']=='1':
+			f.write('savePVal=True\n')
+		else:
+			f.write('savePVal=False\n')
 	f.close()
 
 def writeSubScript(scriptname,datfilename,outfilename):
-	f = open('%s/%s/scripts/%s'%(os.getcwd(),store_directory,scriptname),'w')
+	f = open('%s/%s/scripts/%s'%(os.getcwd(),cfg['store_directory'],scriptname),'w')
 	f.write('#!/bin/bash\n')
 	f.write('mkdir -p scratch\n')
 	f.write('cd scratch\n')
@@ -73,31 +69,32 @@ def writeSubScript(scriptname,datfilename,outfilename):
 	f.write('cp %s/paperStyle.C .\n'%os.getcwd())
 	f.write('cp %s/python/config.py python/\n'%os.getcwd())
 	f.write('cp %s/python/__init__.py python/\n'%os.getcwd())
-	f.write('cp %s/%s .\n'%(os.getcwd(),infile_name))
-	f.write('cp %s/%s/dat/%s .\n'%(os.getcwd(),store_directory,datfilename))
+	f.write('cp %s/%s .\n'%(os.getcwd(),cfg['infile_name']))
+	f.write('cp %s/%s/dat/%s .\n'%(os.getcwd(),cfg['store_directory'],datfilename))
 	f.write('if ( ./bias_study.py -i %s -t ) then\n'%datfilename)
 	f.write('\ttouch %s.done\n'%f.name)
 	f.write('else\n')
 	f.write('\ttouch %s.fail\n'%f.name)
 	f.write('fi\n')
-	f.write('cp %s %s/%s/outfiles/\n'%(outfilename,os.getcwd(),store_directory))
+	f.write('cp %s %s/%s/outfiles/\n'%(outfilename,os.getcwd(),cfg['store_directory']))
 	f.close()
 	os.system('chmod +x %s'%f.name)
-	if not dryRun:
+	if not options.dryRun:
 		os.system('bsub -q 8nh -o %s.log %s'%(f.name,f.name))
 
-
-os.system('mkdir -p %s'%store_directory)
-os.system('mkdir -p %s/dat'%store_directory)
-os.system('mkdir -p %s/outfiles'%store_directory)
-os.system('mkdir -p %s/scripts'%store_directory)
-for mu_val in inj_mu_vals:
-	for gen_pdf in gen_pdfs:
-		for job in range(njobs):
-			outfilename = 'BiasResults_mu%3.1f_gen%s_job%d.root'%(mu_val,gen_pdf,job)
-			datfilename = 'cfg_mu%3.1f_gen%s_job%d.dat'%(mu_val,gen_pdf,job)
-			scriptname = 'sub_mu%3.1f_gen%s_job%d.sh'%(mu_val,gen_pdf,job)
-			writeDatFile(store_directory+'/dat/'+datfilename,gen_pdf,mu_val,outfilename)	
+readConfig(options.datfile)
+os.system('mkdir -p %s'%cfg['store_directory'])
+os.system('mkdir -p %s/dat'%cfg['store_directory'])
+os.system('mkdir -p %s/outfiles'%cfg['store_directory'])
+os.system('mkdir -p %s/scripts'%cfg['store_directory'])
+for val in cfg['inj_mu_vals'].split(','):
+	mu_val = float(val)
+	for gen_pdf in cfg['gen_pdfs'].split(','):
+		for job in range(int(cfg['njobs'])):
+			outfilename = 'BiasResults_mu%4.2f_gen%s_job%d.root'%(mu_val,gen_pdf,job)
+			datfilename = 'cfg_mu%4.2f_gen%s_job%d.dat'%(mu_val,gen_pdf,job)
+			scriptname = 'sub_mu%4.2f_gen%s_job%d.sh'%(mu_val,gen_pdf,job)
+			writeDatFile(cfg['store_directory']+'/dat/'+datfilename,gen_pdf,mu_val,outfilename)	
 			writeSubScript(scriptname,datfilename,outfilename)
 
 		
