@@ -132,6 +132,8 @@ def envelopeComputation(outfile_name,list_of_files,list_of_corrs,genpdf_name,gen
 	tree.Branch('errUp_3sig',errUp_3sig,'errUp_3sig/D')
 	tree.Branch('errDn_3sig',errDn_3sig,'errDn_3sig/D')
 
+	print 'Something'
+
 	env_pdfs = set()
 	for file in list_of_files:
 		infile = r.TFile(file)

@@ -14,7 +14,8 @@
 
 ProfileMultiplePdfs::ProfileMultiplePdfs(bool verbose):
 	verbose_(verbose),
-	alreadyChecked_(false)
+	alreadyChecked_(false),
+	savePVal_(false)
 {
   listOfPdfs.clear();
   //listOfPdfs = new RooArgList();
@@ -26,6 +27,10 @@ ProfileMultiplePdfs::~ProfileMultiplePdfs(){
 	// I do own this memory:
 	for (map<string,TGraph*>::iterator m=profileGraphs.begin(); m!=profileGraphs.end(); m++) delete m->second;
 	profileGraphs.clear();
+}
+
+void ProfileMultiplePdfs::setSavePVal(bool val){
+	savePVal_ = val;
 }
 
 void ProfileMultiplePdfs::addPdf(RooAbsPdf *pdf, float penaltyTerm){
@@ -52,6 +57,67 @@ void ProfileMultiplePdfs::printPdfs(){
   }
 }
 
+double ProfileMultiplePdfs::getChisq(RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &var, bool prt) {
+
+  // Find total number of events
+  double nEvt;
+  double nTot=0.0;
+
+  for(int j=0;j<dat.numEntries();j++) {
+    dat.get(j);
+    nEvt=dat.weight();
+    nTot+=nEvt;    
+  }
+
+  // Find chi-squared equivalent 2NLL
+  //RooRealVar *var=(RooRealVar*)(pdf.getParameters(*dat)->find("CMS_hgg_mass"));
+  double totNLL=0.0;
+  double prbSum=0.0;
+
+  for(int j=0;j<dat.numEntries();j++) {
+    double m=dat.get(j)->getRealValue(var.GetName());
+
+    // Find probability density and hence probability
+    var.setVal(m);
+    double prb=0.25*pdf.getVal(var);
+    prbSum+=prb;
+
+    dat.get(j);
+    nEvt=dat.weight();
+	  
+    double mubin=nTot*prb;
+    double contrib(0.);
+    if (nEvt < 1) contrib = mubin;
+    else contrib=mubin-nEvt+nEvt*log(nEvt/mubin);
+    totNLL+=contrib;
+    
+    if(prt) cout << "Bin " << j << " prob = " << prb << " nEvt = " << nEvt << ", mu = " << mubin << " contribution " << contrib << endl;    
+  }
+  
+  totNLL*=2.0;
+  if(prt) cout << pdf.GetName() << " nTot = " << nTot << " 2NLL constant = " << totNLL << endl;
+  
+  return totNLL;
+}
+
+double ProfileMultiplePdfs::getCorrection(RooAbsData *data, RooAbsPdf *pdf, int add_pars) {
+	
+	// HARD-CODED!!
+	RooRealVar *var = (RooRealVar*)(pdf->getParameters((RooArgSet*)0)->find("CMS_hgg_mass"));
+	double minnll = 9999.;
+	minnll = getChisq(*data,*pdf,*var);
+	int nbins = var->getBins();
+	RooArgSet *allParams = (RooArgSet*)pdf->getParameters(*data);
+	RooArgSet *constParams = (RooArgSet*)allParams->selectByAttrib("Constant",kTRUE);
+	int npars = allParams->getSize()-constParams->getSize()-add_pars; // HACK!
+	double pvalEquiv = TMath::Prob(minnll,nbins-npars);
+	// protection
+	if (pvalEquiv<1.e-16) pvalEquiv=1.e-16;
+	double minnllEquiv = TMath::ChisquareQuantile(1.-pvalEquiv,nbins);
+	//cout << "HERE: " << nbins << " -- " << npars << " -- " << minnll << " -- " << pvalEquiv << " -- " << minnllEquiv << endl;
+	return TMath::Abs(minnll - minnllEquiv);
+}
+
 // no penalty
 void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float poiLow, float poiHigh, int npoints, string name_ext, bool printProgress) {
 	
@@ -66,12 +132,22 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 		TGraph *profileCurve = new TGraph();
 		profileCurve->SetName(Form("%s%s",pdf_name.c_str(),name_ext.c_str()));
 		profileGraphs.insert(make_pair(pdf_name,profileCurve));
+		TGraph *correctionCurve;
+		if (savePVal_){
+			correctionCurve = new TGraph();
+			correctionCurve->SetName(Form("%s%s_correction",pdf_name.c_str(),name_ext.c_str()));
+			correctionGraphs.insert(make_pair(pdf_name,correctionCurve));
+		}
 		// find best fit value
 		RooAbsReal *nll = pdf->createNLL(*data);
 		poi->setConstant(false);
 		RooMinuit(*nll).migrad();
 		double bestFitVal=poi->getVal();
 		double bestFitNll=nll->getVal();
+		double bestFitCorrection=999.;
+		if (savePVal_) {
+			bestFitCorrection = getCorrection(data,pdf,2); //HACK
+		}
 		int p=0;
 		
 		// if best fit val is < low scan point add to graph
@@ -96,10 +172,17 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 			poi->setConstant(true);
 			RooMinuit(*nll).migrad();
 			profileGraphs[pdf_name]->SetPoint(p,val,2.*nll->getVal());
+			if (savePVal_) {
+				double correction = getCorrection(data,pdf,1);
+				correctionGraphs[pdf_name]->SetPoint(p,val,correction);
+			}
 			p++;
 			// check where best fit value is in comparison to scan
 			if (bestFitVal>val && bestFitVal<val+step_size) {
 				profileGraphs[pdf_name]->SetPoint(p,bestFitVal,2.*bestFitNll);
+				if (savePVal_){
+					correctionGraphs[pdf_name]->SetPoint(p,bestFitVal,bestFitCorrection);
+				}
 				p++;
 			}
 			poi->setConstant(false);
@@ -111,6 +194,7 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 		//		p++;
 		//}
 		cout << "Best fit at: x = " << bestFitVal << " 2nll = " << 2.*bestFitNll << endl;
+		if (savePVal_) cout << "\t Saved correction: " << bestFitCorrection << endl;
 	}
 }
 
@@ -130,6 +214,12 @@ void ProfileMultiplePdfs::saveProfiles(TFile *outfile){
 	for (map<string,TGraph*>::iterator m=profileGraphs.begin(); m!=profileGraphs.end(); m++){
 		outfile->cd();
 		m->second->Write();
+	}
+	if (savePVal_){
+		for (map<string,TGraph*>::iterator m=correctionGraphs.begin(); m!=correctionGraphs.end(); m++){
+			outfile->cd();
+			m->second->Write();
+		}
 	}
 }
 

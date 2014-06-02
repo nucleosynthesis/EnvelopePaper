@@ -22,6 +22,7 @@ class config:
 		self.points_in_scan = 10
 		self.plotsForEachToy = False
 		self.corrVals = [0.,1.,2.]
+		self.savePVal = False
 		# ---- end of setting defaults ----
 
 		self.parseDatFile(datfilename)

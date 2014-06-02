@@ -26,6 +26,8 @@ class ProfileMultiplePdfs {
     void clearPdfs();
     void printPdfs();
 
+		void setSavePVal(bool val);
+
 		// using these for envelope paper:
 		void makeProfiles(RooAbsData *data, RooRealVar *poi, float poiLow, float poiHigh, int npoints, string name_ext="", bool printProgress=false);
 		map<string,TGraph*> returnProfiles();
@@ -33,6 +35,9 @@ class ProfileMultiplePdfs {
 		void saveProfiles(TFile *outfile);
 		void addProfile(TGraph* graph, float corr_val);
 		void addProfile(TGraph* graph, TGraph *correction);
+		double getCorrection(RooAbsData *data, RooAbsPdf *pdf, int add_pars=0);
+		double getChisq(RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &var, bool prt=false);
+
 		//void printProfilesWithNPars();
 		void printProfilesWithCorrectionGraph();
 		void constructEnvelope(string ext="");
@@ -49,12 +54,14 @@ class ProfileMultiplePdfs {
     
     map<string,pair<RooAbsPdf*,float> > listOfPdfs;
 		map<string,TGraph*> profileGraphs;
+		map<string,TGraph*> correctionGraphs;
 		//map<string,pair<TGraph*,float> > profileGraphsWithNPars;
 		map<string,pair<TGraph*,TGraph*> > profileGraphsWithCorrectionGraph;
 
 		void printProgressBar(float val, float low, float high, bool asBar=true);
 		bool verbose_;
 		bool alreadyChecked_;
+		bool savePVal_;
 		TGraph *envelope_;
 		double envelopeMinNll_;
 		string envelopeBestFitName_;

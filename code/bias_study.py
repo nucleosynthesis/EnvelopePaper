@@ -97,6 +97,7 @@ if not options.envelopeOnly:
 		toySetup.throwToy('truth_toy%d'%toy,int(dataSet.sumEntries()),False,True,True,True)
 		toyData = toySetup.getToyDataSingle()
 		profiler = r.ProfileMultiplePdfs()
+		profiler.setSavePVal(cfg.savePVal)
 		profiler.addPdfs(envelopeSetup.getSBPdfs())
 		profiler.makeProfiles(toyData,mu,poiLow,poiHigh,cfg.points_in_scan,'_toy%d'%toy,cfg.printScanProgress)
 		#profiler.printProfiles()
@@ -111,6 +112,8 @@ if not options.envelopeOnly:
 	outfile.Close()
 	swToy.Stop()
 	print 'TOTAL FOR ALL %d TOYS TOOK: Real time %3.2f (secs), CPU time %3.2f (secs)'%(cfg.ntoys,swToy.RealTime(),swToy.CpuTime())
+	print '----------------------------------------------------------'
+	print 'Toy throwing done'
 	print '----------------------------------------------------------'
 
 # this can compute bias given toys
