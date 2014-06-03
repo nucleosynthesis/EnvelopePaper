@@ -143,14 +143,14 @@ void throwToy(){
    fr2->GetXaxis()->SetTitle("m_{#gamma#gamma}");
    fr2->GetYaxis()->SetTitle("Events / GeV");
    fr2->Draw(); leg->Draw(); 
-   fits->SaveAs("../concept/fittedfunctions_toy_1storderfuncs.pdf");
+   fits->SaveAs("../functions/fittedfunctions_toy_1storderfuncs.pdf");
 
   
    TCanvas *scan = new TCanvas();
    gr_pow->Draw("AL") ; 
    gr_exp->Draw("L") ;
    gr_lau->Draw("L") ;
-   leg->Draw(); scan->SaveAs("../concept/lhscan_toy_1storderfuncs.pdf");
+   leg->Draw(); scan->SaveAs("../functions/lhscan_toy_1storderfuncs.pdf");
   
    //lau->getParameters(newtoy)->Print("v");
    //exp->getParameters(newtoy)->Print("v");
