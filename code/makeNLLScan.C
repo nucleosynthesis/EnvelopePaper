@@ -1,27 +1,37 @@
 // Simple Macro to produce the NLL scan of the Toy Data
 #include "RooAbsArg.h"
-TGraph *nll2scan(double corr=0.5, RooAbsData *dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
-   double xlow = -3.;
-   double xhigh= 6.;
+#include "getChisq.C"
+
+TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
+   double xlow = -1.;
+   double xhigh= 2.;
    double xstep= 0.1;
 
-   double cfactor = corr*(pdf.getParameters(*dat)->getSize());
-
+   RooRealVar *var=(RooRealVar*)(pdf.getParameters((RooArgSet*)0)->find("CMS_hgg_mass"));
+   double cfactor = corr*(pdf.getParameters(dat)->getSize());
+   mu.setConstant(true);
    TGraph *graph = new TGraph();
-   RooAbsReal *nll = pdf.createNLL(*dat);
+   RooAbsReal *nll = pdf.createNLL(dat);
    RooMinimizer minim(*nll);
-   double minnll = 10;
+   double minnll = 1000000;
    double minmu=-1;
    int cpoint=0;
    RooArgSet bfparams;
-   RooArgSet *nllparams = pdf.getParameters(*dat);
+   RooArgSet *nllparams = pdf.getParameters(dat);
    nllparams->snapshot(bfparams);
    for (double x=xlow;x<=xhigh;x+=xstep) {
 	mu.setVal(x);
-	minim.minimize("Minuit","migrad");	
-	graph.SetPoint(cpoint,x,2*(nll.getVal()+cfactor));
-	if (nll.getVal() < minnll) {
-		minnll=nll.getVal();
+	minim.minimize("Minuit","minimize");
+	//double nllvalue = nll.getVal();	
+	//std::cout << nllvalue << std::endl;
+	//graph.SetPoint(cpoint,x,2*(nllvalue+cfactor));
+	
+	double nllvalue = getChisq(dat,pdf,*var,0);
+	//std::cout << "nllval " << nllvalue << std::endl;
+	graph->SetPoint(cpoint,x,nllvalue+2*cfactor);
+
+	if (nllvalue < minnll) {
+		minnll=nllvalue;
 		minmu = x;
 		bfparams.assignValueOnly(*nllparams);
 	}
@@ -29,21 +39,26 @@ TGraph *nll2scan(double corr=0.5, RooAbsData *dat, RooAbsPdf &pdf, RooRealVar &m
    }
    graph->SetLineWidth(2);
    graph->GetXaxis()->SetTitle("#mu");
+   graph->GetYaxis()->SetTitle("-2Log L");
    mu.setVal(minmu);
    // Set all parameters to best fit ones 
    nllparams->assignValueOnly(bfparams);
-
+   mu.setConstant(false);
+   // May be best to minimize overall once more to find absolute minimum
+   RooMinimizer minim_float(*nll);
+   minim_float.minimize("Minuit","minimize");
+   
    return graph;   
 }
 
 void makeNLLScan(){
 
-   TFile *fi = TFile::Open("envelopews.root");
+   TFile *fi = TFile::Open("envelopews_toy1.root");
    RooWorkspace *multipdf = fi->Get("multipdf");
    RooRealVar *x    = multipdf->var("CMS_hgg_mass");
 
    // The data we will use (a Toy dataset);
-   RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy__CMS_hgg_mass");
+   RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy1__CMS_hgg_mass");
 
    // Build signal model
    RooRealVar mean("mean","mean",125); mean.setConstant();
