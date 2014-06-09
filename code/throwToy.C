@@ -13,7 +13,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    TGraph *graph = new TGraph();
    RooAbsReal *nll = pdf.createNLL(dat);
    RooMinimizer minim(*nll);
-   double minnll = 10;
+   double minnll = 1000000;
    double minmu=-1;
    int cpoint=0;
    RooArgSet bfparams;
@@ -26,8 +26,8 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
 	//std::cout << nllvalue << std::endl;
 	//graph.SetPoint(cpoint,x,2*(nllvalue+cfactor));
 	
-	double nllvalue = getChisq(dat,pdf,*var,1);
-	std::cout << "nllval " << nllvalue << std::endl;
+	double nllvalue = getChisq(dat,pdf,*var,0);
+	//std::cout << "nllval " << nllvalue << std::endl;
 	graph->SetPoint(cpoint,x,nllvalue+2*cfactor);
 
 	if (nllvalue < minnll) {
@@ -44,6 +44,10 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    // Set all parameters to best fit ones 
    nllparams->assignValueOnly(bfparams);
    mu.setConstant(false);
+   // May be best to minimize overall once more to find absolute minimum
+   RooMinimizer minim_float(*nll);
+   minim_float.minimize("Minuit","minimize");
+   
    return graph;   
 }
 
