@@ -75,6 +75,7 @@ void throwToy(){
    RooAbsPdf *lau =  multipdf->pdf("env_pdf_1_8TeV_lau1");
    RooAbsPdf *pow =  multipdf->pdf("env_pdf_1_8TeV_pow1");
    RooAbsPdf *exp =  multipdf->pdf("env_pdf_1_8TeV_exp1");
+   RooAbsPdf *pol =  multipdf->pdf("env_pdf_1_8TeV_bern1");
    RooAbsPdf *signal = multipdf->pdf("gaus");
    // This was the function used to throw the toy
    /*
@@ -116,6 +117,7 @@ void throwToy(){
    RooAddPdf spdf_lau("splusb_lau","splusb1",RooArgList(*signal,*lau),RooArgList(*nsig,*nbkg));
    RooAddPdf spdf_pow("splusb_pow","splusb1",RooArgList(*signal,*pow),RooArgList(*nsig,*nbkg));
    RooAddPdf spdf_exp("splusb_exp","splusb1",RooArgList(*signal,*exp),RooArgList(*nsig,*nbkg));
+   RooAddPdf spdf_pol("splusb_pol","splusb1",RooArgList(*signal,*pol),RooArgList(*nsig,*nbkg));
  
 
    RooPlot *fr2 = x->frame();
@@ -123,6 +125,7 @@ void throwToy(){
 
    TLegend *leg = new TLegend(0.56,0.6,0.85,0.89);
    leg->SetFillColor(0);
+   
 
    TGraph *gr_lau = nll2scan(0.,*datatoy,spdf_lau,*mu);
    gr_lau->SetLineColor(kGreen+2);
@@ -142,11 +145,19 @@ void throwToy(){
    spdf_pow.plotOn(fr2,RooFit::LineColor(4));
    double mPow = mu->getVal();
 
+   TLegend *leg2 = (TLegend*)leg->Clone();
+   
+   TGraph *gr_pol = nll2scan(0.,*datatoy,spdf_pol,*mu);
+   gr_pol->SetLineColor(kViolet);
+   double mPol = mu->getVal();
+   spdf_pol.plotOn(fr2,RooFit::LineColor(kViolet));
+   leg2->AddEntry(gr_pol,"Polynomial","L");
+
    TCanvas *fits = new TCanvas();
    fr2->SetTitle("");
    fr2->GetXaxis()->SetTitle("m_{#gamma#gamma}");
    fr2->GetYaxis()->SetTitle("Events / GeV");
-   fr2->Draw(); leg->Draw(); 
+   fr2->Draw(); leg2->Draw(); 
    fits->SaveAs("../functions/BestFits.pdf");
 
   
@@ -154,13 +165,14 @@ void throwToy(){
    gr_pow->Draw("AL") ; 
    gr_exp->Draw("L") ;
    gr_lau->Draw("L") ;
+   gr_pol->Draw("L");
    leg->Draw(); scan->SaveAs("../functions/Profiles.pdf");
   
    //lau->getParameters(newtoy)->Print("v");
    //exp->getParameters(newtoy)->Print("v");
    //pow->getParameters(newtoy)->Print("v");
-   std::cout << "mu (lau,exp,pow) " << mLau << " " << mExp << " " << mPow << std::endl;
-  
+   std::cout << "mu (lau,exp,pow,pol) " << mLau << " " << mExp << " " << mPow << " " << mPol<< std::endl;
+     
    /* 
    // Save new toy in workspace
    TFile *filenew = new TFile("envelopews_wsignal_toy1.root","RECREATE");
