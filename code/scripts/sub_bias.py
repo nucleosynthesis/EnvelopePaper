@@ -8,19 +8,20 @@ cfg = {}
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("-d","--datfile",type="str")
+parser.add_option("-q","--queue",type="str",default="8nh")
 parser.add_option("--dryRun",default=False,action="store_true")
 (options,args) = parser.parse_args()
 
 def readConfig(datfile):
   
-  f = open(datfile)
-  for line in f.readlines():
-    if line.startswith('#'): continue
-    if '=' not in line: continue
-    line = line.strip('\n')
-    option = line.split('=')[0]
-    value = line.split('=')[1]
-    cfg[option] = value
+	f = open(datfile)
+	for line in f.readlines():
+		if line.startswith('#'): continue
+		if '=' not in line: continue
+		line = line.strip('\n')
+		option = line.split('=')[0]
+		value = line.split('=')[1]
+		cfg[option] = value
 	f.close()
 
 def printConfig():
@@ -56,6 +57,10 @@ def writeDatFile(name,gen_pdf,mu_val,outfile):
 
 def writeSubScript(scriptname,datfilename,outfilename):
 	f = open('%s/%s/scripts/%s'%(os.getcwd(),cfg['store_directory'],scriptname),'w')
+	f.write('touch %s.run\n'%f.name)
+	f.write('rm -f %s.fail\n'%f.name)
+	f.write('rm -f %s.done\n'%f.name)
+	f.write('rm -f %s.log\n'%f.name)
 	f.write('#!/bin/bash\n')
 	f.write('mkdir -p scratch\n')
 	f.write('cd scratch\n')
@@ -80,7 +85,7 @@ def writeSubScript(scriptname,datfilename,outfilename):
 	f.close()
 	os.system('chmod +x %s'%f.name)
 	if not options.dryRun:
-		os.system('bsub -q 8nh -o %s.log %s'%(f.name,f.name))
+		os.system('bsub -q %s -o %s.log %s'%(options.queue,f.name,f.name))
 
 readConfig(options.datfile)
 os.system('mkdir -p %s'%cfg['store_directory'])

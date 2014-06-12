@@ -1,4 +1,4 @@
-#ifndef ProfileMultiplePdfs_h 
+#ifndef ProfileMultiplePdfs_h
 #define ProfileMultiplePdfs_h
 
 #include <iostream>
@@ -51,7 +51,7 @@ class ProfileMultiplePdfs {
 		double getEnvelopeErrorDn(double sigma);
 
   private:
-    
+
     map<string,pair<RooAbsPdf*,float> > listOfPdfs;
 		map<string,TGraph*> profileGraphs;
 		map<string,TGraph*> correctionGraphs;
@@ -70,5 +70,5 @@ class ProfileMultiplePdfs {
 
 		vector<TGraph*> cleanUp_;
 };
-  
+
 #endif

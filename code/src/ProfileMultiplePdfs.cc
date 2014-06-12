@@ -50,7 +50,7 @@ void ProfileMultiplePdfs::clearPdfs(){
 
 void ProfileMultiplePdfs::printPdfs(){
   cout << "List of Pdfs: size(" << listOfPdfs.size() << ")" << endl;
-  for (map<string,pair<RooAbsPdf*,float> >::iterator m=listOfPdfs.begin(); m!=listOfPdfs.end(); m++) { 
+  for (map<string,pair<RooAbsPdf*,float> >::iterator m=listOfPdfs.begin(); m!=listOfPdfs.end(); m++) {
     RooAbsPdf *pdf = m->second.first;
     cout << "\t" << pdf->GetName() << " (penalty=" << m->second.second << ")" << endl;
     cout << "\t -- "; pdf->Print();
@@ -66,7 +66,7 @@ double ProfileMultiplePdfs::getChisq(RooAbsData &dat, RooAbsPdf &pdf, RooRealVar
   for(int j=0;j<dat.numEntries();j++) {
     dat.get(j);
     nEvt=dat.weight();
-    nTot+=nEvt;    
+    nTot+=nEvt;
   }
 
   // Find chi-squared equivalent 2NLL
@@ -84,24 +84,24 @@ double ProfileMultiplePdfs::getChisq(RooAbsData &dat, RooAbsPdf &pdf, RooRealVar
 
     dat.get(j);
     nEvt=dat.weight();
-	  
+
     double mubin=nTot*prb;
     double contrib(0.);
     if (nEvt < 1) contrib = mubin;
     else contrib=mubin-nEvt+nEvt*log(nEvt/mubin);
     totNLL+=contrib;
-    
-    if(prt) cout << "Bin " << j << " prob = " << prb << " nEvt = " << nEvt << ", mu = " << mubin << " contribution " << contrib << endl;    
+
+    if(prt) cout << "Bin " << j << " prob = " << prb << " nEvt = " << nEvt << ", mu = " << mubin << " contribution " << contrib << endl;
   }
-  
+
   totNLL*=2.0;
   if(prt) cout << pdf.GetName() << " nTot = " << nTot << " 2NLL constant = " << totNLL << endl;
-  
+
   return totNLL;
 }
 
 double ProfileMultiplePdfs::getCorrection(RooAbsData *data, RooAbsPdf *pdf, int add_pars) {
-	
+
 	// HARD-CODED!!
 	RooRealVar *var = (RooRealVar*)(pdf->getParameters((RooArgSet*)0)->find("CMS_hgg_mass"));
 	double minnll = 9999.;
@@ -120,7 +120,7 @@ double ProfileMultiplePdfs::getCorrection(RooAbsData *data, RooAbsPdf *pdf, int 
 
 // no penalty
 void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float poiLow, float poiHigh, int npoints, string name_ext, bool printProgress) {
-	
+
 	float step_size = (poiHigh-poiLow)/float(npoints);
 
 	//cout << "pL: " << poiLow << " pH: " << poiHigh << " np: " << npoints << " ss: " << step_size << endl;
@@ -144,12 +144,14 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 		RooMinuit(*nll).migrad();
 		double bestFitVal=poi->getVal();
 		double bestFitNll=nll->getVal();
+		RooRealVar *var = (RooRealVar*)(pdf->getParameters((RooArgSet*)0)->find("CMS_hgg_mass")); // HARD-CODE!!
+		double bestFitPaulNll = getChisq(*data,*pdf,*var);
 		double bestFitCorrection=999.;
 		if (savePVal_) {
 			bestFitCorrection = getCorrection(data,pdf,2); //HACK
 		}
 		int p=0;
-		
+
 		// if best fit val is < low scan point add to graph
 		//if (bestFitVal<=poiLow) {
 		//		profileGraphs[pdf_name]->SetPoint(p,bestFitVal,2.*bestFitNll);
@@ -171,7 +173,9 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 			poi->setVal(val);
 			poi->setConstant(true);
 			RooMinuit(*nll).migrad();
-			profileGraphs[pdf_name]->SetPoint(p,val,2.*nll->getVal());
+			double paulNll = getChisq(*data,*pdf,*var);
+			//profileGraphs[pdf_name]->SetPoint(p,val,2.*nll->getVal());
+			profileGraphs[pdf_name]->SetPoint(p,val,paulNll);
 			if (savePVal_) {
 				double correction = getCorrection(data,pdf,1);
 				correctionGraphs[pdf_name]->SetPoint(p,val,correction);
@@ -179,7 +183,8 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 			p++;
 			// check where best fit value is in comparison to scan
 			if (bestFitVal>val && bestFitVal<val+step_size) {
-				profileGraphs[pdf_name]->SetPoint(p,bestFitVal,2.*bestFitNll);
+				//profileGraphs[pdf_name]->SetPoint(p,bestFitVal,2.*bestFitNll);
+				profileGraphs[pdf_name]->SetPoint(p,bestFitVal,bestFitPaulNll);
 				if (savePVal_){
 					correctionGraphs[pdf_name]->SetPoint(p,bestFitVal,bestFitCorrection);
 				}
@@ -241,7 +246,7 @@ void ProfileMultiplePdfs::addProfile(TGraph* graph, TGraph* correction){
 
 /*
 void ProfileMultiplePdfs::printProfilesWithNPars(){
-	
+
 	cout << "List of profiles with n free params" << endl;
 	for (map<string,pair<TGraph*,int> >::iterator it=profileGraphsWithNPars.begin(); it!=profileGraphsWithNPars.end(); it++){
 		cout << it->first << " : " << it->second.first->GetName() << " -- " << it->second.second << " -- " << it->second.first->GetN() << endl;
@@ -250,7 +255,7 @@ void ProfileMultiplePdfs::printProfilesWithNPars(){
 */
 
 void ProfileMultiplePdfs::printProfilesWithCorrectionGraph(){
-	
+
 	cout << "List of profiles with corrections" << endl;
 	for (map<string,pair<TGraph*,TGraph*> >::iterator it=profileGraphsWithCorrectionGraph.begin(); it!=profileGraphsWithCorrectionGraph.end(); it++){
 		cout << it->first << " : " << it->second.first->GetName() << " -- " << it->second.second->GetName() << " -- " << it->second.first->GetN() << " -- " << it->second.second->GetN() << endl;
@@ -258,7 +263,7 @@ void ProfileMultiplePdfs::printProfilesWithCorrectionGraph(){
 }
 
 void ProfileMultiplePdfs::checkPointsInGraphs() {
-	
+
 	if (alreadyChecked_) return;
 	else {
 		int npoints = profileGraphsWithCorrectionGraph.begin()->second.first->GetN();
@@ -357,7 +362,7 @@ string ProfileMultiplePdfs::getEnvelopeBestFitName(){
 }
 
 double ProfileMultiplePdfs::getEnvelopeErrorUp(double sigma){
-	
+
 	TGraph *shiftedEnv = shiftGraph(envelope_,envelopeMinNll_);
 	TGraph *invertedEnv = new TGraph();
 	// best fit value first then the rest
@@ -379,7 +384,7 @@ double ProfileMultiplePdfs::getEnvelopeErrorUp(double sigma){
 }
 
 double ProfileMultiplePdfs::getEnvelopeErrorDn(double sigma){
-	
+
 	TGraph *shiftedEnv = shiftGraph(envelope_,envelopeMinNll_);
 	TGraph *invertedEnv = new TGraph();
 	int newP=0;
@@ -401,7 +406,7 @@ double ProfileMultiplePdfs::getEnvelopeErrorDn(double sigma){
 }
 
 TGraph* ProfileMultiplePdfs::shiftGraph(TGraph *graph, double shiftBy){
-	
+
 	TGraph *ret_graph = new TGraph();
 	double x,y;
 	for (int p=0; p<graph->GetN(); p++){
@@ -453,7 +458,7 @@ void ProfileMultiplePdfs::printProgressBar(float val, float low, float high, boo
 		else prog += " ";
 	}
 	prog += "]";
-	
+
 	if (asBar) cout << "\t" << prog << " " << Form("%3.0f%%\r",100.*(val-low)/(high-low)) << flush;
 	else cout << Form("\t %3.0f%%\r",100.*(val-low)/(high-low)) << flush;
 }
