@@ -15,7 +15,7 @@ USERINCLUDES += -I$(ROOTSYS)/include
 USERINCLUDES += -I$(ROOFITSYS)/include
 USERINCLUDES += -I$(BOOSTPATH)/include
 USERLIBS += -L$(ROOFITSYS)/lib -lRooFit -lRooFitCore -lRooStats
-USERLIBS += $(shell root-config --glibs) -lTMVA -lMinuit -lFoam -lRooFit -lRooFitCore -lMathMore -lRooStats
+USERLIBS += $(shell root-config --glibs) -lTMVA -lMinuit -lFoam -lRooFit -lRooFitCore -lRooStats
 USERLIBS += -L$(BOOSTPATH)/lib -lboost_regex -lboost_program_options
 CXXFLAGS = -Wall -g -Wl,-rpath=$(BASEDIR)/lib 
 LDFLAGS = -shared -W 
