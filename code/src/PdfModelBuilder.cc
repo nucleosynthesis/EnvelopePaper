@@ -139,7 +139,8 @@ void PdfModelBuilder::makeSBPdfs(bool cache){
   else {
     sigYield = signalModifier;
   }
-  bkgYield = new RooRealVar("bkg_yield","bkg_yield",1000.,0.,1.e6);
+
+  bkgYield = new RooRealVar("bkg_yield","bkg_yield",7712.,0.,1.e6);
 
   for (map<string,RooAbsPdf*>::iterator bkg=bkgPdfs.begin(); bkg!=bkgPdfs.end(); bkg++){
     RooAbsPdf *sbMod = new RooAddPdf(Form("sb_%s",bkg->first.c_str()),Form("sb_%s",bkg->first.c_str()),RooArgList(*(bkg->second),*sigPdf),RooArgList(*bkgYield,*sigYield));
