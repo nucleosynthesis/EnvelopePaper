@@ -6,11 +6,14 @@
 #include <string>
 
 #include "TFile.h"
+#include "TMath.h"
 #include "TGraph.h"
 
 #include "RooRealVar.h"
 #include "RooAbsPdf.h"
+#include "RooAddPdf.h"
 #include "RooAbsData.h"
+#include "RooWorkspace.h"
 
 using namespace std;
 using namespace RooFit;
@@ -18,13 +21,18 @@ using namespace RooFit;
 class ProfileMultiplePdfs {
 
   public:
-    ProfileMultiplePdfs(bool verbose=false);
+    ProfileMultiplePdfs(bool verbose=true);
     ~ProfileMultiplePdfs();
 
     void addPdf(RooAbsPdf *pdf, float penaltyTerm=0.);
     void addPdfs(map<string,RooAbsPdf*> pdfs);
     void clearPdfs();
     void printPdfs();
+    void setObsVar(RooRealVar *var){
+     obs_var=var;
+     wspace->import(*obs_var);
+     obs_var_set=true;
+   }
 
 		void setSavePVal(bool val);
 
@@ -36,7 +44,7 @@ class ProfileMultiplePdfs {
 		void addProfile(TGraph* graph, float corr_val);
 		void addProfile(TGraph* graph, TGraph *correction);
 		double getCorrection(RooAbsData *data, RooAbsPdf *pdf, int add_pars=0);
-		double getChisq(RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &var, bool prt=false);
+		double getChisq(RooAbsData *dat, RooAbsPdf *pdf, bool prt=false);
 
 		//void printProfilesWithNPars();
 		void printProfilesWithCorrectionGraph();
@@ -67,7 +75,10 @@ class ProfileMultiplePdfs {
 		string envelopeBestFitName_;
 		double envelopeBestFitVal_;
     RooArgList *pdfsArgSet;
-
+    		RooRealVar *obs_var;
+		bool obs_var_set;
+		double globMu;
+		RooWorkspace *wspace;
 		vector<TGraph*> cleanUp_;
 };
 

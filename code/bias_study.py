@@ -54,15 +54,20 @@ if not options.envelopeOnly:
 	# define poi
 	poiLow = cfg.poi_scan_range[0] 
 	poiHigh = cfg.poi_scan_range[1]
-	mu = r.RooRealVar('mu','mu',0.,cfg.poi_range[0],cfg.poi_range[1])
+	#mu = r.RooRealVar('mu','mu',0.,cfg.poi_range[0],cfg.poi_range[1])
 	# build signal model
-	mean = r.RooRealVar('mean','mean',125)
+	mean = ws.var("mean")#r.RooRealVar('mean','mean',125)
 	mean.setConstant()
-	sigma = r.RooRealVar('sigma','sigma',1.19)
+	sigma = ws.var("sigma")#r.RooRealVar('sigma','sigma',1.19)
 	sigma.setConstant()
-	nsignal_const = r.RooRealVar('nsignal_const','nsignal_const',50.8)
+	#nsignal_const = r.RooRealVar('nsignal_const','nsignal_const',50.8)
+	#nsignal_const.setConstant()
+	#sig_pdf = r.RooGaussian('gaus','gaus',mgg,mean,sigma)
+	mu = ws.var('r')
+	mu.setRange(cfg.poi_range[0],cfg.poi_range[1])
+	nsignal_const = ws.var("nsignal_const")
 	nsignal_const.setConstant()
-	sig_pdf = r.RooGaussian('gaus','gaus',mgg,mean,sigma)
+	sig_pdf = ws.pdf('gaus')
 
 	# setup gen pdf
 	toySetup = r.PdfModelBuilder()
@@ -97,6 +102,8 @@ if not options.envelopeOnly:
 		toySetup.throwToy('truth_toy%d'%toy,int(dataSet.sumEntries()),False,True,True,True)
 		toyData = toySetup.getToyDataSingle()
 		profiler = r.ProfileMultiplePdfs()
+		#profiler.wspace = ws
+	        profiler.setObsVar(mgg)
 		profiler.setSavePVal(cfg.savePVal)
 		profiler.addPdfs(envelopeSetup.getSBPdfs())
 		profiler.makeProfiles(toyData,mu,poiLow,poiHigh,cfg.points_in_scan,'_toy%d'%toy,cfg.printScanProgress)

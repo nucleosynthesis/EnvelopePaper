@@ -5,6 +5,7 @@
 #include "TLatex.h"
 #include "RooPlot.h"
 #include "RooMinuit.h"
+#include "RooMinimizer.h"
 #include "RooFitResult.h"
 #include "TF1.h"
 #include "TMatrixD.h"
@@ -18,6 +19,8 @@ ProfileMultiplePdfs::ProfileMultiplePdfs(bool verbose):
 	savePVal_(false)
 {
   listOfPdfs.clear();
+  wspace = new RooWorkspace();
+  wspace->SetName("meh");
   //listOfPdfs = new RooArgList();
 }
 
@@ -36,11 +39,15 @@ void ProfileMultiplePdfs::setSavePVal(bool val){
 void ProfileMultiplePdfs::addPdf(RooAbsPdf *pdf, float penaltyTerm){
   pdfsArgSet->add(*pdf);
   listOfPdfs.insert(pair<string,pair<RooAbsPdf*,float> >(pdf->GetName(),make_pair(pdf,penaltyTerm)));
+  wspace->import(*(pdf));
 }
 
 void ProfileMultiplePdfs::addPdfs(map<string,RooAbsPdf*> pdfs) {
 	for (map<string,RooAbsPdf*>::iterator pdf=pdfs.begin(); pdf!=pdfs.end(); pdf++){
 		listOfPdfs.insert(make_pair(pdf->first,make_pair(pdf->second,0.)));
+		RooAbsPdf *thispdf = (listOfPdfs[pdf->first]).first;
+		(thispdf)->SetName((pdf->first).c_str());
+		wspace->import(*(thispdf),RooFit::RecycleConflictNodes());
 	}
 }
 
@@ -57,45 +64,48 @@ void ProfileMultiplePdfs::printPdfs(){
   }
 }
 
-double ProfileMultiplePdfs::getChisq(RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &var, bool prt) {
+double ProfileMultiplePdfs::getChisq(RooAbsData *dat, RooAbsPdf *pdf, bool prt) {
 
+  //RooRealVar *var = obs_var;
+  RooRealVar *var = wspace->var(obs_var->GetName());
   // Find total number of events
   double nEvt;
   double nTot=0.0;
 
-  for(int j=0;j<dat.numEntries();j++) {
-    dat.get(j);
-    nEvt=dat.weight();
+
+  for(int j=0;j<dat->numEntries();j++) {
+    dat->get(j);
+    nEvt=dat->weight();
     nTot+=nEvt;
   }
-
+  //RooAddPdf *pdf = dynamic_cast<RooAddPdf*>(pdfin);
   // Find chi-squared equivalent 2NLL
-  //RooRealVar *var=(RooRealVar*)(pdf.getParameters(*dat)->find("CMS_hgg_mass"));
   double totNLL=0.0;
   double prbSum=0.0;
 
-  for(int j=0;j<dat.numEntries();j++) {
-    double m=dat.get(j)->getRealValue(var.GetName());
+//  if(prt) cout << "NData " << dat.sumEntries() << endl;
+  for(int j=0;j<dat->numEntries();j++) {
+    double m=dat->get(j)->getRealValue(var->GetName());
 
     // Find probability density and hence probability
-    var.setVal(m);
-    double prb=0.25*pdf.getVal(var);
+    var->setVal(m);
+    double prb=0.25*pdf->getVal(*var);
     prbSum+=prb;
 
-    dat.get(j);
-    nEvt=dat.weight();
+    dat->get(j);
+    nEvt=dat->weight();
 
     double mubin=nTot*prb;
     double contrib(0.);
     if (nEvt < 1) contrib = mubin;
-    else contrib=mubin-nEvt+nEvt*log(nEvt/mubin);
+    else contrib=mubin-nEvt+nEvt*TMath::Log(nEvt/mubin);
     totNLL+=contrib;
 
-    if(prt) cout << "Bin " << j << " prob = " << prb << " nEvt = " << nEvt << ", mu = " << mubin << " contribution " << contrib << endl;
+    if(prt) cout << pdf->GetName() << ", Bin " << j << " center" << m << " prob = " << prb << " nEvt = " << nEvt << ", mu = " << mubin << " contribution " << contrib << endl;
   }
 
   totNLL*=2.0;
-  if(prt) cout << pdf.GetName() << " nTot = " << nTot << " 2NLL constant = " << totNLL << endl;
+  if(prt) cout << pdf->GetName() << " nTot = " << nTot << " 2NLL constant = " << totNLL << endl;
 
   return totNLL;
 }
@@ -105,7 +115,7 @@ double ProfileMultiplePdfs::getCorrection(RooAbsData *data, RooAbsPdf *pdf, int 
 	// HARD-CODED!!
 	RooRealVar *var = (RooRealVar*)(pdf->getParameters((RooArgSet*)0)->find("CMS_hgg_mass"));
 	double minnll = 9999.;
-	minnll = getChisq(*data,*pdf,*var);
+	minnll = getChisq(data,pdf);
 	int nbins = var->getBins();
 	RooArgSet *allParams = (RooArgSet*)pdf->getParameters(*data);
 	RooArgSet *constParams = (RooArgSet*)allParams->selectByAttrib("Constant",kTRUE);
@@ -119,16 +129,21 @@ double ProfileMultiplePdfs::getCorrection(RooAbsData *data, RooAbsPdf *pdf, int 
 }
 
 // no penalty
-void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float poiLow, float poiHigh, int npoints, string name_ext, bool printProgress) {
+void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi_in, float poiLow_In, float poiHigh_In, int npoints, string name_ext, bool printProgress) {
 
-	float step_size = (poiHigh-poiLow)/float(npoints);
+	float step_size = (poiHigh_In-poiLow_In)/float(npoints);
 
 	//cout << "pL: " << poiLow << " pH: " << poiHigh << " np: " << npoints << " ss: " << step_size << endl;
-
+	RooRealVar *poi = wspace->var(poi_in->GetName());  // this seems like a stupid thing but it makes things work ?!?!?!
+        
 	// loop pdfs
 	for (map<string,pair<RooAbsPdf*,float> >::iterator pdfIt=listOfPdfs.begin(); pdfIt!=listOfPdfs.end(); pdfIt++){
 		string pdf_name = pdfIt->first;
-		RooAbsPdf *pdf = pdfIt->second.first;
+		std::cout << "Look For " << pdf_name << std::endl;
+		RooAbsPdf *pdf = wspace->pdf(pdf_name.c_str());//pdfIt->second.first;
+		//RooAbsPdf *pdf = pdfIt->second.first;
+		//pdf->addOwnedComponents(RooArgSet(*obs_var));
+		std::cout << "Got  " << pdf->GetName() << std::endl;
 		TGraph *profileCurve = new TGraph();
 		profileCurve->SetName(Form("%s%s",pdf_name.c_str(),name_ext.c_str()));
 		profileGraphs.insert(make_pair(pdf_name,profileCurve));
@@ -141,14 +156,18 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 		// find best fit value
 		RooAbsReal *nll = pdf->createNLL(*data);
 		poi->setConstant(false);
-		RooMinuit(*nll).migrad();
+		//RooMinuit(*nll).migrad();
+		RooMinimizer minim(*nll);
+		minim.minimize("Minuit","minimize");
 		double bestFitVal=poi->getVal();
 		double bestFitNll=nll->getVal();
-		RooRealVar *var = (RooRealVar*)(pdf->getParameters((RooArgSet*)0)->find("CMS_hgg_mass")); // HARD-CODE!!
-		double bestFitPaulNll = getChisq(*data,*pdf,*var);
+		//RooRealVar *var = (RooRealVar*)(pdf->getParameters((RooArgSet*)0)->find("CMS_hgg_mass")); // HARD-CODE!!
+		//RooRealVar *var = obs_var;
+		globMu = poi->getVal();
+		double bestFitPaulNll = getChisq(data,pdf);
 		double bestFitCorrection=999.;
 		if (savePVal_) {
-			bestFitCorrection = getCorrection(data,pdf,2); //HACK
+			bestFitCorrection = getCorrection(data,pdf,1); //HACK
 		}
 		int p=0;
 
@@ -158,26 +177,31 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi, float 
 		//		p++;
 		//}
 		// scan centered at best fit
-		double cen  = 0.5*(poiHigh+poiLow);
+		double cen  = 0.5*(poiHigh_In+poiLow_In);
 
 		double diff = bestFitVal-cen;
 
-		poiLow  += diff ;// bestFitVal - fabs(poiLow);
-		poiHigh += diff ;//+ fabs(poiHigh);
+		double poiLow = poiLow_In  + diff ;// bestFitVal - fabs(poiLow);
+		double poiHigh= poiHigh_In + diff ;//+ fabs(poiHigh);
 		step_size = (poiHigh-poiLow)/float(npoints);
 
+		poi->setConstant(true);
+		RooMinimizer minim2(*nll);
 		cout << "Scanning.... [" << profileCurve->GetName() << " to " << data->GetName() << "]" << endl;
 		for (float val=poiLow; val<poiHigh+(step_size/2.); val+=step_size) {
 			if (printProgress) printProgressBar(val,poiLow,poiHigh);
-			poi->setConstant(false);
+		//	poi->setConstant(false);
 			poi->setVal(val);
 			poi->setConstant(true);
-			RooMinuit(*nll).migrad();
-			double paulNll = getChisq(*data,*pdf,*var);
+			minim2.minimize("Minuit","minimize");
+		//	poi->setConstant(true);
+			//RooMinuit(*nll).migrad();
+			globMu = poi->getVal();
+			double paulNll = getChisq(data,pdf);
 			//profileGraphs[pdf_name]->SetPoint(p,val,2.*nll->getVal());
 			profileGraphs[pdf_name]->SetPoint(p,val,paulNll);
 			if (savePVal_) {
-				double correction = getCorrection(data,pdf,1);
+				double correction = getCorrection(data,pdf);
 				correctionGraphs[pdf_name]->SetPoint(p,val,correction);
 			}
 			p++;
