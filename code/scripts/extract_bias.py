@@ -5,6 +5,7 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("-f","--filename")
 parser.add_option("-d","--datfile")
+parser.add_option("-D","--outdir")
 parser.add_option("-p","--makePlotsOnly",action="store_true",default=False)
 parser.add_option("-b","--isBatch",action="store_true",default=False)
 parser.add_option("-s","--splitJobs",action="store_true",default=False)
@@ -33,6 +34,7 @@ def readConfig():
 		if line.startswith('#'): continue
 		if '=' not in line: continue
 		line = line.strip('\n')
+		line = line.strip()
 		option = line.split('=')[0]
 		value = line.split('=')[1]
 		cfg[option] = value
@@ -151,15 +153,70 @@ def makePlots():
 	makeCoveragePlot()
 	makeWhichPdf2DPlot()
 
+def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs):
+	# given a file should return pull histogram and which_pdf histogram and save it to a file
+	# outfiledir = 'dir/envpdfs/gen_pdf/mu_val/name.root'
+	os.system('mkdir -p %s'%outfiledir)
+	outf = r.TFile('%s/%s'%(outfiledir,options.filename),'RECREATE')
+
+	file_names = []
+	for job in range(int(cfg['njobs'])):
+		file_names.append('%s/outfiles/BiasResults_mu%4.2f_gen%s_job%d.root'%(cfg['store_directory'],mu_val,gen_pdf,job))
+
+	biasComp = biasComputer()
+	biasComp.setCoverageValues([float(x) for x in cfg['coverageValues'].split(',')])
+	biasComp.setOutFile(outf)
+	biasComp.addFiles(file_names)
+	biasComp.setPullHistBinning(50)
+	biasComp.setGenPdf(gen_pdf)
+	biasComp.setMuVal(mu_val)
+	biasComp.setEnvPdfs(env_pdfs)
+	biasComp.doPlots = False
+
+	for c in cfg['corrVals'].split(','):
+		biasComp.setCorrection(c)
+		biasComp.compute('mu%4.2f_gen%s_c%s'%(mu_val,gen_pdf,c))
+		pullHist = biasComp.getPullHist()
+		covHist = biasComp.getCoverageHist()
+		whichHist = biasComp.getWhichPdfHist()
+		outf.cd()
+		pullHist.Write()
+		covHist.Write()
+		whichHist.Write()
+	del biasComp
+	print 'Computation of bias and coverage done for mu=%4.2f and gen=%s'%(mu_val,gen_pdf)
+
 # MAIN BELOW:
 
 readConfig()
+compute_pdf_sets = []
+for set in cfg['compute_pdf_sets'].split(':'):
+	the_set = set.strip('[').strip(']').split(',')
+	compute_pdf_sets.append(the_set)
 
+for pdf_set in compute_pdf_sets:
+	location_track = ''
+	for pdf in pdf_set: location_track += pdf
+
+	for gen_pdf in cfg['gen_pdfs'].split(','):
+		for val in cfg['inj_mu_vals'].split(','):
+			mu_val = float(val)
+			output_loc = '%s/env_%s/genpdf_%s/mu_%4.2f'%(options.outdir,location_track,gen_pdf,mu_val)
+			os.system('mkdir -p %s'%output_loc)
+			postProcessToys(output_loc,gen_pdf,mu_val,pdf_set)
+
+sys.exit()
+
+"""
 # for plot only option
 if options.makePlotsOnly:
 	remakeDictionaries()
 	makePlots()
 	sys.exit()
+
+
+
+sys.exit()
 
 # if doing the full garb
 outfile = r.TFile(options.filename,'RECREATE')
@@ -249,7 +306,7 @@ outfile.Close()
 
 makePlots(options.filename)
 
-
+"""
 
 
 

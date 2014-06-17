@@ -135,7 +135,7 @@ void ProfileMultiplePdfs::makeProfiles(RooAbsData *data, RooRealVar *poi_in, flo
 
 	//cout << "pL: " << poiLow << " pH: " << poiHigh << " np: " << npoints << " ss: " << step_size << endl;
 	RooRealVar *poi = wspace->var(poi_in->GetName());  // this seems like a stupid thing but it makes things work ?!?!?!
-        
+
 	// loop pdfs
 	for (map<string,pair<RooAbsPdf*,float> >::iterator pdfIt=listOfPdfs.begin(); pdfIt!=listOfPdfs.end(); pdfIt++){
 		string pdf_name = pdfIt->first;
@@ -310,9 +310,10 @@ void ProfileMultiplePdfs::constructEnvelope(string ext){
 		cerr << "No graphs to return envelope for! " << endl;
 		exit(1);
 	}
-	else if (profileGraphsWithCorrectionGraph.size()==1) {
-		envelope_ = profileGraphsWithCorrectionGraph.begin()->second.first;
-	}
+	// THIS NOW DOESNT DO THE TASKS REQUIRED
+	//else if (profileGraphsWithCorrectionGraph.size()==1) {
+	//	envelope_ = profileGraphsWithCorrectionGraph.begin()->second.first;
+	//}
 	else {
 		// check graphs (and correction graphs) have same number of points
 		// also find global best fit value for final graph

@@ -11,7 +11,7 @@ if [ "$SCRAM_ARCH" = "slc6_amd64_gcc472" ] || [[ $res == *6.* ]]; then
 	export BOOSTPATH=/afs/cern.ch/sw/lcg/external/Boost/1.53.0_python2.7/x86_64-slc6-gcc47-opt:$BOOSTPATH
 
 # SLC 5
-elif [ "$SCRAM_ARCH" = "slc5_amd64_gcc472" ]  || [[ $res == *6.* ]]; then
+elif [ "$SCRAM_ARCH" = "slc5_amd64_gcc472" ]  || [[ $res == *5.* ]]; then
 	echo 'Setting up for SLC5'
 	. /afs/cern.ch/sw/lcg/external/gcc/4.7/x86_64-slc5/setup.sh
 	. /afs/cern.ch/sw/lcg/app/releases/ROOT/5.34.18/x86_64-slc5-gcc47-opt/root/bin/thisroot.sh
@@ -28,5 +28,5 @@ elif [ "$SCRAM_ARCH" = "osx107_amd64_gcc462" ] ; then
 
 # not found
 else
-  echo Version not recognised: $SCRAM_ARCH 
+  echo Version not recognised: $SCRAM_ARCH
 fi
