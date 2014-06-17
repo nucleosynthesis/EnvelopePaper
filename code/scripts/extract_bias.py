@@ -3,12 +3,13 @@
 
 from optparse import OptionParser
 parser = OptionParser()
-parser.add_option("-f","--filename")
+parser.add_option("-f","--filename",default='bias_hists.root')
 parser.add_option("-d","--datfile")
-parser.add_option("-D","--outdir")
-parser.add_option("-p","--makePlotsOnly",action="store_true",default=False)
-parser.add_option("-b","--isBatch",action="store_true",default=False)
+parser.add_option("-D","--outdir",default='./')
+#parser.add_option("-p","--makePlotsOnly",action="store_true",default=False)
+#parser.add_option("-b","--isBatch",action="store_true",default=False)
 parser.add_option("-s","--splitJobs",action="store_true",default=False)
+parser.add_option("-q","--queue")
 (options,args) = parser.parse_args()
 
 import os
@@ -20,7 +21,7 @@ import ROOT as r
 r.gROOT.ProcessLine(".x paperStyle.C")
 
 from python.biasComputer import *
-if options.isBatch: r.gROOT.SetBatch()
+r.gROOT.SetBatch()
 
 cfg = {}
 pullMeanGraphs={}
@@ -153,15 +154,11 @@ def makePlots():
 	makeCoveragePlot()
 	makeWhichPdf2DPlot()
 
-def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs):
+def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs,file_names):
 	# given a file should return pull histogram and which_pdf histogram and save it to a file
 	# outfiledir = 'dir/envpdfs/gen_pdf/mu_val/name.root'
 	os.system('mkdir -p %s'%outfiledir)
 	outf = r.TFile('%s/%s'%(outfiledir,options.filename),'RECREATE')
-
-	file_names = []
-	for job in range(int(cfg['njobs'])):
-		file_names.append('%s/outfiles/BiasResults_mu%4.2f_gen%s_job%d.root'%(cfg['store_directory'],mu_val,gen_pdf,job))
 
 	biasComp = biasComputer()
 	biasComp.setCoverageValues([float(x) for x in cfg['coverageValues'].split(',')])
@@ -186,6 +183,53 @@ def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs):
 	del biasComp
 	print 'Computation of bias and coverage done for mu=%4.2f and gen=%s'%(mu_val,gen_pdf)
 
+def makeNewDatFile(output_loc,pdf_set,gen_pdf,mu_val):
+	f = open('%s/cfg.dat'%output_loc,'w')
+	for name, value in cfg.items():
+		if name=='store_directory':
+			f.write('store_directory=.\n')
+		elif name=='gen_pdfs':
+			f.write('gen_pdfs=%s\n'%gen_pdf)
+		elif name=='compute_pdf_sets':
+			comp_list = '['
+			for pdf in pdf_set: comp_list += pdf+'.'
+			comp_list = comp_list[:-1]+']'
+			f.write('compute_pdf_sets=%s\n'%comp_list)
+		elif name=='inj_mu_vals':
+			f.write('inj_mu_vals=%4.2f\n'%mu_val)
+		else:
+			f.write('%s=%s\n'%(name,value))
+	f.close()
+
+def writeBatchScript(output_loc,pdf_set,gen_pdf,mu_val,file_names):
+	makeNewDatFile(output_loc,pdf_set,gen_pdf,mu_val)
+	f = open('%s/sub.sh'%output_loc,'w')
+	f.write('#!/bin/bash\n')
+	f.write('mkdir scratch\n')
+	f.write('cd scratch\n')
+	f.write('cd %s\n'%os.getcwd())
+	f.write('. setup_root_lxplus.sh\n')
+	f.write('cd -\n')
+	f.write('mkdir outfiles\n')
+	for fil in file_names:
+		f.write('cp %s outfiles/\n'%fil)
+	f.write('cp %s/cfg.dat .\n'%output_loc)
+	f.write('cp %s/scripts/extract_bias.py .\n'%os.getcwd())
+	f.write('cp -r %s/python .\n'%os.getcwd())
+	f.write('cp -r %s/lib .\n'%os.getcwd())
+	f.write('cp %s/paperStyle.C .\n'%os.getcwd())
+	f.write('if ( ./extract_bias.py -f %s -d cfg.dat ) then\n'%options.filename)
+	f.write('\ttouch %s.done\n'%f.name)
+	f.write('\tcp %s %s\n'%(options.filename,output_loc))
+	f.write('else\n')
+	f.write('\ttouch %s.fail\n'%f.name)
+	f.write('fi\n')
+	f.close()
+	os.system('chmod +x %s'%f.name)
+	if options.queue:
+		os.system('bsub -q %s -o %s.log %s'%(options.queue,f.name,f.name))
+
+
 # MAIN BELOW:
 
 readConfig()
@@ -194,16 +238,31 @@ for set in cfg['compute_pdf_sets'].split(':'):
 	the_set = set.strip('[').strip(']').split(',')
 	compute_pdf_sets.append(the_set)
 
+print 'Configuring batch scripts for folder %s'%(options.outdir)
 for pdf_set in compute_pdf_sets:
 	location_track = ''
 	for pdf in pdf_set: location_track += pdf
-
 	for gen_pdf in cfg['gen_pdfs'].split(','):
 		for val in cfg['inj_mu_vals'].split(','):
 			mu_val = float(val)
-			output_loc = '%s/env_%s/genpdf_%s/mu_%4.2f'%(options.outdir,location_track,gen_pdf,mu_val)
+			output_loc = '%s/%s/env_%s/genpdf_%s/mu_%4.2f'%(os.getcwd(),options.outdir,location_track,gen_pdf,mu_val)
 			os.system('mkdir -p %s'%output_loc)
-			postProcessToys(output_loc,gen_pdf,mu_val,pdf_set)
+			file_names = []
+			for job in range(int(cfg['njobs'])):
+				file_names.append('%s/%s/outfiles/BiasResults_mu%4.2f_gen%s_job%d.root'%(os.getcwd(),cfg['store_directory'],mu_val,gen_pdf,job))
+
+			if not options.splitJobs:
+				postProcessToys(output_loc,gen_pdf,mu_val,pdf_set,file_names)
+			else:
+				writeBatchScript(output_loc,pdf_set,gen_pdf,mu_val,file_names)
+
+os.system('touch %s/envelope_configurations.help'%(options.outdir))
+for pdf_set in compute_pdf_sets:
+	location_track = ''
+	for pdf in pdf_set: location_track += pdf
+	os.system('touch %s/env_%s/gen_pdfs.help'%(options.outdir,location_track))
+	for gen_pdf in cfg['gen_pdfs'].split(','):
+		os.system('touch %s/env_%s/genpdf_%s/mu_vals.help'%(options.outdir,location_track,gen_pdf))
 
 sys.exit()
 

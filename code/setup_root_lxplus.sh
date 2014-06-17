@@ -25,6 +25,10 @@ elif [ "$SCRAM_ARCH" = "osx107_amd64_gcc462" ] ; then
   echo 'Setting up for Mac OS'
   . /Applications/root/bin/thisroot.sh
   export BOOSTPATH=/Applications/boost_1_49_0
+	export PATH=$PWD:$PATH
+	export PYTHONPATH=$PWD:$PYTHONPATH
+	export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
+	export ROOFITSYS=$ROOTSYS
 
 # not found
 else
