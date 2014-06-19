@@ -9,6 +9,7 @@ parser.add_option("-D","--outdir",default='./')
 #parser.add_option("-p","--makePlotsOnly",action="store_true",default=False)
 #parser.add_option("-b","--isBatch",action="store_true",default=False)
 parser.add_option("-s","--splitJobs",action="store_true",default=False)
+parser.add_option("-S","--isSplitJob",action="store_true",default=False)
 parser.add_option("-q","--queue")
 (options,args) = parser.parse_args()
 
@@ -157,8 +158,16 @@ def makePlots():
 def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs,file_names):
 	# given a file should return pull histogram and which_pdf histogram and save it to a file
 	# outfiledir = 'dir/envpdfs/gen_pdf/mu_val/name.root'
-	os.system('mkdir -p %s'%outfiledir)
-	outf = r.TFile('%s/%s'%(outfiledir,options.filename),'RECREATE')
+	sw = r.TStopwatch()
+	sw.Start()
+	outfname = ''
+	if options.isSplitJob:
+		outfname = options.filename
+	else:
+		outfname = outfiledir+'/'+options.filename
+		os.system('mkdir -p %s'%outfiledir)
+
+	outf = r.TFile(outfname,'RECREATE')
 
 	biasComp = biasComputer()
 	biasComp.setCoverageValues([float(x) for x in cfg['coverageValues'].split(',')])
@@ -172,7 +181,7 @@ def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs,file_names):
 
 	for c in cfg['corrVals'].split(','):
 		biasComp.setCorrection(c)
-		biasComp.compute('mu%4.2f_gen%s_c%s'%(mu_val,gen_pdf,c))
+		biasComp.compute('c%s'%c)
 		pullHist = biasComp.getPullHist()
 		covHist = biasComp.getCoverageHist()
 		whichHist = biasComp.getWhichPdfHist()
@@ -180,8 +189,24 @@ def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs,file_names):
 		pullHist.Write()
 		covHist.Write()
 		whichHist.Write()
+		pullCanv = biasComp.pullPlot('',True)
+		outf.cd()
+		pullCanv.SetName('pull_canv_c%s'%c)
+		pullCanv.Write()
+		covCanv = biasComp.coverageHistPlot('',True)
+		outf.cd()
+		covCanv.SetName('coverage_canv_c%s'%c)
+		covCanv.Write()
+		whichCanv = biasComp.whichPdfPlot('',True)
+		outf.cd()
+		whichCanv.SetName('pdf_choice_canv_c%s'%c)
+		whichCanv.Write()
 	del biasComp
+	sw.Stop()
+	print '-----------------------------------------------------'
 	print 'Computation of bias and coverage done for mu=%4.2f and gen=%s'%(mu_val,gen_pdf)
+	print 'Took: Real time %3.2f (secs), CPU time %3.2f (secs)'%(sw.RealTime(),sw.CpuTime())
+	print '-----------------------------------------------------'
 
 def makeNewDatFile(output_loc,pdf_set,gen_pdf,mu_val):
 	f = open('%s/cfg.dat'%output_loc,'w')
@@ -192,7 +217,7 @@ def makeNewDatFile(output_loc,pdf_set,gen_pdf,mu_val):
 			f.write('gen_pdfs=%s\n'%gen_pdf)
 		elif name=='compute_pdf_sets':
 			comp_list = '['
-			for pdf in pdf_set: comp_list += pdf+'.'
+			for pdf in pdf_set: comp_list += pdf+','
 			comp_list = comp_list[:-1]+']'
 			f.write('compute_pdf_sets=%s\n'%comp_list)
 		elif name=='inj_mu_vals':
@@ -205,12 +230,11 @@ def writeBatchScript(output_loc,pdf_set,gen_pdf,mu_val,file_names):
 	makeNewDatFile(output_loc,pdf_set,gen_pdf,mu_val)
 	f = open('%s/sub.sh'%output_loc,'w')
 	f.write('#!/bin/bash\n')
-	f.write('mkdir scratch\n')
+	f.write('mkdir -p scratch\n')
 	f.write('cd scratch\n')
-	f.write('cd %s\n'%os.getcwd())
+	f.write('cp %s/setup_root_lxplus.sh .\n'%os.getcwd())
 	f.write('. setup_root_lxplus.sh\n')
-	f.write('cd -\n')
-	f.write('mkdir outfiles\n')
+	f.write('mkdir -p outfiles\n')
 	for fil in file_names:
 		f.write('cp %s outfiles/\n'%fil)
 	f.write('cp %s/cfg.dat .\n'%output_loc)
@@ -218,7 +242,7 @@ def writeBatchScript(output_loc,pdf_set,gen_pdf,mu_val,file_names):
 	f.write('cp -r %s/python .\n'%os.getcwd())
 	f.write('cp -r %s/lib .\n'%os.getcwd())
 	f.write('cp %s/paperStyle.C .\n'%os.getcwd())
-	f.write('if ( ./extract_bias.py -f %s -d cfg.dat ) then\n'%options.filename)
+	f.write('if ( ./extract_bias.py -f %s -d cfg.dat -S ) then\n'%options.filename)
 	f.write('\ttouch %s.done\n'%f.name)
 	f.write('\tcp %s %s\n'%(options.filename,output_loc))
 	f.write('else\n')

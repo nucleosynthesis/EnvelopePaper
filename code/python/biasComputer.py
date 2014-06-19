@@ -112,16 +112,22 @@ class biasComputer:
 				sys.exit('%s is not a valid correction value. Must convert to float or be \'P\''%c)
 		self.correction = c
 
-	def pullPlot(self,name_ext):
+	def pullPlot(self,name_ext,ret=False):
 
 		# make self.pull plot
 		self.canv.Clear()
+		self.canv.SetRightMargin(0.03)
+		self.canv.SetLeftMargin(0.15)
+		self.canv.Modified()
+		self.canv.Update()
+		self.pull_hist.GetYaxis().SetTitleOffset(1.4)
 		self.pull_fit = r.TF1('self.pull_fit','gaus',-3,3)
 		self.pull_hist.Fit(self.pull_fit,"QN")
 		self.pull_hist.SetLineColor(r.kBlue+2)
 		self.pull_hist.SetLineWidth(2)
 		self.pull_fit.SetLineColor(r.kRed)
 		self.pull_fit.SetLineWidth(2)
+		self.pull_hist.GetXaxis().SetRangeUser(self.pull_hist.GetMean()-3.,self.pull_hist.GetMean()+3.)
 		self.pull_hist.Draw("LEP")
 		# arrow for hist mean
 		hist_mean = r.TArrow()
@@ -164,18 +170,26 @@ class biasComputer:
 		lat.DrawLatex(0.16,0.93,"Generated with %s at #mu=%4.2f and c=%s"%(gen_name,self.mu_val,self.correction))
 		lat.DrawLatex(0.75,0.93,"%d Entries"%self.pull_hist.GetEntries())
 
-		self.canv.Print("diagnostics/pull_hist_%s.pdf"%name_ext)
-		self.outfile.cd()
-		self.pull_hist.Write()
+		if ret:
+			return self.canv
+		else:
+			self.canv.Print("diagnostics/pull_hist_%s.pdf"%name_ext)
+			self.outfile.cd()
+			self.pull_hist.Write()
 		#self.outfile.cd("Canvases")
 		#canv.SetName("pull_hist_%s"%name_ext)
 		#canv.Write()
 
-	def whichPdfPlot(self,name_ext):
+	def whichPdfPlot(self,name_ext,ret=False):
 
 		# make fit pdf plot for number of times refitted
 		#canv = r.TCanvas()
 		self.canv.Clear()
+		self.canv.SetRightMargin(0.03)
+		self.canv.SetLeftMargin(0.15)
+		self.canv.Modified()
+		self.canv.Update()
+		self.whichpdf_hist.GetYaxis().SetTitleOffset(1.4)
 		self.whichpdf_hist.SetFillColor(r.kBlue+1)
 		self.whichpdf_hist.SetStats(0)
 		self.whichpdf_hist.Draw("HIST")
@@ -185,14 +199,41 @@ class biasComputer:
 		gen_name = self.gen_pdf.split('_')[-1]
 		lat.DrawLatex(0.16,0.93,"Generated with %s at #mu=%3.1f and c=%s"%(gen_name,self.mu_val,self.correction))
 		lat.DrawLatex(0.75,0.93,"%d Entries"%self.whichpdf_hist.GetEntries())
-		self.canv.Print("diagnostics/pdf_choice_hist_%s.pdf"%name_ext)
-		self.outfile.cd()
-		self.whichpdf_hist.Write()
+
+		if ret:
+			return self.canv
+		else:
+			self.canv.Print("diagnostics/pdf_choice_hist_%s.pdf"%name_ext)
+			self.outfile.cd()
+			self.whichpdf_hist.Write()
 		#self.outfile.cd("Canvases")
 		#canv.SetName("pdf_choice_hist_%s"%name_ext)
 		#canv.Modified()
 		#canv.Update()
 		#canv.Write()
+
+	def coverageHistPlot(self,name_ext,ret=False):
+		self.canv.Clear()
+		self.canv.SetRightMargin(0.03)
+		self.canv.SetLeftMargin(0.15)
+		self.canv.Modified()
+		self.canv.Update()
+		self.coverage_hist.GetYaxis().SetTitleOffset(1.4)
+		self.coverage_hist.SetFillColor(r.kGreen+1)
+		self.coverage_hist.SetStats(0)
+		self.coverage_hist.Draw("HIST")
+		self.coverage_hist.Draw("TEXTSAME")
+		lat = r.TLatex()
+		lat.SetNDC()
+		gen_name = self.gen_pdf.split('_')[-1]
+		lat.DrawLatex(0.16,0.93,"Generated with %s at #mu=%3.1f and c=%s"%(gen_name,self.mu_val,self.correction))
+		lat.DrawLatex(0.75,0.93,"%d Toys"%self.coverage_hist.GetBinContent(self.coverage_hist.GetNbinsX()))
+		if ret:
+			return self.canv
+		else:
+			self.canv.Print("diagnostics/coverage_hist_%s.pdf"%name_ext)
+			self.outfile.cd()
+			self.coverage_hist.Write()
 
 	def compute(self,name_ext):
 
@@ -203,7 +244,7 @@ class biasComputer:
 		#if not self.outfile.Get('ProfileEnvelopes'): self.outfile.mkdir('ProfileEnvelopes')
 		#if not self.outfile.Get('Canvases'): self.outfile.mkdir('Canvases')
 
-		self.pull_hist = r.TH1F('pull_hist_%s'%name_ext,'',50,-3,3)
+		self.pull_hist = r.TH1F('pull_hist_%s'%name_ext,'',200,-10,10)
 		self.pull_hist.GetXaxis().SetTitle("Pull (#mu)")
 		self.pull_hist.GetYaxis().SetTitle("Number of toy experiments")
 
@@ -216,13 +257,14 @@ class biasComputer:
 			self.whichpdf_dict['sb_%s'%pdf] = i
 			self.whichpdf_hist.GetXaxis().SetBinLabel(i+1,pdf.split('_')[-1])
 
-		self.coverage_hist = r.TH1F('coverage_hist_%s'%name_ext,'',len(self.coverageValues),0,len(self.coverageValues))
+		self.coverage_hist = r.TH1F('coverage_hist_%s'%name_ext,'',len(self.coverageValues)+1,0,len(self.coverageValues)+1)
 		self.coverage_hist.GetYaxis().SetTitle("Number of toy experiments")
 		self.coverage_hist.GetXaxis().SetTitle("Coverage (#sigma)")
 		self.coverage_hist_dict = {}
 		for i, cov in enumerate(self.coverageValues):
 			self.coverage_hist_dict[cov] = i
 			self.coverage_hist.GetXaxis().SetBinLabel(i+1,'%3.1f'%cov)
+		self.coverage_hist.GetXaxis().SetBinLabel(len(self.coverageValues)+1,'Total')
 
 		for file in self.list_of_files:
 			infile = r.TFile(file)
@@ -252,7 +294,6 @@ class biasComputer:
 
 					fit_val = profiler.getEnvelopeBestFitValue()
 					fit_pdf = profiler.getEnvelopeBestFitName()
-					print 'here', fit_pdf, profiler.getEnvelopeBestFitName()
 
 					# pull
 					if (fit_val-self.mu_val) >= 0:
@@ -261,6 +302,7 @@ class biasComputer:
 						self.pull_hist.Fill((fit_val-self.mu_val)/(fit_val-profiler.getEnvelopeErrorDn(1.)))
 
 					# coverage
+					self.coverage_hist.Fill(len(self.coverageValues))
 					for cov in self.coverageValues:
 						errUp = profiler.getEnvelopeErrorUp(cov)
 						errDn = profiler.getEnvelopeErrorDn(cov)
