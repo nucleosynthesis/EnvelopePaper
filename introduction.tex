@@ -14,8 +14,9 @@ However, these methods tend to have some degree of arbitrariness and so
 a new approach is discussed in this paper.
 This method was developed as part of the analysis of data at the CMS experiment
 which resulted in the discovery of the Higgs
-boson and was applied to the case where the Higgs decays to two photons, which
-results in a narrow signal on a large background~\cite{ref:introduction:higgs}.
+boson~\cite{ref:introduction:higgs}.
+It was applied to the case where the Higgs decays to two photons, which
+results in a narrow signal on a large background.
 
 This method tries to be less 
 arbitrary and treats the uncertainty associated with the
@@ -31,16 +32,17 @@ functions with different numbers of parameters.
 The concept of this approach is described in Section~\ref{sec:concept}.
 The application of the method to functions with the same number of parameters
 is described in Section~\ref{sec:functions} and to functions with different
-numbers of paremeters in Section~\ref{sec:correction}. Further discussion on
+numbers of parameters in Section~\ref{sec:correction}. Further discussion on
 the method, including its practical application to the real-world problem of
 the Higgs measurements, is given in Section~\ref{sec:discussion}.
 
 Within this paper, twice the negative of the logarithm of the likelihood
 function is denoted by 2NLL. The fits discussed are binned and the 
-likelihood used for each bin is actually the likelihood ratio to the best
+likelihood used for each bin is the likelihood ratio to the best
 possible likelihood given the observed data, i.e.
-\begin{displaymath}
+\begin{equation}
 {\rm 2NLL} = \mu_i - n_i + n_i \log\left(\frac{n_i}{\mu_i}\right)
-\end{displaymath}
+\label{eqn:introduction:def2NLL}
+\end{equation}
 
 FREQUENTIST UNLESS OTHERWISE STATED (ALSO SEE DISCUSSION)?

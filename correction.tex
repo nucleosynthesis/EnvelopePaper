@@ -5,10 +5,11 @@
 \label{sec:correction:corrections}
 
 The 2NLL calculated from the fit of a function to a dataset is purely a measure
-of the agreement of the function and the data and the number of parameters
+of the agreement of the function and the data; the number of parameters
 used in the function has no impact. Hence, at least for nested families of
 functions (such as polynomials of varying order), then the lowest 2NLL will
-be given by the highest order considered. Because this function also has the
+always be given by the highest order considered.
+Because this function also has the
 largest number of parameters, it will generally have the largest statistical
 error and hence widest 2NLL profile curve.
 Hence, simply using the 2NLL values
@@ -28,10 +29,12 @@ the fit functions. Specifically here, where applied, the correction is
 done so as to get a value equivalent to a function with no parameters, so
 the number of degrees of freedom is the number of bins used.
 Two obvious methods were considered, based on the 
-$\chi^2$ p-value and the Akaike information criterion. 
-
+$\chi^2$ p-value and the Akaike information 
+criterion~\cite{ref:correction:akaike}.
+\begin{enumerate}
+\item[p-value]
 For a binned fit using the expression for the 2NLL ratio
-for each bin, then for
+for each bin specified in equation~\ref{eqn:introduction:def2NLL}, then for
 the large statistics case, the 2NLL becomes equivalent to a $\chi^2$ for the
 fit. In this case, it is meaningful to find the p-value of the $\chi^2$ value.
 A new $\chi^{\prime 2}$
@@ -39,19 +42,32 @@ value can now be obtained, namely that which would give the same p-value but
 with a different number of degrees of freedom, equal to the number of bins.
 The corrected 2NLL is then given by
 \begin{displaymath}
-C = \chi^{\prime 2} = - 2\ln(L) + \chi^{\prime 2} - \chi^2
+C = \chi^{\prime 2} = - 2\ln(L) + (\chi^{\prime 2} - \chi^2)
 \end{displaymath}
 Besides being a function of the number of bins and parameters,
 the size of the correction $\chi^{\prime 2} - \chi^2$
 depends on the original fit quality
 (or equivalently p-value). Figure~\ref{fig:correction:DeltaChiSq}
 shows examples of the size of the correction as a function of the
-fit p-value, when correcting for various numbers of parameters. It
-is seen that the correction is approximately given by
+fit p-value, when correcting for various numbers of parameters.
+The correction is monotonically increasing as the p-value gets smaller.
+Hence, when correcting the 2NLL profile curve, the fits further away from
+the best fit minimum will get a larger correction. Hence, the profile curve
+becomes steeper, which could in principle affect the coverage.
+%Figure~\ref{fig:parameters:pvalue} shows the effect of the correction
+%for the power-law fit on the profile
+%(shown uncorrected in figure~\ref{fig:nuisance:powfit})
+%and on the Neymann fraction
+%(shown uncorrected in figure~\ref{fig:nuisance:powfraction}).
+%In both cases, the effect of the correction is almost negligible
+%in practice.
+However, it can be seen that the correction is approximately given by
 \begin{displaymath}
 \chi^{\prime 2} - \chi^2 \approx N_{\rm par}
 \end{displaymath}
-for the central range of p-values.
+for the central range of p-values. This approximation means the 
+2NLL shape, and hence coverage, is unchanged and this is used in the rest
+of this paper.
 %
 \begin{figure}[tbp]
 \centering
@@ -65,26 +81,14 @@ the $\chi^2$ assuming a flat p-value distribution is shown on the right.}
 \end{figure}
 
 
-The correction is monotonically increasing as the p-value gets smaller.
-Hence, when correcting the 2NLL profile curve, the fits further away from
-the best fit minimum will get a larger correction. Hence, the profile curve
-becomes steeper, which could in principle affect the coverage.
-Figure~\ref{fig:parameters:pvalue} shows the effect of the correction
-for the power-law fit on the profile
-(shown uncorrected in figure~\ref{fig:nuisance:powfit})
-and on the Neymann fraction
-(shown uncorrected in figure~\ref{fig:nuisance:powfraction}).
-In both cases, the effect of the correction is almost negligible
-in practice.
-
-xThe Akaike basic formula for very large sample sizes is
+\item[Akaike]
+The Akaike basic formula for very large sample sizes is
 \begin{displaymath}
 A = - 2\ln(L) + 2N_{\rm par}
 \end{displaymath}
-The resulting value of $A$ is considered here as a corrected 2NLL,
+The resulting value of $A$ is considered here as the corrected 2NLL,
 so the correction is simply $ 2N_{\rm par}$ and
-hence is approximately
-twice as big as the p-value correction.
+hence is twice as big as the p-value correction.
 For finite samples, then it is modified to
 \begin{displaymath}
 A 
@@ -97,7 +101,8 @@ formula is clearly regained. This can be used for binned or unbinned fits.
 Also the correction does not depend on the 2NLL value and
 so is a simple shift of
 the whole profile curve, without changing its shape.
-Hence, it has no effect on coverage.
+Hence, it also has no effect on coverage.
+\end{enumerate}
 
 \subsection{Function definitions}
 \label{sec:correction:functions}

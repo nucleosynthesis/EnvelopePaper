@@ -1,7 +1,7 @@
 \section{Concept of the method (2 pages)}
 \label{sec:concept}
 
-If a small signal in on
+If a small signal sits on
 a large background, relatively small changes to the background shape can
 have significant effects on the apparent signal size and position.
 Unless there is a
@@ -18,10 +18,10 @@ possible.
 The two main parameters of a signal are the position (i.e. the mean)
 and size (i.e. the amplitude), although other
 quantities such as the width may also be of interest. This results in a
-multi-dimensional parameter space. For simpicitiy, in this paper, the position
+multi-dimensional parameter space. For simplicity in this paper, the position
 and width of the signal are considered to be known and only the signal
 size is to be determined. However, the method would also be applicable to
-cases where more than one parameter is to be determined.
+cases where more than one parameter is being estimated.
 
 \subsection{Continuous nuisance parameters}
 \label{sec:concept:continuous}
@@ -38,7 +38,7 @@ such that 2NLL is minimised for each value of $\mu$ over a range.
 The (for example) 68\% confidence range of $\mu$ 
 is then
 taken as the region for which 2NLL is less than ${\rm 2NLL}_{BF}+1$,
-where ${\rm 2NLL}_{BF}$ is the value at the overall minimum.
+where ${\rm 2NLL}_{BF}$ is the best-fit value at the overall minimum.
 
 Consider this absolute minimum in 2NLL: if the nuisance parameters at that
 point were fixed, then the 2NLL profile curve would be steeper than for
@@ -49,14 +49,14 @@ uncertainty arising from this source.
 The same is true for any other point on the original curve; if the nuisance
 parameters were not allowed to vary, each would result in a new steeper curve
 with a minimum above the original curve.
-This width of these curves would again only be affected by the statistical
+The width of these curves would again only be affected by the statistical
 power of the dataset being fitted, not by the systematic errors encompassed
 in the nuisance parameters.
 Finally, there are in general
 many other sets of nuisance parameters which do not result in a point on the
 original profile curve. Fixing the parameters to these values will also result
 in further curves which are enclosed by the original profile curve.
-The critical point is that the original 2NLL minimum profile curve as a function
+The critical point is that the overall 2NLL minimum profile curve as a function
 of $\mu$ encloses the curves for all possible values of the nuisance
 parameters.
 
@@ -65,11 +65,12 @@ in figure~\ref{fig:concept:cartoon}.
 Each set of nuisance
 parameter values will result in a curve, the steepness of which reflects 
 the statistical error only. Consider picking many different sets of nuisance
-parameter values; each gives one such curve. Drawing an envelope around the
+parameter values; each gives one such curve. Drawing an ``envelope'' around the
 minimum 2NLL value of all these curves will give an approximation to the
 original profile curve. Clearly, in practice, many such sets of nuisance
 parameter values would be needed to make this curve smooth. However, in
-principle, sampling the parameter space and then finding the enclosing
+principle, sampling the nuisance parameter space sufficiently
+and then finding the enclosing
 minimum envelope should give the profile curve required.
 Note, it would of course be possible to mix the two methods, i.e.
 choose sets of only some of the parameter values and fit for the others.
@@ -83,8 +84,11 @@ when performing a profile likelihood scan for a variable of interest $x$.
 The 2NLL profile curve for the nuisance parameters fixed to the best fit
 values is shown by the blue, solid line. The full profile curve allowing the
 nuisance parameters to be fitted for every value of $x$ is shown by the 
-black, solid line. For many fixed values of the nuisance parameters,
-the envelope approximates the full profile curve.}
+black, solid line. The red dashed lines show the 2NLL curves for fixed 
+nuisance parameter values other than those at the best fit, while the green 
+dashed line is the envelope, i.e. the lowest value of any of the red dashed 
+curves for each $x$. Even with such a coarse sampling of the nuisance 
+parameters, it is seen that the envelope approximates the full profile curve.}
 \label{fig:concept:cartoon}
 \end{figure}
 
@@ -96,19 +100,22 @@ an envelope can conceptually be applied to the background function
 uncertainty. Each background function considered can be labelled by an
 integer. The integer is then treated as a (discrete) nuisance parameter
 for the profile calculation.
-Most minimisation
+The minimum envelope then gives the overall profile curve including
+all functions considered. This automatically includes any systematic error
+arising from the function choice as the envelope will in general be broader
+than any of the individual function curves which contribute to the envelope.
+
+In practical terms, most minimisation
 code cannot easily handle a discrete parameter, particularly when the
 number and values of the other parameters of the fit (i.e. the parameters
 of the functions) change with the discrete parameter.
 Hence, in practice it has
 to be handled by mixing the methods, i.e. choose each function and minimise
 the other parameters in the usual way to give a profile curve for each function
-in turn. The minimum envelope then gives the overall profile curve including
-all functions considered. This automatically includes any systematic error
-arising from the function choice as the envelope will in general be broader
-than any of the individual function curves which contribute to the envelope.
+in turn. 
 
-While the concept is straightforward, there are some issues in applying it.
+While the concept is straightforward, there are some statistical
+issues in applying it.
 Firstly, there is a question of whether the 2NLL minimum envelope covers,
 i.e. has the correct properties for a profile curve.
 This is discussed in Section~\ref{sec:functions}.

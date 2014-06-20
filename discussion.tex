@@ -7,15 +7,17 @@
 HOW APPLIED TO HIGGS ANALYSIS.
 
 The actual $H \rightarrow \gamma\gamma$ analysis is significantly more
-complex than the simplified version used here. In particular, the 2011 data
-sample is split into five categories (which become nine for the 2012 data).
+complex than the simplified version used here. In particular, the 2011 
+and 2012 data
+samples are split into five and nine categories, respectively, which have
+differing signal:background ratios.
 Because the categories (by definition) have different selection criteria,
 they can have different background shapes.
 There is no {\it a priori} reason to make any assumptions that the functions
 used in each category should be the same. Hence, each category should be
 tested with all functions, in a similar way to the above.
 
-However, the major complication arises because there are common systematics 
+A major complication then arises because there are common systematic effects
 across the categories, arising from nuisance parameters in the signal
 model.
 In the absence of these common nuisance parameters,
@@ -30,18 +32,11 @@ combinations of each function in each category must be fitted.
 The minimum envelope made from the results of all these combinations would
 then be found. While this is conceptually straightforward, the actual
 implementation is probably prohibitive. For example, using the 16 functions
-discussed above, then there would be $16^5 \sim$ 1M combinations of functions
-to be fitted for the 2011 data (and $16^9 \sim$ 70B combinations for the
-2012 data).
+discussed in this paper, there would be $16^5 \sim$ 1M combinations of functions
+to be fitted for the 2011 data sample and $16^9 \sim$ 70B combinations for the
+2012 data sample.
 
-It happens that the correlations of the nuisance parameters
-are relatively small.
-It may be a good approximation 
-to first identify the two or three most likely functions in each category
-which will contribute to the minimum envelope, ignoring the correlations.
-Only these functions would then be used in the full fit, giving at most
-$3^5 \sim 200$ or $3^9 \sim$ 20k combinations. Studies into the 
-implementation are ongoing.
+DETAILS ON HOW HANDLED FROM NICK
 
 \subsection{Envelope smoothing}
 \label{sec:discussion:smoothing}
