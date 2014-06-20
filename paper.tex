@@ -1,5 +1,6 @@
 \pdfoutput=1 % only if pdf/png/jpg images are used
 \documentclass{JINST}
+\let\ifpdf\relax
 
 \title{Handling uncertainties in background shapes: the discrete profiling method}
 
@@ -16,9 +17,9 @@ varying background. In cases where the background functional form is not
 {\it a priori} known, then some extra uncertainty must be assigned to the
 signal parameters because of this lack of knowledge.
 A method for assigning an error from this cause is presented. It is based on
-treating the function uncertainty as a discrete nuisance parameter which is 
+treating the function uncertainty as a discrete nuisance parameter which is
 profiled in an equivalent way to continuous nuisance parameters. This
-effectively means an ``envelope'' is found which encompasses the lowest 
+effectively means an ``envelope'' is found which encompasses the lowest
 log-likelihood values for any given
 signal parameter. The bias and coverage of this method are shown to be good.
 }
