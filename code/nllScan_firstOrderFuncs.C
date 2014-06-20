@@ -3,6 +3,10 @@
 #include "getChisq.C"
 
 
+double MULOW = -1;
+double MUHIGH = 2.6;
+double MUSTEP = 0.05;
+
 void getMinPoint(TGraph *gr, double *xmin, double *ymin){
 
 	double x,y;
@@ -74,9 +78,9 @@ void calculateMinAndErrors(TGraph *envelope, double *min,double *max, double sig
 }
 
 TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
-   double xlow = -1.;
-   double xhigh= 2.;
-   double xstep= 0.1;
+   double xlow = MULOW;
+   double xhigh= MUHIGH;
+   double xstep= MUSTEP;
 
    RooRealVar *var=(RooRealVar*)(pdf.getParameters((RooArgSet*)0)->find("CMS_hgg_mass"));
    double cfactor = corr*(pdf.getParameters(dat)->getSize());
@@ -85,7 +89,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    RooAbsReal *nll = pdf.createNLL(dat);
    RooMinimizer minim(*nll);
    double minnll = 10000000.;
-   double minmu=-1;
+   double minmu=MULOW;
    int cpoint=0;
    RooArgSet bfparams;
    RooArgSet *nllparams = pdf.getParameters(dat);
@@ -94,7 +98,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
 	mu.setVal(x);
 	minim.minimize("Minuit","minimize");
 	
-	double nllvalue = getChisq(dat,pdf,*var,1);
+	double nllvalue = getChisq(dat,pdf,*var,0);
 	//std::cout << "nllval " << nllvalue << std::endl;
 	graph->SetPoint(cpoint,x,nllvalue+2*cfactor);
 
@@ -205,7 +209,7 @@ void nllScan_firstOrderFuncs(){
    RooPlot *fr2 = x->frame();
    datatoy->plotOn(fr2,RooFit::Binning(80));
 
-   TLegend *leg = new TLegend(0.52,0.62,0.81,0.89);
+   TLegend *leg = new TLegend(0.42,0.62,0.71,0.89);
    leg->SetFillColor(0);
    
 
@@ -242,7 +246,7 @@ void nllScan_firstOrderFuncs(){
    fr2->Draw(); leg2->Draw(); 
    fits->SaveAs("../functions/BestFits.pdf");
 
-   gr_pow->GetXaxis()->SetRangeUser(-1,2);
+   gr_pow->GetXaxis()->SetRangeUser(MULOW,MUHIGH);
    gr_pow->GetYaxis()->SetRangeUser(378,390);
   
    TCanvas *scan = new TCanvas();
@@ -256,7 +260,7 @@ void nllScan_firstOrderFuncs(){
    TGraph *gr_env = new TGraph();
    gr_env->SetName("Envelope");
    TGraph *graphs[4] = {gr_pol,gr_exp,gr_lau,gr_pow}; 
-   generateEnvelope(4,graphs,gr_env,-1,2,0.01);  // no correction
+   generateEnvelope(4,graphs,gr_env,MULOW,MUHIGH,MUSTEP);  // no correction
    double mlow=0,mhigh=0; 
    double mlow2=0,mhigh2=0; 
    //std::cout << "mu (lau,exp,pow,pol) " << mLau << " " << mExp << " " << mPow << " " << mPol<< std::endl;
@@ -276,12 +280,12 @@ void nllScan_firstOrderFuncs(){
    //gr_env->GetYaxis()->SetRangeUser(minll,minll+6);
    gr_env->GetYaxis()->SetTitle("-2Log L");
    gr_env->GetXaxis()->SetTitle("#mu");
-   gr_env->GetXaxis()->SetRangeUser(-1,2);
+   gr_env->GetXaxis()->SetRangeUser(MULOW,MUHIGH);
    gr_env->GetYaxis()->SetRangeUser(378,390);
    gr_env->Draw("AL");
-   TLine *lin = new TLine(-1,minll,2,minll);
-   TLine *lin2 = new TLine(-1,minll+1,2,minll+1);
-   TLine *lin3 = new TLine(-1,minll+4,2,minll+4);
+   TLine *lin = new TLine(MULOW,minll,MUHIGH,minll);
+   TLine *lin2 = new TLine(MULOW,minll+1,MUHIGH,minll+1);
+   TLine *lin3 = new TLine(MULOW,minll+4,MUHIGH,minll+4);
    lin->SetLineColor(1); 
    lin2->SetLineColor(1); 
    lin2->SetLineColor(1);
@@ -295,22 +299,22 @@ void nllScan_firstOrderFuncs(){
    TGraphAsymmErrors *newg2 = new TGraphAsymmErrors() ;
    int np = 0;
     
-   for (double xcheck = mlow;xcheck<=mhigh;xcheck+=0.01){
+   for (double xcheck = mlow;xcheck<=mhigh;xcheck+=MUSTEP){
 	newg->SetPoint(np,xcheck,minll);
 	newg->SetPointError(np,0.01,0,0,gr_env->Eval(xcheck)-minll);
 	np++;
    }
 
    np = 0;
-   for (double xcheck = mlow2;xcheck<=mhigh2;xcheck+=0.01){
+   for (double xcheck = mlow2;xcheck<=mhigh2;xcheck+=MUSTEP*0.1){
 	newg2->SetPoint(np,xcheck,minll);
 	newg2->SetPointError(np,0.01,0,0,gr_env->Eval(xcheck)-minll);
 	np++;
    }
 
-   TLegend *legf = new TLegend(0.40,0.62,0.89,0.89);
-   newg->SetFillColor(kGreen+3); newg->SetLineColor(kGreen+3);
-   newg2->SetFillColor(kYellow); newg2->SetLineColor(kYellow);
+   TLegend *legf = new TLegend(0.30,0.62,0.79,0.89);
+   newg->SetFillColor(kGreen+3); newg->SetLineColor(kGreen+3);newg->SetMarkerColor(kGreen+3);
+   newg2->SetFillColor(kYellow); newg2->SetLineColor(kYellow);newg2->SetMarkerColor(kYellow);
    newg2->Draw("E3same");
    newg->Draw("E3same");
    gr_env->Draw("same"); 
