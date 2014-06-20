@@ -2,6 +2,77 @@
 #include "RooAbsArg.h"
 #include "getChisq.C"
 
+
+void getMinPoint(TGraph *gr, double *xmin, double *ymin){
+
+	double x,y;
+	for (int n=0;n<gr->GetN();n++){
+		gr->GetPoint(n,x,y);
+		if (y < *ymin){
+			*ymin = y ;
+			*xmin = x ;
+		}
+	}
+}
+double getEnvelopeErrorUp(TGraph *envelope, double sigma){
+	
+	double minimumNll = 10000.;
+	double bfval  	  = 0.;
+	getMinPoint(envelope,&bfval,&minimumNll);
+
+	TGraph *invertedEnv = new TGraph();
+	// best fit value first then the rest
+	invertedEnv->SetPoint(0,0.,bfval);
+	int newP=1;
+	double x,y;
+	for (int oldP=0; oldP<envelope->GetN(); oldP++){
+		envelope->GetPoint(oldP,x,y);
+		if (x>bfval) {
+			invertedEnv->SetPoint(newP,y-minimumNll,x);
+			newP++;
+		}
+	}
+	double crossing = sigma*sigma;
+	double val = invertedEnv->Eval(crossing);
+	return val;
+}
+
+double getEnvelopeErrorDn(TGraph *envelope, double sigma){
+
+	double minimumNll = 10000.;
+	double bfval  	  = 0.;
+	getMinPoint(envelope,&bfval,&minimumNll);
+	TGraph *invertedEnv = new TGraph();
+
+	int newP=0;
+	double x,y;
+	for (int oldP=0; oldP<envelope->GetN(); oldP++){
+		envelope->GetPoint(oldP,x,y);
+		if (x<bfval) {
+			invertedEnv->SetPoint(newP,y-minimumNll,x);
+			newP++;
+		}
+	}
+	// best fit value last
+	invertedEnv->SetPoint(newP,0.,bfval);
+	double crossing = sigma*sigma;
+	double val = invertedEnv->Eval(crossing);
+	return val;
+}
+
+void calculateMinAndErrors(TGraph *envelope, double *min,double *max, double sig, int verb){
+	
+	std::cout << envelope->GetName() << std::endl;
+	double minimumNll = 10000.;
+	double bfval  	  = 0.;
+	getMinPoint(envelope,&bfval,&minimumNll);
+        *min = getEnvelopeErrorDn(envelope,sig);
+	*max = getEnvelopeErrorUp(envelope,sig);
+	double elow =  bfval - *min;
+	double ehig =  *max - bfval;
+	if (verb) std::cout << " ( @ 2xNll =  " << minimumNll << ") +" << ehig << " -" << elow; 
+}
+
 TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
    double xlow = -1.;
    double xhigh= 2.;
@@ -13,7 +84,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    TGraph *graph = new TGraph();
    RooAbsReal *nll = pdf.createNLL(dat);
    RooMinimizer minim(*nll);
-   double minnll = 1000000;
+   double minnll = 10000000.;
    double minmu=-1;
    int cpoint=0;
    RooArgSet bfparams;
@@ -22,11 +93,8 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    for (double x=xlow;x<=xhigh;x+=xstep) {
 	mu.setVal(x);
 	minim.minimize("Minuit","minimize");
-	//double nllvalue = nll.getVal();	
-	//std::cout << nllvalue << std::endl;
-	//graph.SetPoint(cpoint,x,2*(nllvalue+cfactor));
 	
-	double nllvalue = getChisq(dat,pdf,*var,0);
+	double nllvalue = getChisq(dat,pdf,*var,1);
 	//std::cout << "nllval " << nllvalue << std::endl;
 	graph->SetPoint(cpoint,x,nllvalue+2*cfactor);
 
@@ -47,12 +115,26 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    // May be best to minimize overall once more to find absolute minimum
    RooMinimizer minim_float(*nll);
    minim_float.minimize("Minuit","minimize");
-   
+   graph->SetName(pdf.GetName());
    return graph;   
 }
 
-void throwToy(){
-	// Generate a toy dataset from the equal parts sum of an Exponential, Laurent and power-law (these should already be fit from the real data in the workspace)
+void generateEnvelope(int ng,TGraph **graphs,TGraph *gr_env,double min,double max, double step){
+   int p = 0;
+   for (double x=min; x<=max;x+=step){
+     minnll=1000000.;
+     for (int i = 0; i < ng; i++){
+	double tnll = graphs[i]->Eval(x);
+	if (tnll < minnll){
+		minnll = tnll;
+	}
+     }
+     gr_env->SetPoint(p,x,minnll);
+     p++;
+   }
+}
+
+void nllScan_firstOrderFuncs(){
 	
    gROOT->ProcessLine(".x paperStyle.C");
    gROOT->ProcessLine(".L getChisq.C");
@@ -123,7 +205,7 @@ void throwToy(){
    RooPlot *fr2 = x->frame();
    datatoy->plotOn(fr2,RooFit::Binning(80));
 
-   TLegend *leg = new TLegend(0.56,0.6,0.85,0.89);
+   TLegend *leg = new TLegend(0.52,0.62,0.81,0.89);
    leg->SetFillColor(0);
    
 
@@ -160,6 +242,8 @@ void throwToy(){
    fr2->Draw(); leg2->Draw(); 
    fits->SaveAs("../functions/BestFits.pdf");
 
+   gr_pow->GetXaxis()->SetRangeUser(-1,2);
+   gr_pow->GetYaxis()->SetRangeUser(378,390);
   
    TCanvas *scan = new TCanvas();
    gr_pow->Draw("AL") ; 
@@ -167,12 +251,78 @@ void throwToy(){
    gr_lau->Draw("L") ;
    gr_pol->Draw("L");
    leg->Draw(); scan->SaveAs("../functions/Profiles.pdf");
-  
-   //lau->getParameters(newtoy)->Print("v");
-   //exp->getParameters(newtoy)->Print("v");
-   //pow->getParameters(newtoy)->Print("v");
-   std::cout << "mu (lau,exp,pow,pol) " << mLau << " " << mExp << " " << mPow << " " << mPol<< std::endl;
-     
+
+   // Construct the envelope ?
+   TGraph *gr_env = new TGraph();
+   gr_env->SetName("Envelope");
+   TGraph *graphs[4] = {gr_pol,gr_exp,gr_lau,gr_pow}; 
+   generateEnvelope(4,graphs,gr_env,-1,2,0.01);  // no correction
+   double mlow=0,mhigh=0; 
+   double mlow2=0,mhigh2=0; 
+   //std::cout << "mu (lau,exp,pow,pol) " << mLau << " " << mExp << " " << mPow << " " << mPol<< std::endl;
+   std::cout << " ************* Best Fits and uncertainties **************" << std::endl;
+   std::cout << "mu = "<< mPol <<  ", " << calculateMinAndErrors(gr_pol,&mlow,&mhigh,1,1) << std::endl;
+   std::cout << "mu = "<< mPow <<  ", " << calculateMinAndErrors(gr_pow,&mlow,&mhigh,1,1) << std::endl;
+   std::cout << "mu = "<< mExp <<  ", " << calculateMinAndErrors(gr_exp,&mlow,&mhigh,1,1) << std::endl;
+   std::cout << "mu = "<< mLau <<  ", " << calculateMinAndErrors(gr_lau,&mlow,&mhigh,1,1) << std::endl;
+   std::cout << calculateMinAndErrors(gr_env,&mlow,&mhigh,1,1) << std::endl;
+   std::cout << " ********************************************************" << std::endl;
+
+   std::cout << calculateMinAndErrors(gr_env,&mlow2,&mhigh2,2,0) << std::endl;
+   TCanvas *envelope = new TCanvas();
+   gr_env->SetLineColor(1); gr_env->SetLineWidth(2);
+   double minll = gr_env->Eval( mPow ) ; // Pow is the best fit)
+   std::cout << minll << std::endl;
+   //gr_env->GetYaxis()->SetRangeUser(minll,minll+6);
+   gr_env->GetYaxis()->SetTitle("-2Log L");
+   gr_env->GetXaxis()->SetTitle("#mu");
+   gr_env->GetXaxis()->SetRangeUser(-1,2);
+   gr_env->GetYaxis()->SetRangeUser(378,390);
+   gr_env->Draw("AL");
+   TLine *lin = new TLine(-1,minll,2,minll);
+   TLine *lin2 = new TLine(-1,minll+1,2,minll+1);
+   TLine *lin3 = new TLine(-1,minll+4,2,minll+4);
+   lin->SetLineColor(1); 
+   lin2->SetLineColor(1); 
+   lin2->SetLineColor(1);
+   lin->SetLineWidth(2); 
+   lin3->SetLineWidth(2); 
+   lin2->SetLineWidth(2);
+   lin->SetLineStyle(2); 
+   lin2->SetLineStyle(2);
+   lin3->SetLineStyle(2);
+   TGraphAsymmErrors *newg = new TGraphAsymmErrors() ;
+   TGraphAsymmErrors *newg2 = new TGraphAsymmErrors() ;
+   int np = 0;
+    
+   for (double xcheck = mlow;xcheck<=mhigh;xcheck+=0.01){
+	newg->SetPoint(np,xcheck,minll);
+	newg->SetPointError(np,0.01,0,0,gr_env->Eval(xcheck)-minll);
+	np++;
+   }
+
+   np = 0;
+   for (double xcheck = mlow2;xcheck<=mhigh2;xcheck+=0.01){
+	newg2->SetPoint(np,xcheck,minll);
+	newg2->SetPointError(np,0.01,0,0,gr_env->Eval(xcheck)-minll);
+	np++;
+   }
+
+   TLegend *legf = new TLegend(0.40,0.62,0.89,0.89);
+   newg->SetFillColor(kGreen+3); newg->SetLineColor(kGreen+3);
+   newg2->SetFillColor(kYellow); newg2->SetLineColor(kYellow);
+   newg2->Draw("E3same");
+   newg->Draw("E3same");
+   gr_env->Draw("same"); 
+   lin->Draw(""); 
+   lin2->Draw("");
+   lin3->Draw("");
+    
+   legf->AddEntry(gr_env,"Minimum Envelope","L");
+   legf->AddEntry(newg,"#pm 1 #sigma Interval");
+   legf->AddEntry(newg2,"#pm 2 #sigma Interval");
+   legf->Draw();
+   envelope->SaveAs("../functions/Envelope.pdf");  
    /* 
    // Save new toy in workspace
    TFile *filenew = new TFile("envelopews_wsignal_toy1.root","RECREATE");
