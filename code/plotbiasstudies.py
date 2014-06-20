@@ -15,15 +15,16 @@ def trimers(gr):
 fil = ROOT.TFile.Open("biastoys.root")
 
 gens = [
-		"env_pdf_1_8TeV_lau1_"  
+		"bestfit_" 
+		,"env_pdf_1_8TeV_lau1_"  
 		,"env_pdf_1_8TeV_exp1_" 
 		,"env_pdf_1_8TeV_pow1_" 
-		,"bestfit_" 
 	   ]
-gnames = ["Gen Laurent"
+gnames = [
+ 	"Gen Profiled Function"
+	,"Gen Laurent"
 	, "Gen Exponential"
  	,"Gen Power Law"
- 	,"Gen Profiled Function"
 	]
 # these are the same sizes  (add back in poly)
 #names = ["Laurent","Power Law","Polynomial","Exponential","Envelope"]
@@ -35,7 +36,7 @@ fits = ["lau1","pow1","exp1","envelope"]
 styles = [20,24,25,23]
 colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kRed,ROOT.kBlack]
 
-leg = ROOT.TLegend(0.72,0.53,0.89,0.89)
+leg = ROOT.TLegend(0.72,0.52,0.89,0.89)
 leg.SetFillColor(0)
 
 c = ROOT.TCanvas("c","c",600,1600)
@@ -91,6 +92,6 @@ lat = ROOT.TLatex()
 lat.SetNDC()
 lat.DrawLatex(0.85,0.012,"#mu")
 lat.SetTextAngle(90)
-lat.DrawLatex(0.065,0.7,"< (#mu - #hat{#mu})/#sigma >")
-c.SaveAs("../biasstudies/FirstOrderFunctions.pdf")
+lat.DrawLatex(0.065,0.7,"< (#hat{#mu} - #mu)/#sigma >")
+c.SaveAs("../functions/FirstOrderFunctions.pdf")
 #raw_input()
