@@ -7,7 +7,18 @@ TRandom3 *rnd = new TRandom3();
 double MULOW = -1;
 double MUHIGH = 2.6;
 double MUSTEP = 0.02;
-double CORRECTION = 0.; // (to NLL (not 2NLL) per parameter)
+double CORRECTION = 0.5; // (to NLL (not 2NLL) per parameter)
+
+bool DOEXP=true;
+bool DOPOL=true;
+bool DOPOW=true;
+bool DOLAU=true;
+
+bool DORANDPARS=false;
+bool DOREMOVERANGE=false;
+bool DOALTPARAM=true;
+
+int BINS = 320;
 
 void getMinPoint(TGraph *gr, double *xmin, double *ymin){
 
@@ -66,6 +77,18 @@ double getEnvelopeErrorDn(TGraph *envelope, double sigma){
 	return val;
 }
 
+void removeRanges(RooArgSet &pars){
+	TIterator *dp = pars.createIterator();
+	RooRealVar *arg;
+	while (arg = (RooRealVar*)dp->Next()) {
+          RooRealVar *cat = dynamic_cast<RooRealVar*>(arg);
+          if (cat && !cat->isConstant()) {
+		cat->removeRange();
+		//cat->setVal(cat->getVal()+rnd->Gaus(0,cat->getError()));
+	  }
+        }
+}
+
 void randomizePars(RooArgSet &pars){
 
 	TIterator *dp = pars.createIterator();
@@ -73,7 +96,11 @@ void randomizePars(RooArgSet &pars){
 	while (arg = (RooRealVar*)dp->Next()) {
           RooRealVar *cat = dynamic_cast<RooRealVar*>(arg);
           if (cat && !cat->isConstant()) {
-		cat->setVal(cat->getVal()+0.5*rnd->Gaus(0,cat->getError()));
+		double tval = cat->getVal();
+		double dlow = tval-(cat->getMin());
+		double dhig = cat->getMax() - tval;
+		cat->setVal(rnd->Uniform(tval - dlow/2, tval+dhig/2));
+		//cat->setVal(cat->getVal()+rnd->Gaus(0,cat->getError()));
 	  }
         }
 
@@ -92,19 +119,34 @@ void calculateMinAndErrors(TGraph *envelope, double *min,double *max, double sig
 	if (verb) std::cout << "    mu(from-scan) = "<<bfval<<" ( @ 2xNll =  " << minimumNll << ") +" << ehig << " -" << elow << std::endl; 
 }
 
-TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
+int countNonConstants(RooArgSet *pars){
 
+	int npar =0;
+	TIterator *dp = pars->createIterator();
+	RooRealVar *arg;
+	while (arg = (RooRealVar*)dp->Next()) {
+          RooRealVar *cat = dynamic_cast<RooRealVar*>(arg);
+          if (cat && !cat->isConstant()) {
+		npar++;
+		//cat->setVal(cat->getVal()+rnd->Gaus(0,cat->getError()));
+	  }
+        }
+	return npar;
+}
+
+TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
 
    double xlow = MULOW;
    double xhigh= MUHIGH;
    double xstep= MUSTEP;
 
    RooRealVar *var=(RooRealVar*)(pdf.getParameters((RooArgSet*)0)->find("CMS_hgg_mass"));
-   double cfactor = corr*(pdf.getParameters(dat)->getSize());
    mu.setConstant(true);
    TGraph *graph = new TGraph();
    RooAbsReal *nll = pdf.createNLL(dat);
    RooMinimizer minim(*nll);
+   minim.setStrategy(2);
+   double cfactor = corr*(countNonConstants(nll->getParameters(dat))); // remove mu !
 
 //   RooFitResult *res = pdf.fitTo(dat,RooFit::Save(1));
    
@@ -116,9 +158,12 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    int cpoint=0;
    RooArgSet bfparams, prefitparams;
    RooArgSet *nllparams = pdf.getParameters(dat);
-   randomizePars(*nllparams);
+   std::cout << " Pre Fit (pre random) params  .... " << std::endl;
+   nllparams->Print("v");
+   if (DORANDPARS) randomizePars(*nllparams);
+   if (DOREMOVERANGE) removeRanges(*nllparams);
    std::cout << "Running scan, " << graph->GetName() <<", npars = " << nllparams->getSize() << std::endl;
-   std::cout << " Pre Fit params  .... " << std::endl;
+   std::cout << " Pre Fit (post random) params  .... " << std::endl;
    nllparams->Print("v");
    nllparams->snapshot(bfparams);
    nllparams->snapshot(prefitparams);
@@ -127,7 +172,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    for (double x=xlow;x<=xhigh;x+=xstep) {
 	nllparams->assignValueOnly(prefitparams);
 	mu.setVal(x);
-	minim.minimize("Minuit","migrad");
+	minim.minimize("Minuit","minimize");
 	
 	double nllvalue = getChisq(dat,pdf,*var,0);
 	//std::cout << "nllval " << nllvalue << std::endl;
@@ -149,7 +194,10 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    mu.setConstant(false);
    // May be best to minimize overall once more to find absolute minimum
    RooMinimizer minim_float(*nll);
+   minim_float.setStrategy(2);
    minim_float.minimize("Minuit","minimize");
+   std::cout << " Best Fit (post-fit params  .... " << std::endl;
+   nllparams->Print("v");
 //   nllparams->assignValueOnly((res->randomizePars()));
    graph->SetName(pdf.GetName());
    return graph;   
@@ -177,13 +225,16 @@ void nllScan_allOrderFunctions(){
    gROOT->ProcessLine(".x paperStyle.C");
    gROOT->ProcessLine(".L getChisq.C");
 
-   TFile *fi = TFile::Open("envelopews_wsignal_toy1.root");
+   gROOT->SetBatch(1);
+
+   //TFile *fi = TFile::Open("envelopews_wsignal_toy1.root");
+   TFile *fi = TFile::Open("testws.root");
    RooWorkspace *multipdf = fi->Get("multipdf");
    RooRealVar *x    = multipdf->var("CMS_hgg_mass");
    RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy1__CMS_hgg_mass");
 
    // pre-emptive fiddling 
-   multipdf->var("env_pdf_1_8TeV_pow3_f1")->setVal(0.3);
+   //multipdf->var("env_pdf_1_8TeV_pow3_f1")->setVal(0.3);
    
    // Make a scan for all of these guys   
  
@@ -206,13 +257,14 @@ void nllScan_allOrderFunctions(){
    leg->SetTextFont(42);
    leg->SetFillColor(0);
    RooPlot *pl = x->frame();
-   datatoy->plotOn(pl,RooFit::Binning(80));
+   datatoy->plotOn(pl,RooFit::Binning(80)); // main plot
    TCanvas *can = new TCanvas();
 
    double mlow,mhigh;
 
    TFile *outfits = new TFile("allorderfits.root","RECREATE");
 
+   if (DOPOL){
    // Bernsteins 
    //while (arg = (RooAbsArg*)pdfit->Next()) {
    for (int typeco=0;typeco<maxpdfs;typeco++){
@@ -236,7 +288,7 @@ void nllScan_allOrderFunctions(){
 	RooPlot *frnew = x->frame(); 
 	TCanvas *cnew = new TCanvas(bkg_pdf->GetName(),"canv",800,600);
 	cnew->cd();
-	datatoy->plotOn(frnew,RooFit::Binning(80));	
+	datatoy->plotOn(frnew,RooFit::Binning(BINS));	
 	spdf.plotOn(frnew);	
 	spdf.paramOn(frnew);	
 	frnew->Draw();
@@ -245,13 +297,15 @@ void nllScan_allOrderFunctions(){
 	
 	can->cd();
    }
-
+   }
    //  
    //while (arg = (RooAbsArg*)pdfit->Next()) {
-
+   if (DOEXP){
    for (int typeco=0;typeco<maxpdfs;typeco++){
  	// The pdf made from the new background model
-        RooAbsPdf *bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_exp%d",typeco));
+ 	RooAbsPdf *bkg_pdf;
+        if (DOALTPARAM) bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_expc%d",typeco));
+        else bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_exp%d",typeco));
 	if (!bkg_pdf) continue;
    	RooAddPdf spdf(Form("splusb_%s",bkg_pdf->GetName()),"splusb",RooArgList(*sig_pdf,*bkg_pdf),RooArgList(*nsig,*nbkg));
 	TGraph *gr = nll2scan(CORRECTION,*datatoy,spdf,*mu);
@@ -270,7 +324,7 @@ void nllScan_allOrderFunctions(){
 	RooPlot *frnew = x->frame(); 
 	TCanvas *cnew = new TCanvas(bkg_pdf->GetName(),"canv",800,600);
 	cnew->cd();
-	datatoy->plotOn(frnew,RooFit::Binning(80));	
+	datatoy->plotOn(frnew,RooFit::Binning(BINS));	
 	spdf.plotOn(frnew);	
 	spdf.paramOn(frnew);	
 	frnew->Draw();
@@ -279,10 +333,15 @@ void nllScan_allOrderFunctions(){
 	can->cd();
 	
    }
+   }
+
+   if (DOPOW){
    //while (arg = (RooAbsArg*)pdfit->Next()) {
    for (int typeco=0;typeco<maxpdfs;typeco++){
  	// The pdf made from the new background model
-        RooAbsPdf *bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_pow%d",typeco));
+ 	RooAbsPdf *bkg_pdf;
+        if (DOALTPARAM) bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_powc%d",typeco));
+        else bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_pow%d",typeco));
 	if (!bkg_pdf) continue;
    	RooAddPdf spdf(Form("splusb_%s",bkg_pdf->GetName()),"splusb",RooArgList(*sig_pdf,*bkg_pdf),RooArgList(*nsig,*nbkg));
 	TGraph *gr = nll2scan(CORRECTION,*datatoy,spdf,*mu);
@@ -301,7 +360,7 @@ void nllScan_allOrderFunctions(){
 	RooPlot *frnew = x->frame(); 
 	TCanvas *cnew = new TCanvas(bkg_pdf->GetName(),"canv",800,600);
 	cnew->cd();
-	datatoy->plotOn(frnew,RooFit::Binning(80));	
+	datatoy->plotOn(frnew,RooFit::Binning(BINS));	
 	spdf.plotOn(frnew);	
 	spdf.paramOn(frnew);	
 	frnew->Draw();
@@ -309,9 +368,14 @@ void nllScan_allOrderFunctions(){
 	cnew->Write();
 	can->cd();
    }
+   }
+   
+   if (DOLAU){
    for (int typeco=0;typeco<maxpdfs;typeco++){
  	// The pdf made from the new background model
-        RooAbsPdf *bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_lau%d",typeco));
+ 	RooAbsPdf *bkg_pdf;
+        if (DOALTPARAM) bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_lauc%d",typeco));
+        else bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_lau%d",typeco));
 	if (!bkg_pdf) continue;
    	RooAddPdf spdf(Form("splusb_%s",bkg_pdf->GetName()),"splusb",RooArgList(*sig_pdf,*bkg_pdf),RooArgList(*nsig,*nbkg));
 	TGraph *gr = nll2scan(CORRECTION,*datatoy,spdf,*mu);
@@ -329,7 +393,7 @@ void nllScan_allOrderFunctions(){
 	RooPlot *frnew = x->frame(); 
 	TCanvas *cnew = new TCanvas(bkg_pdf->GetName(),"canv",800,600);
 	cnew->cd();
-	datatoy->plotOn(frnew,RooFit::Binning(80));	
+	datatoy->plotOn(frnew,RooFit::Binning(BINS));	
 	spdf.plotOn(frnew);	
 	spdf.paramOn(frnew);	
 	frnew->Draw();
@@ -337,7 +401,7 @@ void nllScan_allOrderFunctions(){
 	cnew->Write();
 	can->cd();
    }
-  
+   }
    leg->Draw();
    can->Print("ProfilesAllOrders.png");
 
@@ -346,4 +410,8 @@ void nllScan_allOrderFunctions(){
    pl->GetXaxis()->SetTitle("m_{#gamma#gamma}");
    pl->Draw();
    can_fits->Print("BestFitsAllOrders.png");
+
+   outfits->cd();
+   can->Write();
+   can_fits->Write();
 }
