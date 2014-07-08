@@ -116,7 +116,7 @@ for c in cvals:
 	lat.DrawLatex(0.85,0.012,"#mu")
         lat.DrawLatex(0.2,0.93,"%s #sigma Interval"%c)
 	lat.SetTextAngle(90)
-	lat.DrawLatex(0.065,0.72,"Coverage (%)")
+	lat.DrawLatex(0.065,0.45,"Coverage/Expected Coverage")
 	
 	can.SaveAs("../functions/FirstOrderFunctions_Coverage_%s.pdf"%c)
 	#raw_input()
