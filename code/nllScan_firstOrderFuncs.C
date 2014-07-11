@@ -2,6 +2,8 @@
 #include "RooAbsArg.h"
 #include "getChisq.C"
 
+double YMIN = 204;
+double YMAX = 220;
 
 double MULOW = -1;
 double MUHIGH = 2.6;
@@ -143,11 +145,15 @@ void nllScan_firstOrderFuncs(){
    gROOT->ProcessLine(".x paperStyle.C");
    gROOT->ProcessLine(".L getChisq.C");
 
-   TFile *fi = TFile::Open("envelopews_wsignal_toy1.root");
+   TFile *fi = TFile::Open("envelopews_wsignal_toy1_110to150.root");
    RooWorkspace *multipdf = fi->Get("multipdf");
    RooRealVar *x    = multipdf->var("CMS_hgg_mass");
-   RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy1__CMS_hgg_mass");
+   //RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy1__CMS_hgg_mass");
   
+   RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy1_cutrange__CMS_hgg_mass");
+   //x->setRange("fitrnge",110,150);
+   //x->setRange(110,150);
+   //RooDataHist *datatoy = datatoy_in->reduce(RooFit::CutRange("fitrnge"));
  
    // Additional parameters 
    multipdf->var("sigma")->setConstant(true);
@@ -207,7 +213,7 @@ void nllScan_firstOrderFuncs(){
  
 
    RooPlot *fr2 = x->frame();
-   datatoy->plotOn(fr2,RooFit::Binning(80));
+   datatoy->plotOn(fr2,RooFit::Binning(x->getMax()-x->getMin()));
 
    TLegend *leg = new TLegend(0.42,0.62,0.71,0.89);
    leg->SetFillColor(0);
@@ -236,6 +242,7 @@ void nllScan_firstOrderFuncs(){
    TGraph *gr_pol = nll2scan(0.,*datatoy,spdf_pol,*mu);
    gr_pol->SetLineColor(kViolet);
    double mPol = mu->getVal();
+   leg->AddEntry(gr_pol,"Polynomial","L");
    spdf_pol.plotOn(fr2,RooFit::LineColor(kViolet));
    leg2->AddEntry(gr_pol,"Polynomial","L");
 
@@ -247,7 +254,7 @@ void nllScan_firstOrderFuncs(){
    fits->SaveAs("../functions/BestFits.pdf");
 
    gr_pow->GetXaxis()->SetRangeUser(MULOW,MUHIGH);
-   gr_pow->GetYaxis()->SetRangeUser(378,390);
+   gr_pow->GetYaxis()->SetRangeUser(YMIN,YMAX);
   
    TCanvas *scan = new TCanvas();
    gr_pow->Draw("AL") ; 
@@ -281,7 +288,7 @@ void nllScan_firstOrderFuncs(){
    gr_env->GetYaxis()->SetTitle("-2Log L");
    gr_env->GetXaxis()->SetTitle("#mu");
    gr_env->GetXaxis()->SetRangeUser(MULOW,MUHIGH);
-   gr_env->GetYaxis()->SetRangeUser(378,390);
+   gr_env->GetYaxis()->SetRangeUser(YMIN,YMAX);
    gr_env->Draw("AL");
    TLine *lin = new TLine(MULOW,minll,MUHIGH,minll);
    TLine *lin2 = new TLine(MULOW,minll+1,MUHIGH,minll+1);
