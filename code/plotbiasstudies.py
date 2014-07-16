@@ -1,5 +1,5 @@
 import ROOT
-ROOT.gROOT.ProcessLine(".x paperStyle.C"); 
+ROOT.gROOT.ProcessLine(".x paperStyle.C");
 
 ROOT.gStyle.SetTextSize(0.056);
 ROOT.gStyle.SetTitleSize(0.12,"XYZ");
@@ -12,13 +12,14 @@ def trimers(gr):
   for n in range(np):
    gr.SetPointError(n,gr.GetErrorX(n)/2,gr.GetErrorY(n));
 
-fil = ROOT.TFile.Open("biastoys.root")
+#fil = ROOT.TFile.Open("biastoys.root")
+fil = ROOT.TFile.Open("BiasNarrowRangeSummary.root")
 
 gens = [
-		"bestfit_" 
-		,"env_pdf_1_8TeV_lau1_"  
-		,"env_pdf_1_8TeV_exp1_" 
-		,"env_pdf_1_8TeV_pow1_" 
+		"bestfit_"
+		,"env_pdf_1_8TeV_lau1_"
+		,"env_pdf_1_8TeV_exp1_"
+		,"env_pdf_1_8TeV_pow1_"
 	   ]
 gnames = [
  	"Gen Profiled Function"
@@ -59,7 +60,7 @@ for i,g in enumerate(gens):
  latlab = ROOT.TLatex()
  latlab.SetTextSize(0.08)
  latlab.SetNDC()
- latlab.SetTextAngle(90) 
+ latlab.SetTextAngle(90)
  p = ROOT.TPad(g,g,0,dy+float(i)*width,1,dy+float(i+1)*width)
  p.SetCanvas(c)
  if not i==np-1   : p.SetTopMargin(0.01)
@@ -73,16 +74,16 @@ for i,g in enumerate(gens):
  latlab.DrawLatex(0.935,0.15,gnames[i])
 # hists.append(dh)
  for j,f in enumerate(fits):
-   #print g,f 
+   #print g,f
    p.cd()
    gr = fil.Get("pull_mean_gen%sfit%s_c0."%(g,f))
    trimers(gr)
-   gr.SetMarkerStyle(styles[j]) 
-   gr.SetMarkerColor(colors[j]) 
-   gr.SetLineColor(colors[j]) 
+   gr.SetMarkerStyle(styles[j])
+   gr.SetMarkerColor(colors[j])
+   gr.SetLineColor(colors[j])
    gr.SetMarkerSize(0.9)
    gr.Draw("epsame")
-   if i==0: 
+   if i==0:
 	leg.AddEntry(gr,names[j],"P")
  if i==np-1: leg.Draw()
  c.cd()

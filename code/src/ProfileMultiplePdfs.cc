@@ -87,7 +87,7 @@ double ProfileMultiplePdfs::getChisq(RooAbsData *dat, RooAbsPdf *pdf, bool prt) 
   for(int j=0;j<dat->numEntries();j++) {
     double m=dat->get(j)->getRealValue(var->GetName());
 
-    if ( m < var.getMin() || m > var.getMax())  continue;
+    if ( m < var->getMin() || m > var->getMax())  continue;
     // Find probability density and hence probability
     var->setVal(m);
     double prb=0.25*pdf->getVal(*var);
