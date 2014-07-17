@@ -9,6 +9,12 @@ double MUHIGH = 2.6;
 double MUSTEP = 0.02;
 double CORRECTION = 0.5; // (to NLL (not 2NLL) per parameter)
 
+double YMIN=206;
+double YMAX=222;
+
+double MUMIN = -1;
+double MUMAX = 2.6;
+
 bool DOEXP=true;
 bool DOPOL=true;
 bool DOPOW=true;
@@ -16,9 +22,9 @@ bool DOLAU=true;
 
 bool DORANDPARS=false;
 bool DOREMOVERANGE=false;
-bool DOALTPARAM=true;
+bool DOALTPARAM=false;
 
-int BINS = 320;
+int BINS = 160;
 
 void getMinPoint(TGraph *gr, double *xmin, double *ymin){
 
@@ -145,7 +151,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    TGraph *graph = new TGraph();
    RooAbsReal *nll = pdf.createNLL(dat);
    RooMinimizer minim(*nll);
-   minim.setStrategy(2);
+   minim.setStrategy(0);
    double cfactor = corr*(countNonConstants(nll->getParameters(dat))); // remove mu !
 
 //   RooFitResult *res = pdf.fitTo(dat,RooFit::Save(1));
@@ -228,11 +234,13 @@ void nllScan_allOrderFunctions(){
    gROOT->SetBatch(1);
 
    //TFile *fi = TFile::Open("envelopews_wsignal_toy1.root");
-   TFile *fi = TFile::Open("testws.root");
+   TFile *fi = TFile::Open("envelopews_wsignal_toy1_110to150.root");
    RooWorkspace *multipdf = fi->Get("multipdf");
    RooRealVar *x    = multipdf->var("CMS_hgg_mass");
-   RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy1__CMS_hgg_mass");
-
+   RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy1_cutrange__CMS_hgg_mass");
+   //x->setRange("fitrnge",110,150);
+   //x->setRange(110,150);
+   //RooDataHist *datatoy = datatoy_in->reduce(RooFit::CutRange("fitrnge"));
    // pre-emptive fiddling 
    //multipdf->var("env_pdf_1_8TeV_pow3_f1")->setVal(0.3);
    
@@ -257,12 +265,18 @@ void nllScan_allOrderFunctions(){
    leg->SetTextFont(42);
    leg->SetFillColor(0);
    RooPlot *pl = x->frame();
-   datatoy->plotOn(pl,RooFit::Binning(80)); // main plot
+   datatoy->plotOn(pl,RooFit::Binning(x->getMax()-x->getMin())); // main plot
    TCanvas *can = new TCanvas();
 
    double mlow,mhigh;
 
    TFile *outfits = new TFile("allorderfits.root","RECREATE");
+
+   TH1F *dummyHist = new TH1F("dummy","dummy;#mu;-2Log L + correction",1,MUMIN,MUMAX);
+   dummyHist->SetMinimum(YMIN);
+   dummyHist->SetMaximum(YMAX);
+   dummyHist->SetTitle("");
+   can->cd(); dummyHist->Draw("AXIS");
 
    if (DOPOL){
    // Bernsteins 
@@ -277,8 +291,8 @@ void nllScan_allOrderFunctions(){
 	gr->SetLineColor(color[pdfit_c%7]);
 	gr->SetLineStyle(style);
 	
-	if (pdfit_c == 0) gr->Draw("AL");
-	else gr->Draw("L");
+	//gr->Draw("AL");
+	gr->Draw("L");
 	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
 	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
 //	listofpdfs.Add(gr);
@@ -403,13 +417,13 @@ void nllScan_allOrderFunctions(){
    }
    }
    leg->Draw();
-   can->Print("ProfilesAllOrders.png");
+   can->Print("ProfilesAllOrders.pdf");
 
    TCanvas *can_fits = new TCanvas();
    pl->SetTitle("");
    pl->GetXaxis()->SetTitle("m_{#gamma#gamma}");
    pl->Draw();
-   can_fits->Print("BestFitsAllOrders.png");
+   can_fits->Print("BestFitsAllOrders.pdf");
 
    outfits->cd();
    can->Write();
