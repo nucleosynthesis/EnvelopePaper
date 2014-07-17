@@ -87,6 +87,7 @@ double ProfileMultiplePdfs::getChisq(RooAbsData *dat, RooAbsPdf *pdf, bool prt) 
   for(int j=0;j<dat->numEntries();j++) {
     double m=dat->get(j)->getRealValue(var->GetName());
 
+    if ( m < var->getMin() || m > var->getMax())  continue;
     // Find probability density and hence probability
     var->setVal(m);
     double prb=0.25*pdf->getVal(*var);
@@ -116,7 +117,7 @@ double ProfileMultiplePdfs::getCorrection(RooAbsData *data, RooAbsPdf *pdf, int 
 	RooRealVar *var = (RooRealVar*)(pdf->getParameters((RooArgSet*)0)->find("CMS_hgg_mass"));
 	double minnll = 9999.;
 	minnll = getChisq(data,pdf);
-	int nbins = var->getBins();
+	int nbins = 4*(var->getMax()-var->getMin()); // always 0.25 GeV binning
 	RooArgSet *allParams = (RooArgSet*)pdf->getParameters(*data);
 	RooArgSet *constParams = (RooArgSet*)allParams->selectByAttrib("Constant",kTRUE);
 	int npars = allParams->getSize()-constParams->getSize()-add_pars; // HACK!

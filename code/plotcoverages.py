@@ -1,5 +1,5 @@
 import ROOT
-ROOT.gROOT.ProcessLine(".x paperStyle.C"); 
+ROOT.gROOT.ProcessLine(".x paperStyle.C");
 
 ROOT.gStyle.SetTextSize(0.056);
 ROOT.gStyle.SetTitleSize(0.12,"XYZ");
@@ -16,13 +16,14 @@ def trimers(gr,exp): # also reverses the points (1-coverage)
    gr.SetPointError(n,gr.GetErrorX(n)/2,gr.GetErrorY(n)/exp);
    gr.SetPoint(n,x,(1-y)/exp);
 
-fil = ROOT.TFile.Open("biastoys.root")
+#fil = ROOT.TFile.Open("biastoys.root")
+fil = ROOT.TFile.Open("BiasNarrowRangeSummary.root")
 
 gens = [
-		"bestfit_" 
-		,"env_pdf_1_8TeV_lau1_"  
-		,"env_pdf_1_8TeV_exp1_" 
-		,"env_pdf_1_8TeV_pow1_" 
+		"bestfit_"
+		,"env_pdf_1_8TeV_lau1_"
+		,"env_pdf_1_8TeV_exp1_"
+		,"env_pdf_1_8TeV_pow1_"
 	   ]
 gnames = [
  	"Gen Profiled Function"
@@ -76,7 +77,7 @@ for c in cvals:
 	 latlab = ROOT.TLatex()
 	 latlab.SetTextSize(0.08)
 	 latlab.SetNDC()
-	 latlab.SetTextAngle(90) 
+	 latlab.SetTextAngle(90)
 	 p = ROOT.TPad(g,g,0,dy+float(i)*width,1,dy+float(i+1)*width)
 	 p.SetCanvas(can)
 	 if not i==np-1   : p.SetTopMargin(0.01)
@@ -90,7 +91,7 @@ for c in cvals:
 	 latlab.DrawLatex(0.935,0.15,gnames[i])
 	# hists.append(dh)
 	 for j,f in enumerate(fits):
-	   #print g,f 
+	   #print g,f
 	   p.cd()
 	   #p.SetLogy()
 	   grs = []
@@ -99,13 +100,13 @@ for c in cvals:
 
 	   gr = fil.Get("pull_mean_gen%sfit%s_c0._cov%s"%(g,f,c))
 	   trimers(gr,prob)
-	   gr.SetMarkerStyle(styles[j]) 
-	   gr.SetMarkerColor(colors[j]) 
-	   gr.SetLineColor(colors[j]) 
+	   gr.SetMarkerStyle(styles[j])
+	   gr.SetMarkerColor(colors[j])
+	   gr.SetLineColor(colors[j])
 	   gr.SetMarkerSize(0.9)
 	   gr.Draw("epsame")
 	   grs.append(gr)
-	   if i==0: 
+	   if i==0:
 		leg.AddEntry(grs[0],names[j],"P")
 	 if i==np-1: leg.Draw()
 	 can.cd()
@@ -117,6 +118,6 @@ for c in cvals:
         lat.DrawLatex(0.2,0.93,"%s #sigma Interval"%c)
 	lat.SetTextAngle(90)
 	lat.DrawLatex(0.065,0.45,"Coverage/Expected Coverage")
-	
+
 	can.SaveAs("../functions/FirstOrderFunctions_Coverage_%s.pdf"%c)
 	#raw_input()

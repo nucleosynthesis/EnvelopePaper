@@ -1,20 +1,21 @@
-store_directory=batch_jobs_test
-infile_name=envelopews_wsignal_toy1.root
+store_directory=batch_jobs_narrow_range
+infile_name=envelopews_wsignal_toy1_110to150.root
 ws_name=multipdf
 inv_mass_name=CMS_hgg_mass
-fit_gen_to_data_first=roohist_data_mass_cat1_toy1__CMS_hgg_mass
+fit_gen_to_data_first=roohist_data_mass_cat1_toy1_cutrange__CMS_hgg_mass
 
 gen_pdfs=env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1
 #inj_mu_vals=-1.,-0.75,-0.5,-0.25,0.,0.25,0.5,0.75,1.,1.25,1.5,1.75,2.0
 inj_mu_vals=-0.75,-0.5,-0.25,0.,0.25,0.5,0.75,1.,1.25,1.5,1.75,2.0
 env_pdfs=env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1
+compute_pdf_sets=[env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1]:[env_pdf_1_8TeV_exp1]:[env_pdf_1_8TeV_pow1]:[env_pdf_1_8TeV_bern1]:[env_pdf_1_8TeV_lau1]
 
 njobs=5
 ntoysperjob=1000
 points_in_scan=50
 seed=0
 poi_range=-5,5
-poi_scan_range=-3,3
+poi_scan_range=-3.5,3.5
 #corrVals=0.,1.,2.
 corrVals=0.
 savePVal=True

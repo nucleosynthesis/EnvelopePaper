@@ -3,8 +3,8 @@
 
 from optparse import OptionParser
 parser = OptionParser()
-parser.add_option("-f","--filename",default='bias_hists.root')
-parser.add_option("-d","--datfile")
+parser.add_option("-f","--filename",default='bias_hists.root',help="Output rootfile")
+parser.add_option("-d","--datfile",help="Datfile used to submit jobs")
 parser.add_option("-D","--outdir",default='./')
 #parser.add_option("-p","--makePlotsOnly",action="store_true",default=False)
 #parser.add_option("-b","--isBatch",action="store_true",default=False)
