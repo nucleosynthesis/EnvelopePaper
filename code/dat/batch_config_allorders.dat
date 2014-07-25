@@ -1,0 +1,33 @@
+# -------------
+# batch options
+# -------------
+store_directory=batch_jobs_allorders
+infile_name=envelopews_wsignal_toy1_110to150.root
+ws_name=multipdf
+inv_mass_name=CMS_hgg_mass
+fit_gen_to_data_first=roohist_data_mass_cat1_toy1_cutrange__CMS_hgg_mass
+gen_pdfs=env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1,env_pdf_1_8TeV_bern4,env_pdf_1_8TeV_bern5
+inj_mu_vals=-0.75,-0.5,-0.25,0.,0.25,0.5,0.75,1.,1.25,1.5,1.75,2.0
+env_pdfs=env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_exp3,env_pdf_1_8TeV_exp5,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_pow3,env_pdf_1_8TeV_pow5,env_pdf_1_8TeV_lau1,env_pdf_1_8TeV_lau2,env_pdf_1_8TeV_lau3,env_pdf_1_8TeV_lau4,env_pdf_1_8TeV_lau5,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_bern2,env_pdf_1_8TeV_bern3,env_pdf_1_8TeV_bern4,env_pdf_1_8TeV_bern5
+njobs=100
+ntoysperjob=50
+points_in_scan=50
+seed=0
+poi_range=-5,5
+poi_scan_range=-3.5,3.5
+savePVal=True
+
+# -------------
+# extract bias (i.e. compute envelope) options
+# -------------
+compute_pdf_sets=[env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_exp3,env_pdf_1_8TeV_exp5,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_pow3,env_pdf_1_8TeV_pow5,env_pdf_1_8TeV_lau1,env_pdf_1_8TeV_lau2,env_pdf_1_8TeV_lau3,env_pdf_1_8TeV_lau4,env_pdf_1_8TeV_lau5,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_bern2,env_pdf_1_8TeV_bern3,env_pdf_1_8TeV_bern4,env_pdf_1_8TeV_bern5]
+compute_names=envelope
+filename=bias_hists.root
+corrVals=0.,1.,2.,P
+coverageValues=0.5,1.,2.,3.
+
+# -------------
+# plot options
+# -------------
+mu_to_gen_pdf_map={-0.75:env_pdf_1_8TeV_exp1,-0.5:env_pdf_1_8TeV_exp1,-0.25:env_pdf_1_8TeV_exp1,0.:env_pdf_1_8TeV_exp1,0.25:env_pdf_1_8TeV_exp1,0.5:env_pdf_1_8TeV_exp1,0.75:env_pdf_1_8TeV_pow1,1.:env_pdf_1_8TeV_pow1,1.25:env_pdf_1_8TeV_lau1,1.5:env_pdf_1_8TeV_bern4,1.75:env_pdf_1_8TeV_bern5,2.0:env_pdf_1_8TeV_bern5}
+plot_gen_pdfs=bestfit,env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1,env_pdf_1_8TeV_bern4,env_pdf_1_8TeV_bern5

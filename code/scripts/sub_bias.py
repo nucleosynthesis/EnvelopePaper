@@ -13,7 +13,7 @@ parser.add_option("--dryRun",default=False,action="store_true")
 (options,args) = parser.parse_args()
 
 def readConfig(datfile):
-  
+
 	f = open(datfile)
 	for line in f.readlines():
 		if line.startswith('#'): continue
@@ -67,7 +67,7 @@ def writeSubScript(scriptname,datfilename,outfilename):
 	f.write('mkdir -p lib\n')
 	f.write('mkdir -p python\n')
 	f.write('cd %s\n'%os.getcwd())
-	f.write('. setup_root_lxplus.sh\n')
+	f.write('source setup_root_lxplus.sh\n')
 	f.write('cd -\n')
 	f.write('cp %s/lib/libEnvelopeCode.so lib/\n'%os.getcwd())
 	f.write('cp %s/bias_study.py .\n'%os.getcwd())
@@ -81,6 +81,7 @@ def writeSubScript(scriptname,datfilename,outfilename):
 	f.write('else\n')
 	f.write('\ttouch %s.fail\n'%f.name)
 	f.write('fi\n')
+	f.write('rm -f %s.run\n'%f.name)
 	f.write('cp %s %s/%s/outfiles/\n'%(outfilename,os.getcwd(),cfg['store_directory']))
 	f.close()
 	os.system('chmod +x %s'%f.name)
@@ -99,7 +100,7 @@ for val in cfg['inj_mu_vals'].split(','):
 			outfilename = 'BiasResults_mu%4.2f_gen%s_job%d.root'%(mu_val,gen_pdf,job)
 			datfilename = 'cfg_mu%4.2f_gen%s_job%d.dat'%(mu_val,gen_pdf,job)
 			scriptname = 'sub_mu%4.2f_gen%s_job%d.sh'%(mu_val,gen_pdf,job)
-			writeDatFile(cfg['store_directory']+'/dat/'+datfilename,gen_pdf,mu_val,outfilename)	
+			writeDatFile(cfg['store_directory']+'/dat/'+datfilename,gen_pdf,mu_val,outfilename)
 			writeSubScript(scriptname,datfilename,outfilename)
 
-		
+

@@ -1,7 +1,7 @@
 import ROOT as r
 
 class config:
-	
+
 	def __init__(self,datfilename):
 		# ---- set defaults ----
 		self.batchmode = True
@@ -21,13 +21,13 @@ class config:
 		self.poi_scan_range = [-5.,5.]
 		self.points_in_scan = 10
 		self.plotsForEachToy = False
-		self.corrVals = [0.,1.,2.]
+		self.corrVals = ['0.','1.','2.','P']
 		self.savePVal = False
 		# ---- end of setting defaults ----
 
 		self.parseDatFile(datfilename)
 		print self.batchmode
-		r.gROOT.SetBatch(self.batchmode) 
+		r.gROOT.SetBatch(self.batchmode)
 
 	def parseDatFile(self,datfilename):
 		datf = open(datfilename)

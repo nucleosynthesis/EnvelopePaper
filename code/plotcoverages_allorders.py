@@ -1,3 +1,8 @@
+import sys
+cVal = '0.'
+if len(sys.argv)==2:
+	cVal = sys.argv[1]
+
 import ROOT
 ROOT.gROOT.ProcessLine(".x paperStyle.C");
 
@@ -18,30 +23,40 @@ def trimers(gr,exp): # also reverses the points (1-coverage)
 
 #fil = ROOT.TFile.Open("biastoys.root")
 #fil = ROOT.TFile.Open("BiasNarrowRangeSummary.root")
-fil = ROOT.TFile.Open("BiasFirstOrdersSummary.root")
+#fil = ROOT.TFile.Open("BiasFirstOrdersSummary.root")
+fil = ROOT.TFile.Open("BiasAllOrdersSummary.root")
 
 gens = [
 		"bestfit_"
-		,"env_pdf_1_8TeV_lau1_"
 		,"env_pdf_1_8TeV_exp1_"
 		,"env_pdf_1_8TeV_pow1_"
+		,"env_pdf_1_8TeV_bern1_"
+		,"env_pdf_1_8TeV_lau1_"
+		,"env_pdf_1_8TeV_bern4_"
+		,"env_pdf_1_8TeV_bern5_"
 	   ]
 gnames = [
  	"Gen Profiled Function"
-	,"Gen Laurent"
-	, "Gen Exponential"
- 	,"Gen Power Law"
+	, "Gen Exponential 1"
+ 	,"Gen Power Law 1"
+ 	,"Gen Polynomial 1"
+	,"Gen Laurent 1"
+ 	,"Gen Polynomial 4"
+ 	,"Gen Polynomial 5"
 	]
-
 # these are the same sizes  (add back in poly)
 #names = ["Laurent","Power Law","Polynomial","Exponential","Envelope"]
 #fits = ["lau1","pow1","bern1","exp1","envelope"]
 #styles = [20,24,21,25,23]
 #colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kMagenta,ROOT.kRed,ROOT.kBlack]
-names = ["Laurent","Power Law","Exponential","Envelope"]
-fits = ["lau1","pow1","exp1","envelope"]
-styles = [20,24,25,23]
-colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kRed,ROOT.kBlack]
+#names = ["Laurent","Power Law","Exponential","Envelope"]
+#fits = ["lau1","pow1","exp1","envelope"]
+#styles = [20,24,25,23]
+#colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kRed,ROOT.kBlack]
+names = ["Envelope"]
+fits = ["envelope"]
+styles = [23]
+colors = [ROOT.kBlack]
 
 cvals = ["0.5","1.","2.","3."]
 covCanvs = []
@@ -126,10 +141,12 @@ for i,c in enumerate(cvals):
 	lat = ROOT.TLatex()
 	lat.SetNDC()
 	lat.DrawLatex(0.85,0.012,"#mu")
-        lat.DrawLatex(0.2,0.93,"%s #sigma Interval"%c)
+	lat.DrawLatex(0.2,0.96,"%s #sigma Interval"%c)
+	lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 	lat.SetTextAngle(90)
 	lat.DrawLatex(0.065,0.45,"Coverage/Expected Coverage")
 
-	can.SaveAs("../functions/FirstOrderFunctions_Coverage_%s.pdf"%c)
+	can.SaveAs("../functions/AllOrderFunctions_Coverage_%s_c%s.pdf"%(c,cVal))
 	can.Update()
+	can.Modified()
 	#raw_input()

@@ -22,7 +22,7 @@ if rootsys is None:
 import ROOT as r
 import array
 
-# load python stuff from python directory 
+# load python stuff from python directory
 from python.config import *
 
 cfg = config(options.input)
@@ -52,7 +52,7 @@ if not options.envelopeOnly:
 	outfile = r.TFile(cfg.outfile_name,"RECREATE")
 
 	# define poi
-	poiLow = cfg.poi_scan_range[0] 
+	poiLow = cfg.poi_scan_range[0]
 	poiHigh = cfg.poi_scan_range[1]
 	#mu = r.RooRealVar('mu','mu',0.,cfg.poi_range[0],cfg.poi_range[1])
 	# build signal model
@@ -124,8 +124,8 @@ if not options.envelopeOnly:
 	print '----------------------------------------------------------'
 
 # this can compute bias given toys
-if not options.toysOnly:
+#if not options.toysOnly:
 
 	# load plugin
-	from python.computeEnvelope import *
-	envelopeComputation(cfg.outfile_name.replace('.root','Summary.root'),[cfg.outfile_name],cfg.corrVals,cfg.genpdf_name,cfg.gen_inj_sig)
+	#from python.computeEnvelope import *
+	#envelopeComputation(cfg.outfile_name.replace('.root','Summary.root'),[cfg.outfile_name],cfg.corrVals,cfg.genpdf_name,cfg.gen_inj_sig)

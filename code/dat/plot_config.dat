@@ -1,7 +1,7 @@
 filename=bias_hists.root
 
 #gen_pdfs=bestfit,env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1
-gen_pdfs=bestfit,env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_lau1
+plot_gen_pdfs=bestfit,env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_lau1
 #gen_pdfs=env_pdf_1_8TeV_exp1
 #gen_pdfs=bestfit
 
@@ -10,7 +10,7 @@ inj_mu_vals=-0.75,-0.5,-0.25,0.,0.25,0.5,0.75,1.,1.25,1.5,1.75,2.0
 compute_pdf_sets=[env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1]:[env_pdf_1_8TeV_exp1]:[env_pdf_1_8TeV_pow1]:[env_pdf_1_8TeV_bern1]:[env_pdf_1_8TeV_lau1]
 #compute_pdf_sets=[env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1]:[env_pdf_1_8TeV_exp1]:[env_pdf_1_8TeV_pow1]
 
-mu_to_gen_pdf_map={-0.75:env_pdf_1_8TeV_exp1,-0.5:env_pdf_1_8TeV_exp1,-0.25:env_pdf_1_8TeV_exp1,0.:env_pdf_1_8TeV_exp1,0.25:env_pdf_1_8TeV_exp1,0.5:env_pdf_1_8TeV_exp1,0.75:env_pdf_1_8TeV_exp1,1.:env_pdf_1_8TeV_pow1,1.25:env_pdf_1_8TeV_pow1,1.5:env_pdf_1_8TeV_pow1,1.75:env_pdf_1_8TeV_pow1,2.0:env_pdf_1_8TeV_pow1}
+mu_to_gen_pdf_map={-0.75:env_pdf_1_8TeV_exp1,-0.5:env_pdf_1_8TeV_exp1,-0.25:env_pdf_1_8TeV_exp1,0.:env_pdf_1_8TeV_exp1,0.25:env_pdf_1_8TeV_exp1,0.5:env_pdf_1_8TeV_exp1,0.75:env_pdf_1_8TeV_pow1,1.:env_pdf_1_8TeV_pow1,1.25:env_pdf_1_8TeV_pow1,1.5:env_pdf_1_8TeV_pow1,1.75:env_pdf_1_8TeV_pow1,2.0:env_pdf_1_8TeV_pow1}
 
 compute_names=envelope,exp1,pow1,bern1,lau1
 compute_colors=1,600,417,632,616

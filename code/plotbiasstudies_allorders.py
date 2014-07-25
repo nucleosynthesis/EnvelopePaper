@@ -1,3 +1,8 @@
+import sys
+cVal = '0.'
+if len(sys.argv)==2:
+	cVal = sys.argv[1]
+
 import ROOT
 ROOT.gROOT.ProcessLine(".x paperStyle.C");
 
@@ -14,29 +19,40 @@ def trimers(gr):
 
 #fil = ROOT.TFile.Open("biastoys.root")
 #fil = ROOT.TFile.Open("BiasNarrowRangeSummary.root")
-fil = ROOT.TFile.Open("BiasFirstOrdersSummary.root")
+#fil = ROOT.TFile.Open("BiasFirstOrdersSummary.root")
+fil = ROOT.TFile.Open("BiasAllOrdersSummary.root")
 
 gens = [
 		"bestfit_"
-		,"env_pdf_1_8TeV_lau1_"
 		,"env_pdf_1_8TeV_exp1_"
 		,"env_pdf_1_8TeV_pow1_"
+		,"env_pdf_1_8TeV_bern1_"
+		,"env_pdf_1_8TeV_lau1_"
+		,"env_pdf_1_8TeV_bern4_"
+		,"env_pdf_1_8TeV_bern5_"
 	   ]
 gnames = [
  	"Gen Profiled Function"
-	,"Gen Laurent"
-	, "Gen Exponential"
- 	,"Gen Power Law"
+	, "Gen Exponential 1"
+ 	,"Gen Power Law 1"
+ 	,"Gen Polynomial 1"
+	,"Gen Laurent 1"
+ 	,"Gen Polynomial 4"
+ 	,"Gen Polynomial 5"
 	]
 # these are the same sizes  (add back in poly)
 #names = ["Laurent","Power Law","Polynomial","Exponential","Envelope"]
 #fits = ["lau1","pow1","bern1","exp1","envelope"]
 #styles = [20,24,21,25,23]
 #colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kMagenta,ROOT.kRed,ROOT.kBlack]
-names = ["Laurent","Power Law","Exponential","Envelope"]
-fits = ["lau1","pow1","exp1","envelope"]
-styles = [20,24,25,23]
-colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kRed,ROOT.kBlack]
+#names = ["Laurent","Power Law","Exponential","Envelope"]
+#fits = ["lau1","pow1","exp1","envelope"]
+#styles = [20,24,25,23]
+#colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kRed,ROOT.kBlack]
+names = ["Envelope"]
+fits = ["envelope"]
+styles = [23]
+colors = [ROOT.kBlack]
 
 leg = ROOT.TLegend(0.72,0.52,0.89,0.89)
 leg.SetFillColor(0)
@@ -77,7 +93,7 @@ for i,g in enumerate(gens):
  for j,f in enumerate(fits):
    #print g,f
    p.cd()
-   gr = fil.Get("pull_mean_gen%sfit%s_c0."%(g,f))
+   gr = fil.Get("pull_mean_gen%sfit%s_c%s"%(g,f,cVal))
    trimers(gr)
    gr.SetMarkerStyle(styles[j])
    gr.SetMarkerColor(colors[j])
@@ -93,7 +109,8 @@ for i,g in enumerate(gens):
 lat = ROOT.TLatex()
 lat.SetNDC()
 lat.DrawLatex(0.85,0.012,"#mu")
+lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 lat.SetTextAngle(90)
 lat.DrawLatex(0.065,0.7,"< (#hat{#mu} - #mu)/#sigma >")
-c.SaveAs("../functions/FirstOrderFunctions.pdf")
+c.SaveAs("../functions/AllOrderFunctions_c%s.pdf"%cVal)
 #raw_input()

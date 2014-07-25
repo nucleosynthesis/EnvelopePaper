@@ -9,6 +9,7 @@ gen_pdfs=env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_
 inj_mu_vals=-0.75,-0.5,-0.25,0.,0.25,0.5,0.75,1.,1.25,1.5,1.75,2.0
 env_pdfs=env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1
 compute_pdf_sets=[env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_lau1]:[env_pdf_1_8TeV_exp1]:[env_pdf_1_8TeV_pow1]:[env_pdf_1_8TeV_bern1]:[env_pdf_1_8TeV_lau1]
+compute_names=envelope,exp1,pow1,bern1,lau1
 
 njobs=5
 ntoysperjob=1000
