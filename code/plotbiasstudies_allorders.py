@@ -47,12 +47,13 @@ gnames = [
 #colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kMagenta,ROOT.kRed,ROOT.kBlack]
 #names = ["Laurent","Power Law","Exponential","Envelope"]
 #fits = ["lau1","pow1","exp1","envelope"]
-#styles = [20,24,25,23]
-#colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kRed,ROOT.kBlack]
-names = ["Envelope"]
+styles = [20,24,25,23]
+colors = [ROOT.kBlack,ROOT.kBlue,ROOT.kRed,ROOT.kGreen+2]
+corrections = ["1.","P","2."]
+names = ["c=1","c=p(#chi^{2})","c=2"]
 fits = ["envelope"]
-styles = [23]
-colors = [ROOT.kBlack]
+#styles = [23]
+#colors = [ROOT.kBlack]
 
 leg = ROOT.TLegend(0.72,0.52,0.89,0.89)
 leg.SetFillColor(0)
@@ -62,7 +63,7 @@ pads = []
 np = len(gens)
 hists = []
 dh = ROOT.TH1F("hd%s","hd",1,-1.,2.2);
-dh.GetYaxis().SetRangeUser(-0.99,0.99);
+dh.GetYaxis().SetRangeUser(-0.69,0.69);
 #dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
 #dh.GetXaxis().SetTitle("#mu");
 dy = 0.04
@@ -90,7 +91,8 @@ for i,g in enumerate(gens):
  line.Draw()
  latlab.DrawLatex(0.935,0.15,gnames[i])
 # hists.append(dh)
- for j,f in enumerate(fits):
+ f = "envelope"
+ for j,cVal in enumerate(corrections):
    #print g,f
    p.cd()
    gr = fil.Get("pull_mean_gen%sfit%s_c%s"%(g,f,cVal))
@@ -109,8 +111,8 @@ for i,g in enumerate(gens):
 lat = ROOT.TLatex()
 lat.SetNDC()
 lat.DrawLatex(0.85,0.012,"#mu")
-lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
+#lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 lat.SetTextAngle(90)
 lat.DrawLatex(0.065,0.7,"< (#hat{#mu} - #mu)/#sigma >")
-c.SaveAs("../functions/AllOrderFunctions_c%s.pdf"%cVal)
+c.SaveAs("../functions/AllOrderFunctions_call.pdf")
 #raw_input()

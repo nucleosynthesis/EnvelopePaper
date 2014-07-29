@@ -53,10 +53,15 @@ gnames = [
 #fits = ["lau1","pow1","exp1","envelope"]
 #styles = [20,24,25,23]
 #colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kRed,ROOT.kBlack]
-names = ["Envelope"]
+#names = ["Envelope"]
 fits = ["envelope"]
-styles = [23]
-colors = [ROOT.kBlack]
+#styles = [23]
+#colors = [ROOT.kBlack]
+
+styles = [20,24,25,23]
+colors = [ROOT.kBlack,ROOT.kBlue,ROOT.kRed,ROOT.kGreen+2]
+corrections = ["1.","P","2."]
+names = ["c=1","c=p(#chi^{2})","c=2"]
 
 cvals = ["0.5","1.","2.","3."]
 covCanvs = []
@@ -73,13 +78,13 @@ for i,c in enumerate(cvals):
 	dh = ROOT.TH1F("hd%s","hd",1,-1.,2.2);
 	#dh.GetYaxis().SetRangeUser(0.99,1.01);
 	if c=="0.5":
-		dh.GetYaxis().SetRangeUser(0.8,1.15);
+		dh.GetYaxis().SetRangeUser(0.61,1.29);
 	elif c=="1.":
-		dh.GetYaxis().SetRangeUser(0.9,1.05);
+		dh.GetYaxis().SetRangeUser(0.61,1.29);
 	elif c=="2.":
-		dh.GetYaxis().SetRangeUser(0.95,1.05);
+		dh.GetYaxis().SetRangeUser(0.81,1.29);
 	elif c=="3.":
-		dh.GetYaxis().SetRangeUser(0.98,1.02);
+		dh.GetYaxis().SetRangeUser(0.81,1.29);
 
 	#dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
 	#dh.GetXaxis().SetTitle("#mu");
@@ -116,15 +121,16 @@ for i,c in enumerate(cvals):
 	 for line in lines: line.Draw()
 	 latlab.DrawLatex(0.935,0.15,gnames[i])
 	# hists.append(dh)
-	 for j,f in enumerate(fits):
+	 f = "envelope"
+	 for j,cVal in enumerate(corrections):
 	   #print g,f
 	   p.cd()
 	   #p.SetLogy()
 	   grs = []
 	   #for c in cvals:
-	   print "pull_mean_gen%sfit%s_c0._cov1%s"%(g,f,c)
+	   print "pull_mean_gen%sfit%s_c%s_cov%s"%(g,f,cVal,c)
 
-	   gr = fil.Get("pull_mean_gen%sfit%s_c0._cov%s"%(g,f,c))
+	   gr = fil.Get("pull_mean_gen%sfit%s_c%s_cov%s"%(g,f,cVal,c))
 	   trimers(gr,prob)
 	   gr.SetMarkerStyle(styles[j])
 	   gr.SetMarkerColor(colors[j])
@@ -142,11 +148,11 @@ for i,c in enumerate(cvals):
 	lat.SetNDC()
 	lat.DrawLatex(0.85,0.012,"#mu")
 	lat.DrawLatex(0.2,0.96,"%s #sigma Interval"%c)
-	lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
+	#lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 	lat.SetTextAngle(90)
 	lat.DrawLatex(0.065,0.45,"Coverage/Expected Coverage")
 
-	can.SaveAs("../functions/AllOrderFunctions_Coverage_%s_c%s.pdf"%(c,cVal))
+	can.SaveAs("../functions/AllOrderFunctions_Coverage_%s_call.pdf"%(c))
 	can.Update()
 	can.Modified()
 	#raw_input()
