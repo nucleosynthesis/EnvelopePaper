@@ -90,7 +90,7 @@ double ProfileMultiplePdfs::getChisq(RooAbsData *dat, RooAbsPdf *pdf, bool prt) 
     if ( m < var->getMin() || m > var->getMax())  continue;
     // Find probability density and hence probability
     var->setVal(m);
-    double prb=0.25*pdf->getVal(*var);
+    double prb = var->getBinWidth(0) * pdf->getVal(*var);
     prbSum+=prb;
 
     dat->get(j);
@@ -102,7 +102,7 @@ double ProfileMultiplePdfs::getChisq(RooAbsData *dat, RooAbsPdf *pdf, bool prt) 
     else contrib=mubin-nEvt+nEvt*TMath::Log(nEvt/mubin);
     totNLL+=contrib;
 
-    if(prt) cout << pdf->GetName() << ", Bin " << j << " center" << m << " prob = " << prb << " nEvt = " << nEvt << ", mu = " << mubin << " contribution " << contrib << endl;
+    if(prt) cout << pdf->GetName() << ", Bin " << j << " center = " << m << " prob = " << prb << " nEvt = " << nEvt << ", mu = " << mubin << " contribution " << contrib << endl;
   }
 
   totNLL*=2.0;
@@ -117,7 +117,7 @@ double ProfileMultiplePdfs::getCorrection(RooAbsData *data, RooAbsPdf *pdf, int 
 	RooRealVar *var = (RooRealVar*)(pdf->getParameters((RooArgSet*)0)->find("CMS_hgg_mass"));
 	double minnll = 9999.;
 	minnll = getChisq(data,pdf);
-	int nbins = 4*(var->getMax()-var->getMin()); // always 0.25 GeV binning
+  int nbins = var->getBins();
 	RooArgSet *allParams = (RooArgSet*)pdf->getParameters(*data);
 	RooArgSet *constParams = (RooArgSet*)allParams->selectByAttrib("Constant",kTRUE);
 	int npars = allParams->getSize()-constParams->getSize()-add_pars; // HACK!
@@ -125,7 +125,7 @@ double ProfileMultiplePdfs::getCorrection(RooAbsData *data, RooAbsPdf *pdf, int 
 	// protection
 	if (pvalEquiv<1.e-16) pvalEquiv=1.e-16;
 	double minnllEquiv = TMath::ChisquareQuantile(1.-pvalEquiv,nbins);
-	//cout << "HERE: " << nbins << " -- " << npars << " -- " << minnll << " -- " << pvalEquiv << " -- " << minnllEquiv << endl;
+	//cout << "HERE: nbins: " << nbins << " -- npars: " << npars << " -- minnll: " << minnll << " -- pvalEq: " << pvalEquiv << " -- minnllEq: " << minnllEquiv << endl;
 	return TMath::Abs(minnll - minnllEquiv);
 }
 

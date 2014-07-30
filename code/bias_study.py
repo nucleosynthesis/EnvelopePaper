@@ -15,7 +15,7 @@ rootsys = os.environ.get('ROOTSYS')
 if rootsys is None:
 	print 'root not setup'
 	if 'lxplus' in hostname:
-		sys.exit('Run setup_root_lxplus.sh and try again')
+		sys.exit('Run source setup_root_lxplus.sh and try again')
 	else:
 		sys.exit()
 
@@ -100,6 +100,7 @@ if not options.envelopeOnly:
 		sw.Reset()
 		sw.Start()
 		toySetup.throwToy('truth_toy%d'%toy,int(dataSet.sumEntries()),False,True,True,True)
+		if cfg.plotsForEachToy: toySetup.plotToysWithPdfs('diagnostics/genPdf%s_toy%d'%(cfg.genpdf_name,toy),160,False)
 		toyData = toySetup.getToyDataSingle()
 		profiler = r.ProfileMultiplePdfs()
 		#profiler.wspace = ws

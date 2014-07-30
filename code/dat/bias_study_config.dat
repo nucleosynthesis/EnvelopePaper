@@ -1,21 +1,20 @@
 batchmode=True
 suppressRooFitOutput=True
-infile_name=envelopews_wsignal_toy1.root
+infile_name=envelopews_wsignal_toy1_110to150.root
 ws_name=multipdf
 inv_mass_name=CMS_hgg_mass
+fit_gen_to_data_first=roohist_data_mass_cat1_toy1_cutrange__CMS_hgg_mass
 genpdf_name=env_pdf_1_8TeV_exp1
 gen_inj_sig=0
-# can enter a dataset name here to fit first
-fit_gen_to_data_first=roohist_data_mass_cat1_toy1__CMS_hgg_mass
-envpdf_names=env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_lau1,env_pdf_1_8TeV_bern1
+envpdf_names=env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_pow3,env_pdf_1_8TeV_exp3
 outfile_name=BiasStudyProfiles.root
 ntoys=1
 seed=0
 printScanProgress=True
 poi_range=-5.,5.
-poi_scan_range=-2.,2.
-points_in_scan=5
-plotsForEachToy=False
-corrVals=0.,1.,2.
+poi_scan_range=-3.5,3.5
+points_in_scan=50
+plotsForEachToy=True
+corrVals=0.,1.,2.,P
 savePVal=True
 
