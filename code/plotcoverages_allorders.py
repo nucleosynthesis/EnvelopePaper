@@ -56,8 +56,8 @@ fits = ["envelope"]
 #styles = [23]
 #colors = [ROOT.kBlack]
 
-styles = [20,24,25,23]
-colors = [ROOT.kBlack,ROOT.kBlue,ROOT.kRed,ROOT.kGreen+2]
+styles = [23,25,28,23]
+colors = [ROOT.kBlack,ROOT.kBlue,ROOT.kMagenta+1,ROOT.kGreen+2]
 corrections = ["1.","P","2."]
 names = ["c=1","c=p(#chi^{2})","c=2"]
 
@@ -82,7 +82,7 @@ for i,c in enumerate(cvals):
 	elif c=="2.":
 		dh.GetYaxis().SetRangeUser(0.81,1.29);
 	elif c=="3.":
-		dh.GetYaxis().SetRangeUser(0.81,1.29);
+		dh.GetYaxis().SetRangeUser(0.973,1.029);
 
 	#dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
 	#dh.GetXaxis().SetTitle("#mu");
@@ -145,12 +145,12 @@ for i,c in enumerate(cvals):
 	lat = ROOT.TLatex()
 	lat.SetNDC()
 	lat.DrawLatex(0.85,0.012,"#mu")
-	lat.DrawLatex(0.2,0.96,"%s #sigma Interval"%c)
+	lat.DrawLatex(0.2,0.95,"%s #sigma Interval"%c)
 	#lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 	lat.SetTextAngle(90)
 	lat.DrawLatex(0.065,0.45,"Coverage/Expected Coverage")
 
-	can.SaveAs("../functions/AllOrderFunctions_Coverage_%s_call.pdf"%(c))
+	can.SaveAs("../correction/AllOrderFunctions_Coverage_%s_call.pdf"%(c))
 	can.Update()
 	can.Modified()
 	#raw_input()

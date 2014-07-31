@@ -4,9 +4,12 @@
 
 TRandom3 *rnd = new TRandom3();
 
+
+bool RUNPVALCORRECTION=true;
+
 double MULOW = -1;
-double MUHIGH = 2.6;
-double MUSTEP = 0.02;
+double MUHIGH = 2.5;
+double MUSTEP = 0.05;
 double CORRECTION = 0.5; // (to NLL (not 2NLL) per parameter)
 
 double YMIN=206;
@@ -15,10 +18,10 @@ double YMAX=222;
 double MUMIN = -1;
 double MUMAX = 2.6;
 
-bool DOEXP=true;
-bool DOPOL=true;
-bool DOPOW=true;
-bool DOLAU=true;
+bool DOEXP=1;
+bool DOPOL=1;
+bool DOPOW=1;
+bool DOLAU=1;
 
 bool DORANDPARS=false;
 bool DOREMOVERANGE=false;
@@ -142,6 +145,7 @@ int countNonConstants(RooArgSet *pars){
 
 TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
 
+
    double xlow = MULOW;
    double xhigh= MUHIGH;
    double xstep= MUSTEP;
@@ -152,7 +156,9 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    RooAbsReal *nll = pdf.createNLL(dat);
    RooMinimizer minim(*nll);
    minim.setStrategy(0);
-   double cfactor = corr*(countNonConstants(nll->getParameters(dat))); // remove mu !
+
+   double cfactor;
+   cfactor = 2*corr*(countNonConstants(nll->getParameters(dat))); // remove mu !
 
 //   RooFitResult *res = pdf.fitTo(dat,RooFit::Save(1));
    
@@ -181,8 +187,8 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
 	minim.minimize("Minuit","minimize");
 	
 	double nllvalue = getChisq(dat,pdf,*var,0);
-	//std::cout << "nllval " << nllvalue << std::endl;
-	graph->SetPoint(cpoint,x,nllvalue+2*cfactor);
+
+	graph->SetPoint(cpoint,x,nllvalue+cfactor);
 
 	if (nllvalue < minnll) {
 		minnll=nllvalue;
@@ -193,7 +199,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    }
    graph->SetLineWidth(2);
    graph->GetXaxis()->SetTitle("#mu");
-   graph->GetYaxis()->SetTitle("-2Log L");
+   graph->GetYaxis()->SetTitle("-2Log L + Correction");
    mu.setVal(minmu);
    // Set all parameters to best fit ones 
    nllparams->assignValueOnly(bfparams);
@@ -209,19 +215,30 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    return graph;   
 }
 
-void generateEnvelope(int ng,TGraph **graphs,TGraph *gr_env,double min,double max, double step){
+int generateEnvelope(int ng,TGraph *graphs,TGraph *gr_env,double min,double max, double step, double *minimumnll){
    int p = 0;
+   double globalMin = 100000.;
+   int bestpdf=0;
    for (double x=min; x<=max;x+=step){
-     minnll=1000000.;
+     double minnll=1000000.;
      for (int i = 0; i < ng; i++){
-	double tnll = graphs[i]->Eval(x);
+	//std::cout << graphs[i]->GetName();
+	double tnll = (graphs[i]).Eval(x);
 	if (tnll < minnll){
 		minnll = tnll;
+	}
+        if (tnll < globalMin){
+		bestpdf = i;
 	}
      }
      gr_env->SetPoint(p,x,minnll);
      p++;
+     if (minnll < globalMin){
+	globalMin = minnll;
+     }
    }
+   *minimumnll=globalMin;
+   return bestpdf; 
 }
 
 void nllScan_allOrderFunctions(){
@@ -278,6 +295,8 @@ void nllScan_allOrderFunctions(){
    dummyHist->SetTitle("");
    can->cd(); dummyHist->Draw("AXIS");
 
+   TGraph *graphs = new TGraph[50] ;
+   int ngCounter=0;
    if (DOPOL){
    // Bernsteins 
    //while (arg = (RooAbsArg*)pdfit->Next()) {
@@ -310,6 +329,8 @@ void nllScan_allOrderFunctions(){
 	cnew->Write();
 	
 	can->cd();
+	graphs[ngCounter]=*(TGraph*)gr->Clone();
+	ngCounter++;
    }
    }
    //  
@@ -346,6 +367,8 @@ void nllScan_allOrderFunctions(){
 	cnew->Write();
 	can->cd();
 	
+	graphs[ngCounter]=*(TGraph*)gr->Clone();
+	ngCounter++;
    }
    }
 
@@ -381,6 +404,9 @@ void nllScan_allOrderFunctions(){
 	outfits->cd();
 	cnew->Write();
 	can->cd();
+
+	graphs[ngCounter]=*(TGraph*)gr->Clone();
+	ngCounter++;
    }
    }
    
@@ -414,18 +440,95 @@ void nllScan_allOrderFunctions(){
 	outfits->cd();
 	cnew->Write();
 	can->cd();
+
+	graphs[ngCounter]=*(TGraph*)gr->Clone();
+	ngCounter++;
    }
    }
    leg->Draw();
-   can->Print("ProfilesAllOrders.pdf");
+   can->Print("../correction/ProfilesAllOrders.pdf");
 
    TCanvas *can_fits = new TCanvas();
    pl->SetTitle("");
    pl->GetXaxis()->SetTitle("m_{#gamma#gamma}");
    pl->Draw();
-   can_fits->Print("BestFitsAllOrders.pdf");
+   can_fits->Print("../correction/BestFitsAllOrders.pdf");
+
+
+   // Now make the envelope graph;
+   TGraph *gr_env = new TGraph();
+   double globalMin;
+   std::cout << (graphs[0]).GetName() << " " << ngCounter << std::endl;;
+   std::cout << " ********************************************************" << std::endl;
+   int bestPdf = generateEnvelope(ngCounter,graphs,gr_env,MULOW,MUHIGH,MUSTEP,&globalMin);  // no additional correction
+   std::cout << "Best pdf " << bestPdf << std::endl;
+   std::cout << " ********************************************************" << std::endl;
+   double mlow=0,mhigh=0; 
+   double mlow2=0,mhigh2=0; 
+   std::cout << calculateMinAndErrors(gr_env,&mlow,&mhigh,1,1) << std::endl;
+   std::cout << " ********************************************************" << std::endl;
+
+   std::cout << calculateMinAndErrors(gr_env,&mlow2,&mhigh2,2,0) << std::endl;
+   TCanvas *envelope = new TCanvas();
+   gr_env->SetLineColor(1); gr_env->SetLineWidth(2);
+   double minll = globalMin ; // Pow is the best fit)
+   std::cout << minll << std::endl;
+   //gr_env->GetYaxis()->SetRangeUser(minll,minll+6);
+   gr_env->GetYaxis()->SetTitle("-2Log L + Correction");
+   gr_env->GetXaxis()->SetTitle("#mu");
+   gr_env->GetXaxis()->SetRangeUser(MULOW,MUHIGH);
+   gr_env->GetYaxis()->SetRangeUser(YMIN,YMAX);
+   gr_env->Draw("AL");
+   TLine *lin = new TLine(MULOW,minll,MUHIGH,minll);
+   TLine *lin2 = new TLine(MULOW,minll+1,MUHIGH,minll+1);
+   TLine *lin3 = new TLine(MULOW,minll+4,MUHIGH,minll+4);
+   lin->SetLineColor(1); 
+   lin2->SetLineColor(1); 
+   lin2->SetLineColor(1);
+   lin->SetLineWidth(2); 
+   lin3->SetLineWidth(2); 
+   lin2->SetLineWidth(2);
+   lin->SetLineStyle(2); 
+   lin2->SetLineStyle(2);
+   lin3->SetLineStyle(2);
+   TGraphAsymmErrors *newg = new TGraphAsymmErrors() ;
+   TGraphAsymmErrors *newg2 = new TGraphAsymmErrors() ;
+   int np = 0;
+    
+   for (double xcheck = mlow;xcheck<=mhigh;xcheck+=MUSTEP){
+	newg->SetPoint(np,xcheck,minll);
+	newg->SetPointError(np,0.01,0,0,gr_env->Eval(xcheck)-minll);
+	np++;
+   }
+
+   np = 0;
+   for (double xcheck = mlow2;xcheck<=mhigh2;xcheck+=MUSTEP*0.1){
+	newg2->SetPoint(np,xcheck,minll);
+	newg2->SetPointError(np,0.01,0,0,gr_env->Eval(xcheck)-minll);
+	np++;
+   }
+
+   TLegend *legf = new TLegend(0.30,0.62,0.79,0.89);
+   newg->SetFillColor(kGreen+3); newg->SetLineColor(kGreen+3);newg->SetMarkerColor(kGreen+3);
+   newg2->SetFillColor(kYellow); newg2->SetLineColor(kYellow);newg2->SetMarkerColor(kYellow);
+   newg2->Draw("E3same");
+   newg->Draw("E3same");
+   graphs[bestPdf].SetLineColor(2);
+   graphs[bestPdf].Draw("same");
+   gr_env->Draw("same"); 
+   lin->Draw(""); 
+   lin2->Draw("");
+   lin3->Draw("");
+    
+   //legf->AddEntry(&graphs[bestPdf],"Single function ","L");
+   legf->AddEntry(gr_env,"Minimum Envelope","L");
+   legf->AddEntry(newg,"#pm 1 #sigma Interval");
+   legf->AddEntry(newg2,"#pm 2 #sigma Interval");
+   legf->Draw();
+   envelope->SaveAs("../correction/EnvelopeAllOrders.pdf");  
 
    outfits->cd();
    can->Write();
    can_fits->Write();
+   envelope->Write();
 }

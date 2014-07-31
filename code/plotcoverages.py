@@ -7,6 +7,8 @@ ROOT.gStyle.SetLabelSize(0.09, "XYZ");
 ROOT.gStyle.SetPadBorderMode(0);
 ROOT.gStyle.SetTitleYOffset(0.5);
 
+#ROOT.gROOT.SetBatch(1)
+
 def trimers(gr,exp): # also reverses the points (1-coverage)
   np = gr.GetN()
   x = ROOT.Double(0);
@@ -58,13 +60,13 @@ for i,c in enumerate(cvals):
 	dh = ROOT.TH1F("hd%s","hd",1,-1.,2.2);
 	#dh.GetYaxis().SetRangeUser(0.99,1.01);
 	if c=="0.5":
-		dh.GetYaxis().SetRangeUser(0.8,1.15);
+		dh.GetYaxis().SetRangeUser(0.81,1.165);
 	elif c=="1.":
-		dh.GetYaxis().SetRangeUser(0.9,1.05);
+		dh.GetYaxis().SetRangeUser(0.86,1.165);
 	elif c=="2.":
-		dh.GetYaxis().SetRangeUser(0.95,1.05);
+		dh.GetYaxis().SetRangeUser(0.93,1.11);
 	elif c=="3.":
-		dh.GetYaxis().SetRangeUser(0.98,1.02);
+		dh.GetYaxis().SetRangeUser(0.986,1.021);
 
 	#dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
 	#dh.GetXaxis().SetTitle("#mu");

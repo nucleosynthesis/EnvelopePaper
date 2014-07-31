@@ -106,24 +106,67 @@ Hence, it also has no effect on coverage.
 
 \subsection{Function definitions}
 \label{sec:correction:functions}
-
+DESCRIBE THE RECURSIVE FRACTION DEFINITIONS USED HERE AND WHICH ONES WE USE
 \subsection{Example case}
 \label{sec:correction:example}
 
-SHOW RESULTS FOR ``TRUE'' P-VALUE CORRECTION?
+SHOWING RESULTS USING CORRECTION 1 PER DOF. SHOULD WE COMPARE TO AKAIKE AND PVALUE BASED CORRECTION?
 
-RELATION TO BIAS WHEN USING FUNCTION A TO FIT FUNCTION B? ASIMOV?
+When including higher order functions, the 95.4\% confidence interval on $\mu$ is extended 
+due to the influence of the higher order polynomial functions providing a reasonable 
+description of the data. The central value is unchanged since the lowest order power law 
+best desribes the data when including a penalty for using additional parameters in the fit.
 
-\subsection{Toy generation}
-\label{sec:correction:toys}
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.45\textwidth]{correction/ProfilesAllOrders.pdf}
+\includegraphics[width=0.45\textwidth]{correction/EnvelopeAllOrders.pdf}
+\caption{Left: Profile 2NLL scans for all of the functions considered. The 2NLL values for
+each profile has been corrected by 1 unit per background function parameter. 
+Right: Minimum envelope of the functions onsidered accounting for the correction of 1 per 
+background parameter. The 2NLL scan when only considering the lowest order power law function 
+is shown in red.}
+\label{fig:correction:profiles}
+\end{figure}
 
-EXTRA COMPLICATION WITH BAYESIAN AND FREQUENTIST MIXTURES OF NORMALISATION
+
+%RELATION TO BIAS WHEN USING FUNCTION A TO FIT FUNCTION B? ASIMOV?
+
+%\subsection{Toy generation}
+%\label{sec:correction:toys}
+
+%EXTRA COMPLICATION WITH BAYESIAN AND FREQUENTIST MIXTURES OF NORMALISATION
 
 \subsection{Bias and coverage depoendence on correction}
 \label{sec:correction:bias}
 
-BIAS VS CORRECTION
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.45\textwidth]{correction/AllOrderFunctions_call.pdf}
+\caption{Average pull when fitting using the envelope as a function of $\mu$ 
+used to generate the signal. Each panel shows the average bias when using 
+a different background function for toy generation.
+The top plot show the result when the best-fit function at each
+value of $\mu$ is used to generate toys.}
+\label{fig:correction:allorderbias}
+\end{figure}
 
-ERROR VS CORRECTION.
 
-DOES BIAS $\rightarrow 0$ for CORRECTION $\rightarrow 0$?
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_0.5_call}.pdf}
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_1._call}.pdf}\\
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_2._call}.pdf}
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_3._call}.pdf}
+\caption{Fraction of toys in which the fitted value of $\mu$ is within the 0.5, 1, 2 and 
+$3\sigma$ intervals relative to the expected fraction for that iterval when correcting 
+with the different 2NLL correction schemes. 
+The results when generating with different functions and generating using the 
+profiled function for each value of $\mu$ are shown in the different panels.  }
+\label{fig:correction:allordercoverage}
+\end{figure}
+%BIAS VS CORRECTION
+
+%ERROR VS CORRECTION.
+
+%DOES BIAS $\rightarrow 0$ for CORRECTION $\rightarrow 0$?

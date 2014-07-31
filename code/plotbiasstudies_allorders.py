@@ -45,8 +45,8 @@ gnames = [
 #colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kMagenta,ROOT.kRed,ROOT.kBlack]
 #names = ["Laurent","Power Law","Exponential","Envelope"]
 #fits = ["lau1","pow1","exp1","envelope"]
-styles = [20,24,25,23]
-colors = [ROOT.kBlack,ROOT.kBlue,ROOT.kRed,ROOT.kGreen+2]
+styles = [23,25,28,23]
+colors = [ROOT.kBlack,ROOT.kBlue,ROOT.kMagenta+1,ROOT.kGreen+2]
 corrections = ["1.","P","2."]
 names = ["c=1","c=p(#chi^{2})","c=2"]
 fits = ["envelope"]
@@ -112,5 +112,5 @@ lat.DrawLatex(0.85,0.012,"#mu")
 #lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 lat.SetTextAngle(90)
 lat.DrawLatex(0.065,0.7,"< (#hat{#mu} - #mu)/#sigma >")
-c.SaveAs("../functions/AllOrderFunctions_call.pdf")
+c.SaveAs("../correction/AllOrderFunctions_call.pdf")
 #raw_input()

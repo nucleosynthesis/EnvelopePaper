@@ -6,7 +6,7 @@ double YMIN = 204;
 double YMAX = 220;
 
 double MULOW = -1;
-double MUHIGH = 2.6;
+double MUHIGH = 2.5;
 double MUSTEP = 0.05;
 
 void getMinPoint(TGraph *gr, double *xmin, double *ymin){

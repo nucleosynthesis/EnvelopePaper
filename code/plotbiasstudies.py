@@ -25,7 +25,7 @@ gens = [
 gnames = [
  	"Gen Profiled Function"
 	,"Gen Laurent"
-	, "Gen Exponential"
+	,"Gen Exponential"
  	,"Gen Power Law"
 	]
 # these are the same sizes  (add back in poly)

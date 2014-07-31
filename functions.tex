@@ -39,12 +39,12 @@ real Higgs data sample used. However, it is emphasised that this is not the
 actual data sample and so 
 none of the detailed results presented below can be used to deduce any
 properties of the Higgs boson iself.
-This original dataset was generated in 320 bins. It included XXX signal events
-generated according to a Gaussian distribution with a mean of 125\,GeV and a 
-width of YYY\,GeV. In the following, the signal strength results are given in
+This original dataset was generated in 160 bins. It included signal events
+generated according to a Gaussian distribution with a normalization of 50.8 events, a mean of 125\,GeV and a 
+width of 1.19\,GeV. In the following, the signal strength results are given in
 terms of the relative strength $\mu$, 
 meaning the measured size of the signal relative
-to the generated value.
+to the expected number of signal events.
 
 The four two-parameter functions mentioned above were each 
 separately fitted to this
@@ -67,22 +67,18 @@ and so is hidden below the power law line.}
 \end{figure}
 
 The profile scan as a function of the relative signal strength $\mu$
-between $-1$ and 2
+between $-1$ and 2.5
 for the four functions is shown in
 figure~\ref{fig:functions:profiles}.
 The absolute minimum occurs for the power law function at a relative signal 
-strength of around $\mu \approx 1.1$. If just considering this function,
-then the measured value of the relative strength would be quoted as
-$\mu = 1.1 \pm 0.5$, determining the error from $\Delta({\rm 2NLL}) = 1$.
-The exponential function gives a very similar 2NLL value
-at its best fit, but gives a relative signal strength of $\mu = 0.5 \pm 0.4$.
-CHECK THESE VALUES!
-The Laurent result of $\mu = 1.1 \pm 0.5$
-is very similar to the power law in terms of the
-relative signal strength, but with a slightly
-worse 2NLL value. The polynomial 2NLL value is too large to appear in the plot
-but the best fit $\mu$ value is at the lower edge of the profile scan range
-and so does not have a true minimum.
+strength of $\mu = 0.93$. If just considering this function,
+then one would set a 68.3\% confidence interval on $\mu$ of  
+$0.43 < \mu < 1.40 $, determined as the interval for which $\Delta({\rm 2NLL}) < 1$. 
+The measurement would therefore be reported with its standard error as $\mu=0.93^{+0.47}_{-0.50}$.
+When fitting the exponential function a very similar 2NLL value is obtained
+at its best fit, but gives a relative signal strength of $\mu = 0.72^{+0.52}_{-0.46}$.
+Fitting with the straight line yields a very different result of $\mu = 0.01^{+0.51}_{-0.47}$ 
+although its clear that this function does not describe the data well.
 The fact that the different functions can give different best fit values
 is a direct example of the systematic error associated
 with the choice of function.
@@ -92,20 +88,19 @@ with the choice of function.
 \includegraphics[width=0.45\textwidth]{functions/Profiles.pdf}
 \caption{Profile 2NLL scans for the four functions discussed in the text.
 The polynominal function is always above the top of the 2NLL scale shown in this
-figure. SHOULD THIS HAVE AN ENVELOPE CURVE, OR A SEPARATE PLOT WITH JUST
-THE ENVELOPE PLUS 1SIGMA CONSTRUCTION LINES? IN NEXT PLOT}
+figure. }
 \label{fig:functions:profiles}
 \end{figure}
 
 The envelope around these functions is shown in
 figure~\ref{fig:functions:envelope}.
-The best fit is clearly still $\mu \approx 1.1$ from the power law
-but now the error is enlarged by the exponential contribution to the
+The best fit is still $\mu=0.93$ from the power law
+but now the standard error is enlarged by the exponential contribution to the
 envelope on the lower side of the scan. Hence, taking all four functions into
-account, the value which would now be quoted would be 
-$\mu = 1.1^{+0.5}_{-1.0}$. The enlarged error is a direct reflection of the
+account, the measured value of $\mu$ which would now be quoted is 
+$\mu = 0.93_{-0.56}^{+0.47}$. The enlarged uncertainty is a direct reflection of the
 systematic error arising from the function uncertainty. Note,
-it is clear that the very bad fit of the polynomial
+it is clear that the poor fit of the polynomial
 means it plays no role in the envelope and so this function is 
 ``automatically'' ignored by the method,
 without requiring any arbitrary criterion for
@@ -113,11 +108,10 @@ including it or not.
 %
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.45\textwidth]{functions/Profiles.pdf}
+\includegraphics[width=0.45\textwidth]{functions/Envelope.pdf}
 \caption{Profile 2NLL envelope for the four two-parameter function fits.
-The lines shown the best fit and the errors determined from
-$\Delta({\rm 2NLL})=1$.
-PLACEHOLDER}
+The coloured bands indicate the $1\sigma$ and $2\sigma$ intervals determined from the regions 
+for which the value of 2NLL increases by 1 and 4 units from the minimum value as indicated by the horizontal lines.}
 \label{fig:functions:envelope}
 \end{figure}
 
@@ -127,14 +121,12 @@ PLACEHOLDER}
 
 The discrete profile method was tested for bias and coverage 
 using a large ensemble of
-pseudo-experiments (``toys''). For each of these, a background and signal 
-dataset were generated using a Monte Carlo technique. The background function
-was chosen to be one of the four two-parameter functions discussed above, with
-the parameters set to their best fit values. In addition, a further set of
-toy datasets were generated based on the same
-smooth function and Gaussian as for the original dataset.
-
-WHAT SIGNAL STRENGTH?
+pseudo-experiments (``toys''). For each of these, a toy
+dataset including signal and background events generated using a Monte Carlo technique. 
+The background function was chosen to be one of the four two-parameter functions discussed above, with
+the parameters set to their best fit values. Several ensembles of toy pseudo-experiments were 
+generated varying the normalization of the signal function in order to test the properties 
+of the method as a function of the parameter $\mu$.  
 
 In all cases, the resulting toy datasets were then treated identically to the
 original dataset, with a fit for the relative signal strength using
@@ -142,7 +134,7 @@ each of the four functions as background, and then forming the envelope.
 For each ensemble of datasets, the mean pull of the relative
 signal strength was determined. Figure~\ref{fig:functions:firstorderbias}
 shows the result of these fits. It is seen that the envelope gives a very small
-bias for all cases, which is not the case for any of the specific functions.
+bias for all cases, which is not the case when using one specific function.
 %
 \begin{figure}[tbp]
 \centering
@@ -152,14 +144,14 @@ using the envelope. The second, third and fourth plots shows the results
 when the generating background function is power law, exponential and Laurent,
 respectively. The top plot show the result when the best-fit function at each
 value of $\mu$ is used to generate toys; this means the exponential function
-below $\mu = 0.8$ and the power law function above this value. In all cases,
+below $\mu = 0.55$ and the power law function above this value. In all cases,
 the polynomial gives values outside the range of these plots.}
 \label{fig:functions:firstorderbias}
 \end{figure}
 
 The coverage was also determined from the same fits. The difference of the
 2NLL between the best fit value and the true value of the relative signal 
-strength was found and the fraction of times this was less than 1 or 4 was
+strength was found and the fraction of times this was less than 0.25, 1, 4 and 9, was
 determined. Figure~\ref{fig:functions:firstordercoverage}
 shows the result of these studies. It is seen that the envelope gives good
 coverage for all cases, which is again not the case for any of the specific 
@@ -171,9 +163,9 @@ functions.
 \includegraphics[width=0.45\textwidth]{{functions/FirstOrderFunctions_Coverage_1.}.pdf}\\
 \includegraphics[width=0.45\textwidth]{{functions/FirstOrderFunctions_Coverage_2.}.pdf}
 \includegraphics[width=0.45\textwidth]{{functions/FirstOrderFunctions_Coverage_3.}.pdf}
-\caption{Fraction of relative signal strength within the ``one sigma'' and
-``two sigma'' range when fitting with each function as background and when
-using the envelope. The four plots correspond to the coverage of the 0.5, 1, 2 and 3 $\sigma$ intervals.
+\caption{Fraction of toys in which the fitted value of $\mu$ is within the 0.5, 1, 2 and 
+$3\sigma$ intervals relative to the expected fraction for that interval using a single 
+function and using the envelope.
 The second, third and fourth panel shows the results
 when the generating background function is power law, exponential and Laurent,
 respectively. The top plot show the result when the best-fit function at each
@@ -182,18 +174,18 @@ value of $\mu$ is used to generate toys.}
 \end{figure}
 
 
-ASIMOV RESULTS AS PART OF DISCUSSION ON BIAS?
+%ASIMOV RESULTS AS PART OF DISCUSSION ON BIAS?
 
-UNBINNED MENTIONED ONLY IN PASSING
+%UNBINNED MENTIONED ONLY IN PASSING
 
 
-\subsection{Toy generation}
-\label{sec:functions:toys}
+%\subsection{Toy generation}
+%\label{sec:functions:toys}
 
-WHAT IS A BETTER TERM THAN ``TOYS''?
+%WHAT IS A BETTER TERM THAN ``TOYS''?
 
-1. USING SINGLE FUNCTION (GIVING BIAS)
+%1. USING SINGLE FUNCTION (GIVING BIAS)
 
-2. USING BAYESIAN PROBABILITY MIX OF FUNCTIONS (NO BIAS)
+%2. USING BAYESIAN PROBABILITY MIX OF FUNCTIONS (NO BIAS)
 
-3. USING FREQUENTIST FRACTIONAL CONTRIBUTIONS OF FUNCTIONS (BIAS???)
+%3. USING FREQUENTIST FRACTIONAL CONTRIBUTIONS OF FUNCTIONS (BIAS???)
