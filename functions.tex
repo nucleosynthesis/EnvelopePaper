@@ -128,6 +128,14 @@ the parameters set to their best fit values. Several ensembles of toy pseudo-exp
 generated varying the normalization of the signal function in order to test the properties 
 of the method as a function of the parameter $\mu$.  
 
+In addition, a further ensemble of toy datasets was generated, for which the
+background function itself, as well as its parameters, was chosen according to
+the best fit for each value of $\mu$. From figure~\ref{fig:functions:profiles},
+it can be seen that this means the exponential function is used for $\mu<0.8$?????
+and the power law function is used otherwise. Conceptually, this method again
+treats the function choice as a discrete nuisance parameter and so picks the
+best fit values of all parameters for each $\mu$ value.
+
 In all cases, the resulting toy datasets were then treated identically to the
 original dataset, with a fit for the relative signal strength using
 each of the four functions as background, and then forming the envelope.

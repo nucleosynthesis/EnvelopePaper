@@ -21,19 +21,19 @@ void deltaChiSq() {
 
   for(unsigned j(1);j<10;j++) {
     std::ostringstream sout;
-    sout << 320-j;
-    fDeltaChi2[j]=new TH1F((std::string("FDeltaChi2_320_")+sout.str()).c_str(),
-                           (std::string(";p-value;Change of #chi^{2} for change of DoF to 320")).c_str(),
+    sout << 160-j;
+    fDeltaChi2[j]=new TH1F((std::string("FDeltaChi2_160_")+sout.str()).c_str(),
+                           (std::string(";p-value;Change of #chi^{2} for change of DoF to 160")).c_str(),
                            10000,0.0,1.0);
     
-    hDeltaChi2[j]=new TH1F((std::string("HDeltaChi2_320_")+sout.str()).c_str(),
-                           (std::string(";Change of #chi^{2} for change of DoF to 320;Arbitrary units")).c_str(),
+    hDeltaChi2[j]=new TH1F((std::string("HDeltaChi2_160_")+sout.str()).c_str(),
+                           (std::string(";Change of #chi^{2} for change of DoF to 160;Arbitrary units")).c_str(),
                            1000,0.0,10.0);
     
     for(unsigned i(0);i<10000;i++) {
       double p=0.0001*(i+0.5);
-      double c0=TMath::ChisquareQuantile(1-p,320);
-      double c1=TMath::ChisquareQuantile(1-p,320-j);
+      double c0=TMath::ChisquareQuantile(1-p,160);
+      double c1=TMath::ChisquareQuantile(1-p,160-j);
       fDeltaChi2[j]->SetBinContent(i+1,(c0-c1));
       hDeltaChi2[j]->Fill(c0-c1);
     }
@@ -52,15 +52,15 @@ void deltaChiSq() {
   fDeltaChi2[1]->Draw("same");
 
   t.SetTextColor(6);
-  t.DrawLatex(0.1,0.6,"Dof = 319");
+  t.DrawLatex(0.1,0.6,"Dof = 159");
   t.SetTextColor(4);
-  t.DrawLatex(0.2,1.6,"Dof = 318");
+  t.DrawLatex(0.2,1.6,"Dof = 158");
   t.SetTextColor(3);
-  t.DrawLatex(0.3,2.6,"Dof = 317");
+  t.DrawLatex(0.3,2.6,"Dof = 157");
   t.SetTextColor(2);
-  t.DrawLatex(0.4,3.6,"Dof = 316");
+  t.DrawLatex(0.4,3.6,"Dof = 156");
   t.SetTextColor(1);
-  t.DrawLatex(0.5,4.6,"Dof = 315");
+  t.DrawLatex(0.5,4.6,"Dof = 155");
 
   canv->Print("../correction/DeltaChiSq1.pdf");
 
@@ -77,15 +77,15 @@ void deltaChiSq() {
   hDeltaChi2[2]->Draw("same");  
 
   t.SetTextColor(6);
-  t.DrawLatex(4.0,900.0,"Dof = 319");
+  t.DrawLatex(4.0,650.0,"Dof = 159");
   t.SetTextColor(4);
-  t.DrawLatex(4.0,820.0,"Dof = 318");
+  t.DrawLatex(4.0,600.0,"Dof = 158");
   t.SetTextColor(3);
-  t.DrawLatex(4.0,740.0,"Dof = 317");
+  t.DrawLatex(4.0,550.0,"Dof = 157");
   t.SetTextColor(2);
-  t.DrawLatex(4.0,660.0,"Dof = 316");
+  t.DrawLatex(4.0,500.0,"Dof = 156");
   t.SetTextColor(1);
-  t.DrawLatex(4.0,580.0,"Dof = 315");
+  t.DrawLatex(4.0,450.0,"Dof = 155");
 
   canv->Print("../correction/DeltaChiSq2.pdf");
 }
