@@ -167,6 +167,27 @@ profiled function for each value of $\mu$ are shown in the different panels.  }
 \end{figure}
 %BIAS VS CORRECTION
 
+Figure~\ref{fig:correction:compareerrors} shows the distribution of symmetrized uncertainty on $\mu$ 
+when considering the full set of functions using the three different correction schemes compared  
+with considering a single first order function. The symmetrized uncertainty ($\sigma_{\mu}$) 
+is defined as half of the 68.3\% interval on $\mu$. 
+The distributions are obtained from fitting 
+toy datasets generated using the first order power law function for the background, with 
+signal generated assuming $\mu=1$ ??? RIGHT ???. The tail of the distributions observed 
+when considering the envelope of functions are from fits in which functions other than the 
+best fitting function contribute to the 68.3\% interval. As expected, correcting using a higher 
+penalty reduced the size of this tail since in this case, it is less likely that a higher order 
+function can contribute.
+ 
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.45\textwidth]{correction/compare_error_magnitude.pdf}
+\caption{Symmetrized uncertainty distributions in toy datasets comparing the three correction schemes 
+when including the full set of functions 
+to the case when considering only a single power law function for the fit.}
+\label{fig:correction:allorderbias}
+\end{figure}
+
 %ERROR VS CORRECTION.
 
 %DOES BIAS $\rightarrow 0$ for CORRECTION $\rightarrow 0$?
