@@ -66,8 +66,8 @@ However, it can be seen that the correction is approximately given by
 \chi^{\prime 2} - \chi^2 \approx N_{\rm par}
 \end{displaymath}
 for the central range of p-values. This approximation means the 
-2NLL shape, and hence coverage, is unchanged and this is used in the rest
-of this paper.
+2NLL shape, and hence coverage, is unchanged. Both the exact p-value
+correction and the approximation are used in the rest of this paper.
 %
 \begin{figure}[tbp]
 \centering
@@ -106,23 +106,67 @@ Hence, it also has no effect on coverage.
 
 \subsection{Function definitions}
 \label{sec:correction:functions}
-DESCRIBE THE RECURSIVE FRACTION DEFINITIONS USED HERE AND WHICH ONES WE USE
+The fit functions which were used are the two-parameter functions listed in 
+Section~\ref{sec:functions:function} and higher order generalisations of
+these. Specifically, these are
+\begin{enumerate}
+\item
+``Power law''; $f(x) = \sum_{i=0}^N p_{2i} x^{p_{2i+1}}$.
+\item
+``Exponential''; $f(x) = \sum_{i=0}^N p_{2i} e^{p_{2i+1}x}$.
+\item
+``Laurent''; $f(x) = \sum_{i=0}^N p_i/x^n$.
+\item
+``Polynomial''; $f(x) = \sum_{i=0}^N p_i x^i$.
+\end{enumerate}
+The Laurent function values of $n$ used for $i=0,1,2,3,4,5\dots$ are
+$n=4,5,3,6,2,7\dots$, meaning they are grouped around the original
+two $n$ values of 4 and 5 as used throughout Section~\ref{sec:functions}.
+Note the power law and exponential functions can only have even numbers of
+parameters, i.e. $N_{\rm par}=2N$, while the Laurent and polynomial functions
+can have both even and odd numbers, i.e. $N_{\rm par}=N$.
+
+
 \subsection{Example case}
 \label{sec:correction:example}
 
-SHOWING RESULTS USING CORRECTION 1 PER DOF. SHOULD WE COMPARE TO AKAIKE AND PVALUE BASED CORRECTION?
+The functions listed above were fit to the data for values of 
+$2 \le N_{\rm par} \le 6$; this resulted in three fits for the power law and
+exponential functions, and five fits for the Laurent and polynomial functions.
+The profiles for each of these function fits are shown in
+figure~\ref{fig:correction:profiles}, for the example case of 
+applying the approximate p-value correction to the 2NLL of one unit per 
+background function parameter.
 
-When including higher order functions, the 95.4\% confidence interval on $\mu$ is extended 
+For this case, the lowest corrected 2NLL value is still given by the
+two-parameter power law function and so gives an identical central value
+to that described in Section~\ref{sec:functions:example}. The lowest corrected
+2NLL value for $\mu < 0.55$ is also again given by the two-parameter exponential
+function, also as for the previous case. 
+Indeed, comparison to figure~\ref{fig:functions:profiles} shows that the
+minimum values of the corrected 2NLL for low $\mu$
+are simply two units larger here than in that figure.
+
+However, for $\mu> 1.6X$ (? CHECK!),
+then the $N_{\rm par}=4$ and 5 polynomials become the lowest functions in the
+profile. Hence, the envelope is formed from four different functions in this
+case. Figure~\ref{fig:correction:profiles} also shows the $1\sigma$ and 
+$2\sigma$ confidence intervals which would be determined from the 
+profile envelope. The 68.3\% region is identical to that found using
+just the two-parameter functions, but
+when including higher order functions, the 95.4\% confidence interval on $\mu$ is extended to higher $\mu$
 due to the influence of the higher order polynomial functions providing a reasonable 
-description of the data. The central value is unchanged since the lowest order power law 
-best desribes the data when including a penalty for using additional parameters in the fit.
+description of the data.
+%The central value is unchanged since the lowest order power law 
+%best desribes the data when including a penalty for using additional parameters in the fit.
 
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.45\textwidth]{correction/ProfilesAllOrders.pdf}
 \includegraphics[width=0.45\textwidth]{correction/EnvelopeAllOrders.pdf}
 \caption{Left: Profile 2NLL scans for all of the functions considered. The 2NLL values for
-each profile has been corrected by 1 unit per background function parameter. 
+each profile has been corrected by one unit per background function parameter.
+The labels indicate $N_{\rm par}-1$ ETC, ETC. 
 Right: Minimum envelope of the functions onsidered accounting for the correction of 1 per 
 background parameter. The 2NLL scan when only considering the lowest order power law function 
 is shown in red.}
@@ -137,8 +181,12 @@ is shown in red.}
 
 %EXTRA COMPLICATION WITH BAYESIAN AND FREQUENTIST MIXTURES OF NORMALISATION
 
-\subsection{Bias and coverage depoendence on correction}
+\subsection{Bias and coverage dependence on correction}
 \label{sec:correction:bias}
+
+Figure~\ref{fig:correction:allorderbias} SHOWS STUFF
+
+Figure~\ref{fig:correction:allordercoverage} SHOWS OTHER STUFF
 
 \begin{figure}[tbp]
 \centering
@@ -185,7 +233,7 @@ function can contribute.
 \caption{Symmetrized uncertainty distributions in toy datasets comparing the three correction schemes 
 when including the full set of functions 
 to the case when considering only a single power law function for the fit.}
-\label{fig:correction:allorderbias}
+\label{fig:correction:compareerrors}
 \end{figure}
 
 %ERROR VS CORRECTION.
