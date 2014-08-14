@@ -489,7 +489,7 @@ void nllScan_allOrderFunctions(){
    // Now make the envelope graph;
    TGraph *gr_env = new TGraph();
    double globalMin;
-   std::cout << (graphs[0]).GetName() << " " << ngCounter << std::endl;;
+   //std::cout << (graphs[0]).GetName() << " " << ngCounter << std::endl;;
    std::cout << " ********************************************************" << std::endl;
    int bestPdf = generateEnvelope(ngCounter,graphs,gr_env,MULOW,MUHIGH,MUSTEP,&globalMin);  // no additional correction
    std::cout << "Best pdf " << bestPdf << std::endl;
@@ -503,7 +503,7 @@ void nllScan_allOrderFunctions(){
    TCanvas *envelope = new TCanvas();
    gr_env->SetLineColor(1); gr_env->SetLineWidth(2);
    double minll = globalMin ; // Pow is the best fit)
-   std::cout << minll << std::endl;
+   //std::cout << minll << std::endl;
    //gr_env->GetYaxis()->SetRangeUser(minll,minll+6);
    gr_env->GetYaxis()->SetTitle("-2Log L + Correction");
    gr_env->GetXaxis()->SetTitle("#mu");
