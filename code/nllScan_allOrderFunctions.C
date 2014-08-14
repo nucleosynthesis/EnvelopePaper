@@ -1,4 +1,5 @@
-
+#include <algo>
+#include <stdlib>
 #include "RooAbsArg.h"
 #include "getChisq.C"
 
@@ -215,6 +216,35 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    return graph;   
 }
 
+const char * GetBkgName(const char* name){
+
+   int npar = 0;
+   std::string newname;
+   TString str(name);
+
+   if (str.Contains("pow")) {
+	newname="Power Law Sum";
+   }
+   if (str.Contains("bern")) {
+	newname="Polynomial";
+   }
+   if (str.Contains("lau")) {
+	newname="Laurent Series";
+   }
+   if (str.Contains("exp")) {
+	newname="Exponential Sum";
+   }
+   
+   for (int typ=0;typ<10;typ++){
+	if (str.EndsWith(Form("%d",typ)) ) { npar = typ+1; break;}
+   }
+
+//   char np[1];
+//   itoa(npar,np,10); 
+   newname += std::string(" (")+std::string(Form("%d",npar))+ std::string("pars) ");
+   return newname.c_str(); 
+}
+
 int generateEnvelope(int ng,TGraph *graphs,TGraph *gr_env,double min,double max, double step, double *minimumnll){
    int p = 0;
    double globalMin = 100000.;
@@ -254,6 +284,7 @@ void nllScan_allOrderFunctions(){
    TFile *fi = TFile::Open("envelopews_wsignal_toy1_110to150.root");
    RooWorkspace *multipdf = fi->Get("multipdf");
    RooRealVar *x    = multipdf->var("CMS_hgg_mass");
+   //RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy1__CMS_hgg_mass");
    RooDataHist *datatoy = multipdf->data("roohist_data_mass_cat1_toy1_cutrange__CMS_hgg_mass");
    //x->setRange("fitrnge",110,150);
    //x->setRange(110,150);
@@ -313,7 +344,7 @@ void nllScan_allOrderFunctions(){
 	//gr->Draw("AL");
 	gr->Draw("L");
 	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
-	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
+	leg->AddEntry(gr,GetBkgName(bkg_pdf->GetName()),"L");
 //	listofpdfs.Add(gr);
         pdfit_c++;
    	calculateMinAndErrors(gr,&mlow,&mhigh,1,1);	
@@ -351,7 +382,7 @@ void nllScan_allOrderFunctions(){
 	if (pdfit_c == 0) gr->Draw("L");
 	else gr->Draw("L");
 	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
-	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
+	leg->AddEntry(gr,GetBkgName(bkg_pdf->GetName()),"L");
 	//listofpdfs.Add(gr);
         pdfit_c++;
 
@@ -389,7 +420,7 @@ void nllScan_allOrderFunctions(){
 	if (pdfit_c == 0) gr->Draw("L");
 	else gr->Draw("L");
 	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
-	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
+	leg->AddEntry(gr,GetBkgName(bkg_pdf->GetName()),"L");
 	//listofpdfs.Add(gr);
         pdfit_c++;
 	
@@ -426,7 +457,7 @@ void nllScan_allOrderFunctions(){
 	if (pdfit_c == 0) gr->Draw("L");
 	else gr->Draw("L");
 	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
-	leg->AddEntry(gr,bkg_pdf->GetName(),"L");
+	leg->AddEntry(gr,GetBkgName(bkg_pdf->GetName()),"L");
 	//listofpdfs.Add(gr);
         pdfit_c++;
    	calculateMinAndErrors(gr,&mlow,&mhigh,1,1);
