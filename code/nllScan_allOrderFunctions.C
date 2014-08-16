@@ -241,7 +241,7 @@ const char * GetBkgName(const char* name){
 
 //   char np[1];
 //   itoa(npar,np,10); 
-   newname += std::string(" (")+std::string(Form("%d",npar))+ std::string("pars) ");
+   newname += std::string(" (")+std::string(Form("%d",npar))+ std::string("pars)");
    return newname.c_str(); 
 }
 
