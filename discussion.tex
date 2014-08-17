@@ -11,7 +11,7 @@ HOW APPLIED TO HIGGS ANALYSIS.
 The actual $H \rightarrow \gamma\gamma$ analysis is significantly more
 complex than the simplified version used here. In particular, the 2011 
 and 2012 data
-samples are split into five and nine categories, respectively, which have
+samples are split into eleven and fourteen categories, respectively, which have
 differing signal:background ratios.
 Because the categories (by definition) have different selection criteria,
 they can have different background shapes.
@@ -37,8 +37,23 @@ implementation is probably prohibitive. For example, using the 16 functions
 discussed in this paper, there would be $16^5 \sim$ 1M combinations of functions
 to be fitted for the 2011 data sample and $16^9 \sim$ 70B combinations for the
 2012 data sample.
+Instead of considering all possible combinations of functions, the function 
+which minimizes the likelihood and its parameters can be determined through 
+an iterative procedure. The first step is to determine the set of functions which 
+fit the data, in each category, fixing the values of all nuisance parameters. Since 
+the signal parameter, $\mu$, is also fixed for a given point in the scan no free parameters 
+are correlated between categories. Finding the functions which minimize the likelihood in 
+this case then reduces to the simple case, namely finding the minimum in each category 
+independently. Once these functions, and their parameters, are found, the choice of function 
+is then fixed while the nuisance parameters are freed and a single fit of the nuisance parameters 
+and chosen background parameters is performed. If no significant change in the likelihood 
+is observed, the overall minimum is achieved, however, if this is not the case, the 
+nuisances must be fixed again and the procedure to find the best fit functions given the 
+new values of the nuisance parameters is repeated. This iterative procedure continues until the 
+likelihood remains stable. This procedure dramatically reduces the number of fits to be performed 
+to minimize the likelihood and is found to produce identical results when compared to trying 
+all combinations in toy examples. 
 
-DETAILS ON HOW HANDLED FROM NICK
 
 %\subsection{Envelope smoothing}
 %\label{sec:discussion:smoothing}
