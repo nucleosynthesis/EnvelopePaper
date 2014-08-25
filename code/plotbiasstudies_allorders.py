@@ -31,12 +31,12 @@ gens = [
 		,"env_pdf_1_8TeV_bern5_"
 	   ]
 gnames = [
- 	"Gen Profiled Function"
-	, "Gen Exponential 1"
- 	,"Gen Power Law 1"
-	,"Gen Laurent 1"
- 	,"Gen Polynomial 4"
- 	,"Gen Polynomial 5"
+ 	"Profiled Function"
+	,"Exponential (2 pars)"
+ 	,"Power Law (2 pars)"
+	,"Laurent (2 pars)"
+ 	,"Polynomial (5 pars)"
+ 	,"Polynomial (6 pars)"
 	]
 # these are the same sizes  (add back in poly)
 #names = ["Laurent","Power Law","Polynomial","Exponential","Envelope"]

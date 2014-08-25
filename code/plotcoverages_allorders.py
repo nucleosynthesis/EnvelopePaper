@@ -35,12 +35,12 @@ gens = [
 		,"env_pdf_1_8TeV_bern5_"
 	   ]
 gnames = [
- 	"Gen Profiled Function"
-	, "Gen Exponential 1"
- 	,"Gen Power Law 1"
-	,"Gen Laurent 1"
- 	,"Gen Polynomial 4"
- 	,"Gen Polynomial 5"
+ 	"Profiled Function"
+	, "Exponential (2 pars)"
+ 	,"Power Law (2 par)"
+	,"Laurent (2 par)"
+ 	,"Polynomial (5 pars)"
+ 	,"Polynomial (6 pars)"
 	]
 # these are the same sizes  (add back in poly)
 #names = ["Laurent","Power Law","Polynomial","Exponential","Envelope"]
@@ -64,8 +64,9 @@ names = ["c=1","c=p(#chi^{2})","c=2"]
 cvals = ["0.5","1.","2.","3."]
 covCanvs = []
 
+ROOT.gROOT.SetBatch(1)
 for i,c in enumerate(cvals):
-  	can = ROOT.TCanvas("c%d"%i,"c%d"%i,600,1600)
+  	can = ROOT.TCanvas("c%d"%i,"c%d"%i,600,1000)
   	covCanvs.append(can)
   	leg = ROOT.TLegend(0.72,0.52,0.89,0.89)
   	leg.SetFillColor(0)
@@ -76,13 +77,13 @@ for i,c in enumerate(cvals):
 	dh = ROOT.TH1F("hd%s","hd",1,-1.,2.2);
 	#dh.GetYaxis().SetRangeUser(0.99,1.01);
 	if c=="0.5":
-		dh.GetYaxis().SetRangeUser(0.61,1.29);
+		dh.GetYaxis().SetRangeUser(0.81,1.27);
 	elif c=="1.":
-		dh.GetYaxis().SetRangeUser(0.61,1.29);
+		dh.GetYaxis().SetRangeUser(0.86,1.19);
 	elif c=="2.":
-		dh.GetYaxis().SetRangeUser(0.81,1.29);
+		dh.GetYaxis().SetRangeUser(0.95,1.051);
 	elif c=="3.":
-		dh.GetYaxis().SetRangeUser(0.973,1.029);
+		dh.GetYaxis().SetRangeUser(0.993,1.007);
 
 	#dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
 	#dh.GetXaxis().SetTitle("#mu");
