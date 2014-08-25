@@ -6,7 +6,7 @@
 \label{sec:discussion}
 \label{sec:discussion:higgs}
 
-HOW APPLIED TO HIGGS ANALYSIS.
+%HOW APPLIED TO HIGGS ANALYSIS.
 
 The actual $H \rightarrow \gamma\gamma$ analysis is significantly more
 complex than the simplified version used here. In particular, the 2011 
@@ -23,8 +23,9 @@ A major complication then arises because there are common systematic effects
 across the categories, arising from nuisance parameters in the signal
 model.
 In the absence of these common nuisance parameters,
-the different categories could be profiled independently, using the
-minimum envelope technique to produce a curve per category. These could then
+the different categories could be profiled independently, each using the
+minimum envelope technique to produce an envelope curve per category.
+These could then
 be summed to give the overall profile curve. However, with common
 nuisance parameters, all categories must be profiled at the same time.
 Since minimisation code to handle the 
@@ -34,25 +35,30 @@ combinations of each function in each category must be fitted.
 The minimum envelope made from the results of all these combinations would
 then be found. While this is conceptually straightforward, the actual
 implementation is probably prohibitive. For example, using the 16 functions
-discussed in this paper, there would be $16^5 \sim$ 1M combinations of functions
-to be fitted for the 2011 data sample and $16^9 \sim$ 70B combinations for the
-2012 data sample.
+discussed in this paper, there would be $16^{11} \sim 10^{13}$ combinations 
+of functions to be fitted for the 2011 data sample and $16^{14} \sim 10^{17}$ 
+combinations for the 2012 data sample.
 Instead of considering all possible combinations of functions, the function 
 which minimizes the likelihood and its parameters can be determined through 
-an iterative procedure. The first step is to determine the set of functions which 
-fit the data, in each category, fixing the values of all nuisance parameters. Since 
-the signal parameter, $\mu$, is also fixed for a given point in the scan no free parameters 
-are correlated between categories. Finding the functions which minimize the likelihood in 
-this case then reduces to the simple case, namely finding the minimum in each category 
-independently. Once these functions, and their parameters, are found, the choice of function 
-is then fixed while the nuisance parameters are freed and a single fit of the nuisance parameters 
-and chosen background parameters is performed. If no significant change in the likelihood 
-is observed, the overall minimum is achieved, however, if this is not the case, the 
-nuisances must be fixed again and the procedure to find the best fit functions given the 
-new values of the nuisance parameters is repeated. This iterative procedure continues until the 
-likelihood remains stable. This procedure dramatically reduces the number of fits to be performed 
-to minimize the likelihood and is found to produce identical results when compared to trying 
-all combinations in toy examples. 
+an iterative procedure. The first step is to determine the set of functions 
+which best fit the data, in each category, fixing the values of all nuisance 
+parameters.
+Since the signal parameter, $\mu$, is also fixed for a given point in the scan 
+no free parameters are correlated between categories.
+Finding the functions which minimize the likelihood in 
+this case then reduces to the simple case, namely finding the minimum in each 
+category independently. 
+Once these functions, and their parameters, are found, the choice of function 
+is then fixed while the nuisance parameters are freed and a single fit of the 
+nuisance parameters and chosen background parameters is performed.
+If no significant change in the likelihood is observed, the overall minimum is 
+achieved, however, if this is not the case, the nuisances must be fixed again 
+and the procedure to find the best fit functions given the new values of the 
+nuisance parameters is repeated.
+This iterative procedure continues until the likelihood remains stable.
+This procedure dramatically reduces the number of fits to be performed 
+to minimize the likelihood and is found to produce identical results when 
+compared to trying all combinations in toy examples. 
 
 
 %\subsection{Envelope smoothing}
