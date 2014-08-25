@@ -76,7 +76,7 @@ void calculateMinAndErrors(TGraph *envelope, double *min,double *max, double sig
 	*max = getEnvelopeErrorUp(envelope,sig);
 	double elow =  bfval - *min;
 	double ehig =  *max - bfval;
-	if (verb) std::cout << " ( @ 2xNll =  " << minimumNll << ") +" << ehig << " -" << elow; 
+	if (verb) std::cout << "    mu(from-scan) = "<<bfval<<" ( @ 2xNll =  " << minimumNll << ") ,( " << sig << " sigma ) +" << ehig << " -" << elow << std::endl; 
 }
 
 TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
@@ -279,7 +279,8 @@ void nllScan_firstOrderFuncs(){
    std::cout << calculateMinAndErrors(gr_env,&mlow,&mhigh,1,1) << std::endl;
    std::cout << " ********************************************************" << std::endl;
 
-   std::cout << calculateMinAndErrors(gr_env,&mlow2,&mhigh2,2,0) << std::endl;
+   std::cout << calculateMinAndErrors(gr_env,&mlow2,&mhigh2,2,1) << std::endl;
+   std::cout << " ********************************************************" << std::endl;
    TCanvas *envelope = new TCanvas();
    gr_env->SetLineColor(1); gr_env->SetLineWidth(2);
    double minll = gr_env->Eval( mPow ) ; // Pow is the best fit)
