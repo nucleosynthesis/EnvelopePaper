@@ -252,7 +252,7 @@ void nllScan_firstOrderFuncs(){
 
    TCanvas *fits = new TCanvas();
    fr2->SetTitle("");
-   fr2->GetXaxis()->SetTitle("m_{#gamma#gamma}");
+   fr2->GetXaxis()->SetTitle("m_{#gamma#gamma} (GeV)");
    fr2->GetYaxis()->SetTitle("Events / GeV");
    fr2->Draw(); leg2->Draw(); 
    fits->SaveAs("../functions/BestFits.pdf");
@@ -335,8 +335,8 @@ void nllScan_firstOrderFuncs(){
    lin3->Draw("");
     
    legf->AddEntry(gr_env,"Minimum Envelope","L");
-   legf->AddEntry(newg,"#pm 1 #sigma Interval");
-   legf->AddEntry(newg2,"#pm 2 #sigma Interval");
+   legf->AddEntry(newg,"68.3% Interval");
+   legf->AddEntry(newg2,"95.4% Interval");
    legf->Draw();
    envelope->SaveAs("../functions/Envelope.pdf");  
    /* 

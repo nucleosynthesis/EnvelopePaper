@@ -146,7 +146,7 @@ for i,c in enumerate(cvals):
 	lat = ROOT.TLatex()
 	lat.SetNDC()
 	lat.DrawLatex(0.85,0.012,"#mu")
-	lat.DrawLatex(0.2,0.95,"%s #sigma Interval"%c)
+        lat.DrawLatex(0.2,0.95,"%2.1f%% Interval"%(100*(1-2*ROOT.RooStats.SignificanceToPValue(float(c)))))
 	#lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 	lat.SetTextAngle(90)
 	lat.DrawLatex(0.065,0.45,"Coverage/Expected Coverage")

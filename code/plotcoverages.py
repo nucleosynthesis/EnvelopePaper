@@ -7,7 +7,7 @@ ROOT.gStyle.SetLabelSize(0.09, "XYZ");
 ROOT.gStyle.SetPadBorderMode(0);
 ROOT.gStyle.SetTitleYOffset(0.5);
 
-#ROOT.gROOT.SetBatch(1)
+ROOT.gROOT.SetBatch(1)
 
 def trimers(gr,exp): # also reverses the points (1-coverage)
   np = gr.GetN()
@@ -128,7 +128,7 @@ for i,c in enumerate(cvals):
 	lat = ROOT.TLatex()
 	lat.SetNDC()
 	lat.DrawLatex(0.85,0.012,"#mu")
-        lat.DrawLatex(0.2,0.93,"%s #sigma Interval"%c)
+        lat.DrawLatex(0.2,0.93,"%2.1f%% Interval"%(100*(1-2*ROOT.RooStats.SignificanceToPValue(float(c)))))
 	lat.SetTextAngle(90)
 	lat.DrawLatex(0.065,0.45,"Coverage/Expected Coverage")
 

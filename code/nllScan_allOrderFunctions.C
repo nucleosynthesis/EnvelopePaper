@@ -554,8 +554,8 @@ void nllScan_allOrderFunctions(){
     
    //legf->AddEntry(&graphs[bestPdf],"Single function ","L");
    legf->AddEntry(gr_env,"Minimum Envelope","L");
-   legf->AddEntry(newg,"#pm 1 #sigma Interval");
-   legf->AddEntry(newg2,"#pm 2 #sigma Interval");
+   legf->AddEntry(newg,"68.3% Interval");
+   legf->AddEntry(newg2,"95.4% Interval");
    legf->Draw();
    envelope->SaveAs("../correction/EnvelopeAllOrders.pdf");  
 
