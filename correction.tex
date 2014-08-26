@@ -15,9 +15,9 @@ error and hence widest \nll profile curve.
 Hence, simply using the \nll values
 without any ``penalty'' for the number of parameters would effectively
 always result in the minimum envelope being mainly defined by the highest
-order function. It would also mean there is no ``natural'' way to know when
+order function considered. It would also mean there is no ``natural'' way to know when
 to no longer consider yet more higher order functions. However, decision based
-on quantities, such as an F-test, %~\ref{ftest},
+on quantities, such as an F-test,~\ref{ftest},
 are standardly used to determine when higher order functions in
 a family can be ignored. Hence, when using functions with different
 numbers of parameters, it seems necessary to have some correction to the \nll
@@ -52,7 +52,7 @@ depends on the original fit quality
 shows examples of the size of the correction as a function of the
 fit p-value, when correcting for various numbers of parameters.
 The correction is monotonically increasing as the p-value gets smaller.
-Hence, when correcting the \nll profile curve, the fits further away from
+Hence, when correcting the profile likelihood curve, the fits further away from
 the best fit minimum will get a larger correction. Hence, the profile curve
 becomes steeper, which could in principle affect the coverage, even if
 only considering one fit function.
@@ -69,7 +69,7 @@ However, it can be seen that the correction is approximately given by
 \end{displaymath}
 for the central range of p-values. This approximation means the 
 \nll shape, and hence coverage, is unchanged. Both the exact p-value
-correction and the $N_{\rm par}$ approximate correction are used this paper.
+correction and the $N_{\rm par}$ approximate correction are used in this paper.
 %
 \begin{figure}[tbp]
 \centering
@@ -113,9 +113,9 @@ Section~\ref{sec:functions:function} and higher order generalisations of
 these. Specifically, these are
 \begin{enumerate}
 \item
-``Power law''; $f(x) = \sum_{i=0}^N p_{2i} x^{p_{2i+1}}$.
+``Power law''; $f(x) = \sum_{i=0}^N p^{a}_{i} x^{p^{b}_{i+1}}$.
 \item
-``Exponential''; $f(x) = \sum_{i=0}^N p_{2i} e^{p_{2i+1}x}$.
+``Exponential''; $f(x) = \sum_{i=0}^N p^{a}_{i} e^{p^{b}_{i+1}x}$.
 \item
 ``Laurent''; $f(x) = \sum_{i=0}^N p_i/x^n$.
 \item
@@ -153,10 +153,10 @@ the $N_{\rm par}=5$ polynomial is the lowest function in the profile,
 while for $\mu > 1.68$,
 the $N_{\rm par}=6$ polynomial is lowest.
 Hence, the envelope is formed from four different functions in this
-case. Figure~\ref{fig:correction:profiles} also shows the $1\sigma$ and 
-$2\sigma$ confidence intervals which would be determined from the 
+case. Figure~\ref{fig:correction:profiles} also shows the 68.3\% and 
+95.4\% confidence intervals which would be determined from the 
 profile envelope. The 68.3\% region is identical to that found using
-just the two-parameter functions, but
+just the two-parameter functions (Sec~\ref{sec:functions:example}), but
 when including higher order functions, the 95.4\% confidence interval 
 on $\mu$ is $-0.18 < \mu < 2.11$,
 i.e. it is extended to higher $\mu$
@@ -172,7 +172,7 @@ reasonable description of the data.
 \caption{Left: Profile \nll scans for all of the functions considered. The \nll values for
 each profile has been corrected by one unit per background function parameter.
 The labels indicate the function and value of $N_{\rm par}$.
-Right: Minimum envelope of the functions onsidered accounting for the correction of 1 per 
+Right: Minimum envelope of the functions considered accounting for the correction of 1 per 
 background parameter. The \nll scan when only considering the lowest order power law function 
 is shown in red.}
 \label{fig:correction:profiles}
@@ -196,7 +196,7 @@ which gave the lowest corrected \nll values in
 figure~\ref{fig:correction:profiles}.
 Figure~\ref{fig:correction:allorderbias} shows the average pull vs $\mu$
 for each generating function choice, with the envelope based on the
-three correction methods considered, i.e. exact p-value, approximate p-value
+three correction methods considered, i.e.~exact p-value, approximate p-value
 and Akaike. It is seen that the exact and approximate p-value corrections give
 effectively identical results. It is also found that the bias for some
 generating functions can get up to a significant fraction of the error, but
@@ -232,8 +232,8 @@ Akaike correction.
 \includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_1._call}.pdf}\\
 \includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_2._call}.pdf}
 \includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_3._call}.pdf}
-\caption{Fraction of toys in which the fitted value of $\mu$ is within the 0.5, 1, 2 and 
-$3\sigma$ intervals relative to the expected fraction for that interval 
+\caption{Fraction of toys in which the fitted value of $\mu$ is within the 38.3\%, 68.3\%, 95.4\% and 
+99.7\% intervals relative to the expected fraction for that interval 
 when correcting 
 with the different \nll correction schemes. 
 The results when generating with different functions and generating using the 
@@ -251,9 +251,9 @@ and Akaike (``$c=2$'').}
 \end{figure}
 
 Figure~\ref{fig:correction:compareerrors} shows the distribution of the 68.3\%
-symmetrized uncertainty on $\mu$ 
+ uncertainty on $\mu$ 
 when considering the full set of functions using the three different correction schemes compared  
-with considering a single first order function. The symmetrized uncertainty ($\sigma_{\mu}$) 
+with considering a single first order function. The uncertainty ($\sigma_{\mu}$) 
 is defined as half of the 68.3\% interval on $\mu$. 
 The distributions are obtained from fitting 
 toy datasets generated using the first order power law function for the background, with 
@@ -262,13 +262,13 @@ due to the systematic contribution arising from the function uncertainty.
 The tail of the distributions observed 
 when considering the envelope of functions are from fits in which functions other than the 
 best fitting function contribute to the 68.3\% interval. As expected, correcting using a higher 
-penalty reduced the size of this tail since in this case, it is less likely that a higher order 
+penalty reduce the size of this tail since in this case, it is less likely that a higher order 
 function can contribute.
  
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.45\textwidth]{correction/compare_error_magnitude.pdf}
-\caption{Symmetrized 68.3\% uncertainty distributions in toy datasets 
+\caption{Distribution of $\sigma_{\mu}$ in toy datasets 
 comparing the three correction schemes 
 when including the full set of functions 
 to the case when considering only a single power law function 
