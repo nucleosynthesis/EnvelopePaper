@@ -2,10 +2,13 @@
 \label{sec:introduction}
 
 A very common problem in data analysis is to determine the parameters of
-a narrow signal which occurs on a wide, smoothly varying background. If the
-background function shape is not know {\it a priori}, then there will be 
-some uncertainty in the signal parameters resulting from the uncetainty in
-the function to use. This issue is exacerbated in the case of a small signal to
+a narrow signal which occurs on a wide, smoothly varying background. 
+In high energy physics, this is often achieved using a maximum likelihood technique~\cite{ref:Fisher01011922} 
+in which separate parametric models for the signal and background processes are constructed and 
+``fit'' to the data.
+If, however, the background model shape is not known {\it a priori}, then there will be 
+some uncertainty in the signal parameters resulting from the uncertainty in
+the function used. This issue is exacerbated in the case of a small signal to
 background ratio.
 
 A common approach is to try various different plausible functions and 
@@ -21,14 +24,13 @@ background~\cite{ref:introduction:legacy}.
 
 This method tries to be less 
 arbitrary and treats the uncertainty associated with the
-background shape function in a way
-which is more like the other
-uncertainties associated with the measurement, i.e. as a systematic error
-which is handled as a nuisance parameter.
+background parameterisation in a way
+which is more comparable with the treatment of other 
+uncertainties associated with the measurement; the choice of background function 
+is a systematic error which is handled as a nuisance parameter~\cite{ref:intro:nusiances}.
 There are two major new parts to this approach, namely the method for
 treating the choice of function as a nuisance parameter, and how to compare 
 functions with different numbers of parameters.
-
 
 The concept of this approach is described in Section~\ref{sec:concept}.
 The application of the method to functions with the same number of parameters
@@ -42,8 +44,12 @@ function is denoted by \nll. The fits discussed are binned and the
 likelihood used for each bin is the likelihood ratio to the best
 possible likelihood given the observed data, i.e.
 \begin{equation}
-{\rm \nll} = \mu_i - n_i + n_i \log\left(\frac{n_i}{\mu_i}\right)
+{\rm \nll} = \mu_i - n_i + n_i \log\left(\frac{n_i}{\mu_i}\right),
 \label{eqn:introduction:def2NLL}
 \end{equation}
+where $n_{i}$ are the observed and $\mu_{i}$ is the expected number of events 
+given a particular background model in the $i-$th bin. 
 
+For the purposes of fitting and generating datasets, the statistics package 
+``RooFit'' is used throughout this paper~\cite{ref:roofit}. 
 %FREQUENTIST UNLESS OTHERWISE STATED (ALSO SEE DISCUSSION)?

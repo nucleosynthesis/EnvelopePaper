@@ -11,7 +11,7 @@ the background. Hence, different choices of the form of the function
 will give different results for the signal parameters, meaning there is a
 systematic uncertainty associated with the function choice.
 The basic concept discussed in this paper is to consider the background
-function choice as a nuisance parameter which leads to a systematic error.
+function choice as a source of systematic error which is modelled as a nuisance parameter.
 It is then consistently treated like other nuisance parameters as far as
 possible.
 
@@ -20,22 +20,22 @@ and size (i.e. the amplitude), although other
 quantities such as the width may also be of interest. This results in a
 multi-dimensional parameter space. For simplicity in this paper, the position
 and width of the signal are considered to be known and only the signal
-size is to be determined. However, the method would also be applicable to
+size is to be determined. However, the method is applicable to
 cases where more than one parameter is being estimated.
 
 \subsection{Continuous nuisance parameters}
 \label{sec:concept:continuous}
 
 It is useful to consider briefly the usual way in which nuisance 
-parameters lead to systematic errors. Consider measuring a signal
+parameters are used to incorporate systematic errors. Consider measuring a signal
 strength for a known background functional shape, but with unknown function
 parameters. The background parameters themselves are considered as
 nuisance parameters, since their actual values are not of interest.
 When fitting for the signal size $\mu$, then twice the negative logarithm of the
 likelihood (\nll) is minimised with respect to $\mu$ and all the background
-nuisance parameters. It is usual to perform a profile likelihood
+nuisance parameters. It is usual to construct a profile likelihood
 such that \nll is minimised for each value of $\mu$ over a range. 
-The (for example) 68\% confidence range of $\mu$ 
+The (for example) 68.3\% confidence interval of $\mu$ 
 is then
 taken as the region for which \nll is less than ${\rm \nll}_{BF}+1$,
 where ${\rm \nll}_{BF}$ is the best-fit value at the overall minimum.
@@ -105,8 +105,8 @@ all functions considered. This automatically includes any systematic error
 arising from the function choice as the envelope will in general be broader
 than any of the individual function curves which contribute to the envelope.
 
-In practical terms, most minimisation
-code cannot easily handle a discrete parameter, particularly when the
+In practical terms, most minimisation routines 
+cannot easily handle a discrete parameter, particularly when the
 number and values of the other parameters of the fit (i.e. the parameters
 of the functions) change with the discrete parameter.
 Hence, in practice it has
