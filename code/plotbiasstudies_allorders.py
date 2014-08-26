@@ -12,6 +12,8 @@ ROOT.gStyle.SetLabelSize(0.09, "XYZ");
 ROOT.gStyle.SetPadBorderMode(0);
 ROOT.gStyle.SetTitleYOffset(0.5);
 
+ROOT.gROOT.SetBatch(1)
+
 def trimers(gr):
   np = gr.GetN()
   for n in range(np):
@@ -56,7 +58,7 @@ fits = ["envelope"]
 leg = ROOT.TLegend(0.72,0.52,0.89,0.89)
 leg.SetFillColor(0)
 
-c = ROOT.TCanvas("c","c",600,1600)
+c = ROOT.TCanvas("c","c",600,1000)
 pads = []
 np = len(gens)
 hists = []
