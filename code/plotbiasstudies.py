@@ -6,7 +6,7 @@ ROOT.gStyle.SetTitleSize(0.12,"XYZ");
 ROOT.gStyle.SetLabelSize(0.09, "XYZ");
 ROOT.gStyle.SetPadBorderMode(0);
 ROOT.gStyle.SetTitleYOffset(0.5);
-
+ROOT.gROOT.SetBatch(1)
 def trimers(gr):
   np = gr.GetN()
   for n in range(np):
@@ -23,10 +23,10 @@ gens = [
 		,"env_pdf_1_8TeV_pow1_"
 	   ]
 gnames = [
- 	"Gen Profiled Function"
-	,"Gen Laurent"
-	,"Gen Exponential"
- 	,"Gen Power Law"
+ 	"Profiled Function"
+	,"Laurent"
+	,"Exponential"
+ 	,"Power Law"
 	]
 # these are the same sizes  (add back in poly)
 #names = ["Laurent","Power Law","Polynomial","Exponential","Envelope"]

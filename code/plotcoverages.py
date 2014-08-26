@@ -29,10 +29,10 @@ gens = [
 		,"env_pdf_1_8TeV_pow1_"
 	   ]
 gnames = [
- 	"Gen Profiled Function"
-	,"Gen Laurent"
-	, "Gen Exponential"
- 	,"Gen Power Law"
+ 	 "Profiled Function"
+	,"Laurent"
+	,"Exponential"
+ 	,"Power Law"
 	]
 
 # these are the same sizes  (add back in poly)
