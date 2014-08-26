@@ -43,7 +43,7 @@ value can now be obtained, namely that which would give the same p-value but
 with a different number of degrees of freedom, equal to the number of bins.
 The corrected \nll is then given by
 \begin{displaymath}
-C = \chi^{\prime 2} = - 2\ln(L) + (\chi^{\prime 2} - \chi^2)
+C = \chi^{\prime 2} = \textrm{\nll} + (\chi^{\prime 2} - \chi^2)
 \end{displaymath}
 Besides being a function of the number of bins and parameters,
 the size of the correction $\chi^{\prime 2} - \chi^2$
@@ -86,7 +86,7 @@ the $\chi^2$ assuming a flat p-value distribution is shown on the right.}
 \item %[Akaike]
 The Akaike basic formula for very large sample sizes is
 \begin{displaymath}
-A = - 2\ln(L) + 2N_{\rm par}
+A = \textrm{\nll} + 2N_{\rm par}
 \end{displaymath}
 The resulting value of $A$ is considered here as the corrected \nll,
 so the correction is simply $ 2N_{\rm par}$ and
@@ -94,8 +94,8 @@ hence is twice as big as the approximate p-value correction.
 For finite samples, then it is modified to
 \begin{displaymath}
 A 
-= - 2\ln(L) + 2N_{\rm par}  + \frac{2N_{\rm par}(N_{\rm par}+1)}{n-(N_{\rm par}+1)}
-= - 2\ln(L) + \frac{2N_{\rm par}}{1-(N_{\rm par}+1)/n}
+= \textrm{\nll} + 2N_{\rm par}  + \frac{2N_{\rm par}(N_{\rm par}+1)}{n-(N_{\rm par}+1)}
+= \textrm{\nll} + \frac{2N_{\rm par}}{1-(N_{\rm par}+1)/n}
 \end{displaymath}
 where $n$ is the sample size, i.e. the number of bins (for a binned likelihood
 fit) or events (for an unbinned likelihood fit). For large $n$, the original
