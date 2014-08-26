@@ -222,18 +222,21 @@ void nllScan_firstOrderFuncs(){
    TGraph *gr_lau = nll2scan(0.,*datatoy,spdf_lau,*mu);
    gr_lau->SetLineColor(kGreen+2);
    leg->AddEntry(gr_lau,"Laurent","L");
+   spdf_lau.plotOn(fr2,RooFit::LineColor(kGreen+2),RooFit::LineStyle(2),RooFit::Components(*lau));
    spdf_lau.plotOn(fr2,RooFit::LineColor(kGreen+2));
    double mLau = mu->getVal();
 
    TGraph *gr_exp = nll2scan(0.,*datatoy,spdf_exp,*mu);
    gr_exp->SetLineColor(2);
    leg->AddEntry(gr_exp,"Exponential","L");
+   spdf_exp.plotOn(fr2,RooFit::LineColor(2),RooFit::LineStyle(2),RooFit::Components(*exp));
    spdf_exp.plotOn(fr2,RooFit::LineColor(2));
    double mExp = mu->getVal();
 
    TGraph *gr_pow = nll2scan(0.,*datatoy,spdf_pow,*mu);
    gr_pow->SetLineColor(4);
    leg->AddEntry(gr_pow,"Power Law","L");
+   spdf_pow.plotOn(fr2,RooFit::LineColor(4),RooFit::LineStyle(2),RooFit::Components(*pow));
    spdf_pow.plotOn(fr2,RooFit::LineColor(4));
    double mPow = mu->getVal();
 
@@ -243,6 +246,7 @@ void nllScan_firstOrderFuncs(){
    gr_pol->SetLineColor(kViolet);
    double mPol = mu->getVal();
    leg->AddEntry(gr_pol,"Polynomial","L");
+   spdf_pol.plotOn(fr2,RooFit::LineColor(kViolet),RooFit::LineStyle(2),RooFit::Components(*pol));
    spdf_pol.plotOn(fr2,RooFit::LineColor(kViolet));
    leg2->AddEntry(gr_pol,"Polynomial","L");
 
