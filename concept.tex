@@ -32,17 +32,17 @@ strength for a known background functional shape, but with unknown function
 parameters. The background parameters themselves are considered as
 nuisance parameters, since their actual values are not of interest.
 When fitting for the signal size $\mu$, then twice the negative logarithm of the
-likelihood (2NLL) is minimised with respect to $\mu$ and all the background
+likelihood (\nll) is minimised with respect to $\mu$ and all the background
 nuisance parameters. It is usual to perform a profile likelihood
-such that 2NLL is minimised for each value of $\mu$ over a range. 
+such that \nll is minimised for each value of $\mu$ over a range. 
 The (for example) 68\% confidence range of $\mu$ 
 is then
-taken as the region for which 2NLL is less than ${\rm 2NLL}_{BF}+1$,
-where ${\rm 2NLL}_{BF}$ is the best-fit value at the overall minimum.
+taken as the region for which \nll is less than ${\rm \nll}_{BF}+1$,
+where ${\rm \nll}_{BF}$ is the best-fit value at the overall minimum.
 
-Consider this absolute minimum in 2NLL: if the nuisance parameters at that
-point were fixed, then the 2NLL profile curve would be steeper than for
-the original overall 2NLL curve. This directly reflects the fact that
+Consider this absolute minimum in \nll: if the nuisance parameters at that
+point were fixed, then the \nll profile curve would be steeper than for
+the original overall \nll curve. This directly reflects the fact that
 if the nuisance parameters had no uncertainty,
 the error on $\mu$ would be reduced, i.e. there would be no systematic 
 uncertainty arising from this source.
@@ -56,7 +56,7 @@ Finally, there are in general
 many other sets of nuisance parameters which do not result in a point on the
 original profile curve. Fixing the parameters to these values will also result
 in further curves which are enclosed by the original profile curve.
-The critical point is that the overall 2NLL minimum profile curve as a function
+The critical point is that the overall \nll minimum profile curve as a function
 of $\mu$ encloses the curves for all possible values of the nuisance
 parameters.
 
@@ -66,7 +66,7 @@ Each set of nuisance
 parameter values will result in a curve, the steepness of which reflects 
 the statistical error only. Consider picking many different sets of nuisance
 parameter values; each gives one such curve. Drawing an ``envelope'' around the
-minimum 2NLL value of all these curves will give an approximation to the
+minimum \nll value of all these curves will give an approximation to the
 original profile curve. Clearly, in practice, many such sets of nuisance
 parameter values would be needed to make this curve smooth. However, in
 principle, sampling the nuisance parameter space sufficiently
@@ -81,10 +81,10 @@ choose sets of only some of the parameter values and fit for the others.
 \caption{Illustration of construction of the envelope (green, dot-dashed line)
 by choosing several fixed values of the nuisance parameters (red, dashed lines)
 when performing a profile likelihood scan for a variable of interest $x$.
-The 2NLL profile curve for the nuisance parameters fixed to the best fit
+The \nll profile curve for the nuisance parameters fixed to the best fit
 values is shown by the blue, solid line. The full profile curve allowing the
 nuisance parameters to be fitted for every value of $x$ is shown by the 
-black, solid line. The red dashed lines show the 2NLL curves for fixed 
+black, solid line. The red dashed lines show the \nll curves for fixed 
 nuisance parameter values other than those at the best fit, while the green 
 dashed line is the envelope, i.e. the lowest value of any of the red dashed 
 curves for each $x$. Even with such a coarse sampling of the nuisance 
@@ -116,11 +116,11 @@ in turn.
 
 While the concept is straightforward, there are some statistical
 issues in applying it.
-Firstly, there is a question of whether the 2NLL minimum envelope covers,
+Firstly, there is a question of whether the \nll minimum envelope covers,
 i.e. has the correct properties for a profile curve.
 This is discussed in Section~\ref{sec:functions}.
 Secondly, to find the minimum requires a
-comparison between the absolute 2NLL values from fits to different functions.
+comparison between the absolute \nll values from fits to different functions.
 In general, these will include functions with different numbers of parameters.
-Hence, a way to meaningfully compare their 2NLL values must be found.
+Hence, a way to meaningfully compare their \nll values must be found.
 This is discussed in Section~\ref{sec:correction}.

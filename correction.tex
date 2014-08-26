@@ -1,18 +1,18 @@
 \section{Using functions with different numbers of parameters} % 5 pages
 \label{sec:correction}
 
-\subsection{Corrections to 2NLL}
+\subsection{Corrections to \nll}
 \label{sec:correction:corrections}
 
-The 2NLL calculated from the fit of a function to a dataset is purely a measure
+The \nll calculated from the fit of a function to a dataset is purely a measure
 of the agreement of the function and the data; the number of parameters
 used in the function has no impact. Hence, at least for nested families of
-functions (such as polynomials of varying order), then the lowest 2NLL will
+functions (such as polynomials of varying order), then the lowest \nll will
 always be given by the highest order considered.
 Because this function also has the
 largest number of parameters, it will generally have the largest statistical
-error and hence widest 2NLL profile curve.
-Hence, simply using the 2NLL values
+error and hence widest \nll profile curve.
+Hence, simply using the \nll values
 without any ``penalty'' for the number of parameters would effectively
 always result in the minimum envelope being mainly defined by the highest
 order function. It would also mean there is no ``natural'' way to know when
@@ -20,10 +20,10 @@ to no longer consider yet more higher order functions. However, decision based
 on quantities, such as an F-test, %~\ref{ftest},
 are standardly used to determine when higher order functions in
 a family can be ignored. Hence, when using functions with different
-numbers of parameters, it seems necessary to have some correction to the 2NLL
+numbers of parameters, it seems necessary to have some correction to the \nll
 value to account for this difference in number.
 
-The idea is therefore to compare 2NLL values,
+The idea is therefore to compare \nll values,
 correcting for the differing number of parameters 
 (or equivalently differing number of degrees of freedom) in
 the fit functions. Specifically here, where applied, the correction is
@@ -34,14 +34,14 @@ $\chi^2$ p-value and the Akaike information
 criterion~\cite{ref:correction:akaike}.
 \begin{enumerate}
 \item %[p-value]
-For a binned fit using the expression for the 2NLL ratio
+For a binned fit using the expression for the \nll ratio
 for each bin specified in equation~\ref{eqn:introduction:def2NLL}, then for
-the large statistics case, the 2NLL becomes equivalent to a $\chi^2$ for the
+the large statistics case, the \nll becomes equivalent to a $\chi^2$ for the
 fit. In this case, it is meaningful to find the p-value of the $\chi^2$ value.
 A new $\chi^{\prime 2}$
 value can now be obtained, namely that which would give the same p-value but
 with a different number of degrees of freedom, equal to the number of bins.
-The corrected 2NLL is then given by
+The corrected \nll is then given by
 \begin{displaymath}
 C = \chi^{\prime 2} = - 2\ln(L) + (\chi^{\prime 2} - \chi^2)
 \end{displaymath}
@@ -52,7 +52,7 @@ depends on the original fit quality
 shows examples of the size of the correction as a function of the
 fit p-value, when correcting for various numbers of parameters.
 The correction is monotonically increasing as the p-value gets smaller.
-Hence, when correcting the 2NLL profile curve, the fits further away from
+Hence, when correcting the \nll profile curve, the fits further away from
 the best fit minimum will get a larger correction. Hence, the profile curve
 becomes steeper, which could in principle affect the coverage, even if
 only considering one fit function.
@@ -68,7 +68,7 @@ However, it can be seen that the correction is approximately given by
 \chi^{\prime 2} - \chi^2 \approx N_{\rm par}
 \end{displaymath}
 for the central range of p-values. This approximation means the 
-2NLL shape, and hence coverage, is unchanged. Both the exact p-value
+\nll shape, and hence coverage, is unchanged. Both the exact p-value
 correction and the $N_{\rm par}$ approximate correction are used this paper.
 %
 \begin{figure}[tbp]
@@ -88,7 +88,7 @@ The Akaike basic formula for very large sample sizes is
 \begin{displaymath}
 A = - 2\ln(L) + 2N_{\rm par}
 \end{displaymath}
-The resulting value of $A$ is considered here as the corrected 2NLL,
+The resulting value of $A$ is considered here as the corrected \nll,
 so the correction is simply $ 2N_{\rm par}$ and
 hence is twice as big as the approximate p-value correction.
 For finite samples, then it is modified to
@@ -100,7 +100,7 @@ A
 where $n$ is the sample size, i.e. the number of bins (for a binned likelihood
 fit) or events (for an unbinned likelihood fit). For large $n$, the original
 formula is clearly regained. This can be used for binned or unbinned fits.
-Also the correction does not depend on the 2NLL value and
+Also the correction does not depend on the \nll value and
 so is a simple shift of
 the whole profile curve, without changing its shape.
 Hence, it also has no effect on coverage.
@@ -137,16 +137,16 @@ $2 \le N_{\rm par} \le 6$; this resulted in three fits for the power law and
 exponential functions, and five fits for the Laurent and polynomial functions.
 The profiles for each of these function fits are shown in
 figure~\ref{fig:correction:profiles}, for the example case of 
-applying the approximate p-value correction to the 2NLL of one unit per 
+applying the approximate p-value correction to the \nll of one unit per 
 background function parameter.
 
-For this case, the lowest corrected 2NLL value is still given by the
+For this case, the lowest corrected \nll value is still given by the
 two-parameter power law function and so gives an identical central value
 to that described in Section~\ref{sec:functions:example}. The lowest corrected
-2NLL value for $\mu < 0.55$ is also again given by the two-parameter exponential
+\nll value for $\mu < 0.55$ is also again given by the two-parameter exponential
 function, also as for the previous case. 
 Indeed, comparison to figure~\ref{fig:functions:profiles} shows that the
-minimum values of the corrected 2NLL for low $\mu$
+minimum values of the corrected \nll for low $\mu$
 are simply two units larger here than in that figure.
 However, for $1.48 < \mu < 1.69$ 
 the $N_{\rm par}=5$ polynomial is the lowest function in the profile,
@@ -169,11 +169,11 @@ reasonable description of the data.
 \centering
 \includegraphics[width=0.45\textwidth]{correction/ProfilesAllOrders.pdf}
 \includegraphics[width=0.45\textwidth]{correction/EnvelopeAllOrders.pdf}
-\caption{Left: Profile 2NLL scans for all of the functions considered. The 2NLL values for
+\caption{Left: Profile \nll scans for all of the functions considered. The \nll values for
 each profile has been corrected by one unit per background function parameter.
 The labels indicate the function and value of $N_{\rm par}$.
 Right: Minimum envelope of the functions onsidered accounting for the correction of 1 per 
-background parameter. The 2NLL scan when only considering the lowest order power law function 
+background parameter. The \nll scan when only considering the lowest order power law function 
 is shown in red.}
 \label{fig:correction:profiles}
 \end{figure}
@@ -192,7 +192,7 @@ is shown in red.}
 In a similar way to Section~\ref{sec:functions:coverage}, toy datasets
 were generated using various individual functions and also the best fit
 functions for each $\mu$ value. The individual functions chosen were those
-which gave the lowest corrected 2NLL values in 
+which gave the lowest corrected \nll values in 
 figure~\ref{fig:correction:profiles}.
 Figure~\ref{fig:correction:allorderbias} shows the average pull vs $\mu$
 for each generating function choice, with the envelope based on the
@@ -220,7 +220,7 @@ and Akaike (``$c=2$'').}
 \end{figure}
 
 Similarly, figure~\ref{fig:correction:allordercoverage} shows the fraction of
-times the envelope fit result was within the various 2NLL ranges, as used
+times the envelope fit result was within the various \nll ranges, as used
 previously in figure~\ref{fig:functions:firstordercoverage}. Again, the
 coverage is reasonably good for all cases. As for the bias, the two
 p-value corrections are identical and always give a better result than the
@@ -235,7 +235,7 @@ Akaike correction.
 \caption{Fraction of toys in which the fitted value of $\mu$ is within the 0.5, 1, 2 and 
 $3\sigma$ intervals relative to the expected fraction for that interval 
 when correcting 
-with the different 2NLL correction schemes. 
+with the different \nll correction schemes. 
 The results when generating with different functions and generating using the 
 profiled function for each value of $\mu$ are shown in the different panels.
 The functions
