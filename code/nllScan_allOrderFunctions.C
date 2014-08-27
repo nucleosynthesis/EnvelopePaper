@@ -200,7 +200,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    }
    graph->SetLineWidth(2);
    graph->GetXaxis()->SetTitle("#mu");
-   graph->GetYaxis()->SetTitle("-2Log L + Correction");
+   graph->GetYaxis()->SetTitle("#Lambda + Correction");
    mu.setVal(minmu);
    // Set all parameters to best fit ones 
    nllparams->assignValueOnly(bfparams);
@@ -320,7 +320,7 @@ void nllScan_allOrderFunctions(){
 
    TFile *outfits = new TFile("allorderfits.root","RECREATE");
 
-   TH1F *dummyHist = new TH1F("dummy","dummy;#mu;-2Log L + correction",1,MUMIN,MUMAX);
+   TH1F *dummyHist = new TH1F("dummy","dummy;#mu;#Lambda + correction",1,MUMIN,MUMAX);
    dummyHist->SetMinimum(YMIN);
    dummyHist->SetMaximum(YMAX);
    dummyHist->SetTitle("");
@@ -506,7 +506,7 @@ void nllScan_allOrderFunctions(){
    double minll = globalMin ; // Pow is the best fit)
    //std::cout << minll << std::endl;
    //gr_env->GetYaxis()->SetRangeUser(minll,minll+6);
-   gr_env->GetYaxis()->SetTitle("-2Log L + Correction");
+   gr_env->GetYaxis()->SetTitle("#Lambda + Correction");
    gr_env->GetXaxis()->SetTitle("#mu");
    gr_env->GetXaxis()->SetRangeUser(MULOW,MUHIGH);
    gr_env->GetYaxis()->SetRangeUser(YMIN,YMAX);

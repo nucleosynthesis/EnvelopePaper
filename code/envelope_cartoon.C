@@ -35,7 +35,7 @@ void envelope_cartoon(){
   dummy.GetYaxis()->SetRangeUser(0.,5.5);
   dummy.SetStats(0);
   dummy.GetXaxis()->SetTitle("x");
-  dummy.GetYaxis()->SetTitle("#Delta(-2LogL)");
+  dummy.GetYaxis()->SetTitle("#Delta#Lambda");
 
   TCanvas c("c","c",800,600);
   c.SetGrid();

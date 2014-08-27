@@ -6,9 +6,9 @@
 
   TCanvas *can = new TCanvas();  
  
-  err_hist_pow_c0->SetLineColor(2);
+  err_hist_pow_c0->SetLineColor(kGreen+2);
   err_hist_pow_c0->SetLineWidth(2);
-  err_hist_pow_c0->SetMarkerColor(2);
+  err_hist_pow_c0->SetMarkerColor(kGreen+2);
   err_hist_pow_c0->SetMarkerStyle(20);
   err_hist_pow_c0->SetMarkerSize(0.8);
 
@@ -46,9 +46,9 @@
   TLegend *leg = new TLegend(0.52,0.52,0.87,0.89);
   leg->SetFillColor(0);
   leg->AddEntry(err_hist_pow_c0,"fit power law","PLE");
-  leg->AddEntry(err_hist_env_c1,"c=1 ","PLE");
-  leg->AddEntry(err_hist_env_cP,"c=p(#chi^{2}) ","PLE");
-  leg->AddEntry(err_hist_env_c2,"c=2 ","PLE");
+  leg->AddEntry(err_hist_env_c1,"approx. p-value ","PLE");
+  leg->AddEntry(err_hist_env_cP,"p-value ","PLE");
+  leg->AddEntry(err_hist_env_c2,"Akaike ","PLE");
   leg->Draw();
   can->RedrawAxis();
 

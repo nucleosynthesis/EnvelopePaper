@@ -113,7 +113,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    }
    graph->SetLineWidth(2);
    graph->GetXaxis()->SetTitle("#mu");
-   graph->GetYaxis()->SetTitle("-2Log L");
+   graph->GetYaxis()->SetTitle("#Lambda");
    mu.setVal(minmu);
    // Set all parameters to best fit ones 
    nllparams->assignValueOnly(bfparams);
@@ -290,7 +290,7 @@ void nllScan_firstOrderFuncs(){
    double minll = gr_env->Eval( mPow ) ; // Pow is the best fit)
    std::cout << minll << std::endl;
    //gr_env->GetYaxis()->SetRangeUser(minll,minll+6);
-   gr_env->GetYaxis()->SetTitle("-2Log L");
+   gr_env->GetYaxis()->SetTitle("#Lambda");
    gr_env->GetXaxis()->SetTitle("#mu");
    gr_env->GetXaxis()->SetRangeUser(MULOW,MUHIGH);
    gr_env->GetYaxis()->SetRangeUser(YMIN,YMAX);
@@ -329,6 +329,10 @@ void nllScan_firstOrderFuncs(){
    newg2->SetFillColor(kYellow); newg2->SetLineColor(kYellow);newg2->SetMarkerColor(kYellow);
    newg2->Draw("E3same");
    newg->Draw("E3same");
+   gr_env->Draw("same"); 
+   gr_pow->SetLineColor(2);
+   gr_pow->SetLineStyle(2);
+   gr_pow->Draw("same");
    gr_env->Draw("same"); 
    lin->Draw(""); 
    lin2->Draw("");
