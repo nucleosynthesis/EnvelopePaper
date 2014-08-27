@@ -171,13 +171,13 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    int cpoint=0;
    RooArgSet bfparams, prefitparams;
    RooArgSet *nllparams = pdf.getParameters(dat);
-   std::cout << " Pre Fit (pre random) params  .... " << std::endl;
-   nllparams->Print("v");
+   //std::cout << " Pre Fit (pre random) params  .... " << std::endl;
+   //nllparams->Print("v");
    if (DORANDPARS) randomizePars(*nllparams);
    if (DOREMOVERANGE) removeRanges(*nllparams);
    std::cout << "Running scan, " << graph->GetName() <<", npars = " << nllparams->getSize() << std::endl;
-   std::cout << " Pre Fit (post random) params  .... " << std::endl;
-   nllparams->Print("v");
+   //std::cout << " Pre Fit (post random) params  .... " << std::endl;
+   //nllparams->Print("v");
    nllparams->snapshot(bfparams);
    nllparams->snapshot(prefitparams);
 
@@ -209,8 +209,8 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    RooMinimizer minim_float(*nll);
    minim_float.setStrategy(2);
    minim_float.minimize("Minuit","minimize");
-   std::cout << " Best Fit (post-fit params  .... " << std::endl;
-   nllparams->Print("v");
+   //std::cout << " Best Fit (post-fit params  .... " << std::endl;
+   //nllparams->Print("v");
 //   nllparams->assignValueOnly((res->randomizePars()));
    graph->SetName(pdf.GetName());
    return graph;   
@@ -242,6 +242,7 @@ const char * GetBkgName(const char* name){
 //   char np[1];
 //   itoa(npar,np,10); 
    newname += std::string(" (")+std::string(Form("%d",npar))+ std::string("pars)");
+   std::cout << newname.c_str() << std::endl;
    return newname.c_str(); 
 }
 
