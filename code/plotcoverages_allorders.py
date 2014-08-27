@@ -66,7 +66,7 @@ covCanvs = []
 
 ROOT.gROOT.SetBatch(1)
 for i,c in enumerate(cvals):
-  	can = ROOT.TCanvas("c%d"%i,"c%d"%i,600,1000)
+  	can = ROOT.TCanvas("c%d"%i,"c%d"%i,600,800)
   	covCanvs.append(can)
   	leg = ROOT.TLegend(0.72,0.52,0.89,0.89)
   	leg.SetFillColor(0)

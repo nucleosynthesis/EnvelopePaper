@@ -58,7 +58,7 @@ fits = ["envelope"]
 leg = ROOT.TLegend(0.72,0.52,0.89,0.89)
 leg.SetFillColor(0)
 
-c = ROOT.TCanvas("c","c",600,1000)
+c = ROOT.TCanvas("c","c",600,800)
 pads = []
 np = len(gens)
 hists = []
