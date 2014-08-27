@@ -59,7 +59,7 @@ fits = ["envelope"]
 styles = [23,25,28,23]
 colors = [ROOT.kBlack,ROOT.kBlue,ROOT.kMagenta+1,ROOT.kGreen+2]
 corrections = ["1.","P","2."]
-names = ["c=1","c=p(#chi^{2})","c=2"]
+names = ["approx. p-value","p-value","Akaike"]
 
 cvals = ["0.5","1.","2.","3."]
 covCanvs = []
