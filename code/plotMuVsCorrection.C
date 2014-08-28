@@ -1,5 +1,6 @@
 void plotMuVsCorrection() {
 
+   const double epsilon = 0.05;
   gROOT->ProcessLine(".x paperStyle.C");
 
 	const int nPoints = 8;
@@ -17,6 +18,8 @@ void plotMuVsCorrection() {
 	for (int p=0; p<nPoints; p++){
 		TString name = "";
 		if (p==0) name = "p-value";
+		else if (p==3) name = "app. p-value";
+		else if (p==5) name = "Akaike";
 		else name = Form("%3.1f / dof",corr[p]);
 		bestFitH->GetXaxis()->SetBinLabel(p+1,name.Data());
 	}
@@ -43,9 +46,9 @@ void plotMuVsCorrection() {
 		bestFit->SetPoint(p,bestFitH->GetBinCenter(p+1),mu[p]);
 		err1sigma->SetPoint(p,bestFitH->GetBinCenter(p+1),mu[p]);
 		err2sigma->SetPoint(p,bestFitH->GetBinCenter(p+1),mu[p]);
-		bestFit->SetPointError(p,bestFitH->GetBinWidth(p+1)/2.,bestFitH->GetBinWidth(p+1)/2.,0.,0.);
-		err1sigma->SetPointError(p,bestFitH->GetBinWidth(p+1)/2.,bestFitH->GetBinWidth(p+1)/2.,TMath::Abs(muLow1[p]),muHigh1[p]);
-		err2sigma->SetPointError(p,bestFitH->GetBinWidth(p+1)/2.,bestFitH->GetBinWidth(p+1)/2.,TMath::Abs(muLow2[p]),muHigh2[p]);
+		bestFit->SetPointError(p,bestFitH->GetBinWidth(p+1)/2.-epsilon,bestFitH->GetBinWidth(p+1)/2.-epsilon,0.,0.);
+		err1sigma->SetPointError(p,bestFitH->GetBinWidth(p+1)/2.-epsilon,bestFitH->GetBinWidth(p+1)/2.-epsilon,TMath::Abs(muLow1[p]),muHigh1[p]);
+		err2sigma->SetPointError(p,bestFitH->GetBinWidth(p+1)/2.-epsilon,bestFitH->GetBinWidth(p+1)/2.-epsilon,TMath::Abs(muLow2[p]),muHigh2[p]);
 	}
 
 	TCanvas *canv = new TCanvas();
@@ -54,8 +57,8 @@ void plotMuVsCorrection() {
 	leg->SetFillColor(0);
 	leg->SetLineColor(0);
 	leg->AddEntry(bestFitH,"Fit value","L");
-	leg->AddEntry(err1sigma,"#pm 1#sigma error","LF");
-	leg->AddEntry(err2sigma,"#pm 2#sigma error","LF");
+	leg->AddEntry(err1sigma,"68.3% Interval","LF");
+	leg->AddEntry(err2sigma,"95.4% Interval","LF");
 
 	bestFitH->GetYaxis()->SetRangeUser(-1.,4.);
 	bestFitH->GetXaxis()->LabelsOption("d");
@@ -68,9 +71,10 @@ void plotMuVsCorrection() {
 	bestFitH->Draw("AXIS");
 	err2sigma->Draw("2same");
 	err1sigma->Draw("2same");
-	bestFit->Draw("EPsame");
+	bestFit->Draw("Esame");
 	//bestFitH->Draw("HIST ][ same");
 	leg->Draw();
+	canv->RedrawAxis();
 	canv->Print("../correction/correction.pdf");
 
 
