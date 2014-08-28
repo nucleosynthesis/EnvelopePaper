@@ -24,13 +24,13 @@ numbers of parameters, it seems necessary to have some correction to the \nll
 value to account for this difference in number.
 
 The idea is therefore to compare \nll values,
-correcting for the differing number of parameters 
+correcting for the differing number of parameters
 (or equivalently differing number of degrees of freedom) in
 the fit functions. Specifically here, where applied, the correction is
 done so as to get a value equivalent to a function with no parameters, so
 the number of degrees of freedom is the number of bins used.
-Two obvious methods were considered, based on the 
-$\chi^2$ p-value and the Akaike information 
+Two obvious methods were considered, based on the
+$\chi^2$ p-value and the Akaike information
 criterion~\cite{ref:correction:akaike}.
 \begin{enumerate}
 \item %[p-value]
@@ -69,7 +69,7 @@ However, it can be seen that the correction is approximately given by
 \qquad{\rm so}\qquad
 \Lambda_{\mathrm{corr}} \approx \textrm{\nll} + N_{\rm par}
 \end{displaymath}
-for the central range of p-values. This approximation means the 
+for the central range of p-values. This approximation means the
 $\Lambda_{\mathrm{corr}}$ shape, and hence coverage, is unchanged. Both the exact p-value
 correction and the $N_{\rm par}$ approximate correction are used in this paper.
 %
@@ -95,7 +95,7 @@ so the correction is simply $ 2N_{\rm par}$ and
 hence is twice as big as the approximate p-value correction.
 For finite samples, then it is modified to
 \begin{displaymath}
-\Lambda_{\mathrm{corr}} 
+\Lambda_{\mathrm{corr}}
 = \textrm{\nll} + 2N_{\rm par}  + \frac{2N_{\rm par}(N_{\rm par}+1)}{n-(N_{\rm par}+1)}
 = \textrm{\nll} + \frac{2N_{\rm par}}{1-(N_{\rm par}+1)/n}
 \end{displaymath}
@@ -110,7 +110,7 @@ Hence, it also has no effect on coverage.
 
 \subsection{Function definitions}
 \label{sec:correction:functions}
-The fit functions which were used are the two-parameter functions listed in 
+The fit functions which were used are the two-parameter functions listed in
 Section~\ref{sec:functions:function} and higher order generalisations of
 these. Specifically, these are
 \begin{enumerate}
@@ -134,50 +134,56 @@ can have both even and odd numbers, i.e. $N_{\rm par}=N$.
 \subsection{Example case}
 \label{sec:correction:example}
 
-The functions listed above were fit to the original dataset for values of 
+The functions listed above were fit to the original dataset for values of
 $2 \le N_{\rm par} \le 6$; this resulted in three fits for the power law and
 exponential functions, and five fits for the Laurent and polynomial functions.
 The profiles for each of these function fits are shown in
-figure~\ref{fig:correction:profiles}, for the example case of 
-applying the approximate p-value correction to the \nll of one unit per 
+figure~\ref{fig:correction:profiles}, for the example case of
+applying the approximate p-value correction to the \nll of one unit per
 background function parameter.
 
 For this case, the lowest corrected \nll value is still given by the
 two-parameter power law function and so gives an identical central value
 to that described in Section~\ref{sec:functions:example}. The lowest corrected
 \nll value for $\mu < 0.55$ is also again given by the two-parameter exponential
-function, also as for the previous case. 
+function, also as for the previous case.
 Indeed, comparison to figure~\ref{fig:functions:profiles} shows that the
 minimum values of the corrected \nll for low $\mu$
 are simply two units larger here than in that figure.
-However, for $1.48 < \mu < 1.68$ 
+However, for $1.48 < \mu < 1.68$
 the $N_{\rm par}=5$ polynomial is the lowest function in the profile,
 while for $\mu > 1.68$,
 the $N_{\rm par}=6$ polynomial is lowest.
 Hence, the envelope is formed from four different functions in this
-case. Figure~\ref{fig:correction:profiles} also shows the 68.3\% and 
-95.4\% confidence intervals which would be determined from the 
+case. Figure~\ref{fig:correction:profiles} also shows the 68.3\% and
+95.4\% confidence intervals which would be determined from the
 profile envelope. The 68.3\% region is identical to that found using
 just the two-parameter functions (see Section~\ref{sec:functions:example}), but
-when including higher order functions, the 95.4\% confidence interval 
+when including higher order functions, the 95.4\% confidence interval
 on $\mu$ is $-0.18 < \mu < 2.11$,
 i.e. it is extended to higher $\mu$
-due to the influence of the higher order polynomial functions providing a 
+due to the influence of the higher order polynomial functions providing a
 reasonable description of the data.
-%The central value is unchanged since the lowest order power law 
+%The central value is unchanged since the lowest order power law
 %best desribes the data when including a penalty for using additional parameters in the fit.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.45\textwidth]{correction/ProfilesAllOrders.pdf}
-\includegraphics[width=0.45\textwidth]{correction/EnvelopeAllOrders.pdf}
-\caption{Left: Profile \nll scans for all of the functions considered. The \nll values for
-each profile has been corrected by one unit per background function parameter.
-The labels indicate the function and value of $N_{\rm par}$.
-Right: Minimum envelope of the functions considered accounting for the correction of 1 per 
-background parameter. The \nll scan when only considering the lowest order power law function 
-is shown in red.}
+\includegraphics[width=0.45\textwidth]{{correction/ProfilesAllOrders0.0}.pdf}
+\includegraphics[width=0.45\textwidth]{{correction/EnvelopeAllOrders0.0}.pdf} \\
+\includegraphics[width=0.45\textwidth]{{correction/ProfilesAllOrders1.0}.pdf}
+\includegraphics[width=0.45\textwidth]{{correction/EnvelopeAllOrders1.0}.pdf} \\
+\includegraphics[width=0.45\textwidth]{{correction/ProfilesAllOrders2.0}.pdf}
+\includegraphics[width=0.45\textwidth]{{correction/EnvelopeAllOrders2.0}.pdf}
+\caption{Left: Profile \nll scans for all of the functions considered. The \nll values for each profile have been corrected by no units (top), one unit per background function parameter (middle) and two units per background function parameter (bottom). The labels indicate the function and the value of $N_{\rm par}$. Right: Minimum envelope of the functions considered accounting for the correction of either 0, 1 or 2 per background parameter. The \nll scan when only considering the best fit function is shown in red.}
 \label{fig:correction:profiles}
+\end{figure}
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=0.65\textwidth]{correction/correction.pdf}
+\caption{The best fit value of the signal strength, $\mu$, and its uncertainty when fitted to the dataset as a function of the correction apllied per background parameter.}
+\label{fig:correction:correction}
 \end{figure}
 
 
@@ -194,7 +200,7 @@ is shown in red.}
 In a similar way to Section~\ref{sec:functions:coverage}, toy datasets
 were generated using various individual functions and also the best fit
 functions for each $\mu$ value. The individual functions chosen were those
-which gave the lowest corrected \nll values in 
+which gave the lowest corrected \nll values in
 figure~\ref{fig:correction:profiles}.
 Figure~\ref{fig:correction:allorderbias} shows the average pull vs $\mu$
 for each generating function choice, with the envelope based on the
@@ -207,8 +213,8 @@ that the p-value corrections always give less bias than the Akaike correction.
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.48\textwidth]{correction/AllOrderFunctions_call.pdf}
-\caption{Average pull when fitting using the envelope as a function of $\mu$ 
-used to generate the signal. Each panel shows the average bias when using 
+\caption{Average pull when fitting using the envelope as a function of $\mu$
+used to generate the signal. Each panel shows the average bias when using
 a different background function for toy generation, with the functions
 used being (from the top): polynomial with $N_{\rm par}=6$,
 polynomial with $N_{\rm par}=5$, Laurent with $N_{\rm par}=2$,
@@ -235,11 +241,11 @@ Akaike correction.
 \includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_1._call}.pdf}\\
 \includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_2._call}.pdf}
 \includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_3._call}.pdf}
-\caption{Fraction of toys in which the fitted value of $\mu$ is within the 38.3\%, 68.3\%, 95.4\% and 
-99.7\% intervals relative to the expected fraction for that interval 
-when correcting 
-with the different \nll correction schemes. 
-The results when generating with different functions and generating using the 
+\caption{Fraction of toys in which the fitted value of $\mu$ is within the 38.3\%, 68.3\%, 95.4\% and
+99.7\% intervals relative to the expected fraction for that interval
+when correcting
+with the different \nll correction schemes.
+The results when generating with different functions and generating using the
 profiled function for each value of $\mu$ are shown in the different panels.
 The functions
 used are (from the top): polynomial with $N_{\rm par}=6$,
@@ -254,7 +260,7 @@ value of $\mu$ is used to generate toys.
 \label{fig:correction:allordercoverage}
 \end{figure}
 
-Hence, overall the two p-value correction methods seem to give effectively 
+Hence, overall the two p-value correction methods seem to give effectively
 identical results and also perform better than the Akaike correction method.
 In practical terms, the approximate p-value correction method is much easier
 to implement than the exact method
@@ -264,27 +270,27 @@ p-value correction was used throughout the Higgs
 to two-photon analysis~\cite{ref:introduction:legacy}.
 
 Figure~\ref{fig:correction:compareerrors} shows the distribution of the 68.3\%
- uncertainty on $\mu$ 
-when considering the full set of functions using the three different correction schemes compared  
-with considering a single first order function. The uncertainty ($\sigma_{\mu}$) 
-is defined as half of the 68.3\% interval on $\mu$. 
-The distributions are obtained from fitting 
-toy datasets generated using the first order power law function for the background, with 
+ uncertainty on $\mu$
+when considering the full set of functions using the three different correction schemes compared
+with considering a single first order function. The uncertainty ($\sigma_{\mu}$)
+is defined as half of the 68.3\% interval on $\mu$.
+The distributions are obtained from fitting
+toy datasets generated using the first order power law function for the background, with
 signal generated assuming $\mu=1$. This quantifies the increase in the error
 due to the systematic contribution arising from the function uncertainty.
-The tail of the distributions observed 
-when considering the envelope of functions are from fits in which functions other than the 
-best fitting function contribute to the 68.3\% interval. As expected, correcting using a higher 
-penalty reduce the size of this tail since in this case, it is less likely that a higher order 
+The tail of the distributions observed
+when considering the envelope of functions are from fits in which functions other than the
+best fitting function contribute to the 68.3\% interval. As expected, correcting using a higher
+penalty reduce the size of this tail since in this case, it is less likely that a higher order
 function can contribute.
-%
+
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.45\textwidth]{correction/compare_error_magnitude.pdf}
-\caption{Distribution of $\sigma_{\mu}$ in toy datasets 
-comparing the three correction schemes 
-when including the full set of functions 
-to the case when considering only a single power law function 
+\caption{Distribution of $\sigma_{\mu}$ in toy datasets
+comparing the three correction schemes
+when including the full set of functions
+to the case when considering only a single power law function
 with $N_{\rm par}=2$ for the fit.}
 \label{fig:correction:compareerrors}
 \end{figure}

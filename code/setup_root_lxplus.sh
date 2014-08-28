@@ -41,7 +41,7 @@ elif [ "$scAr" = "slc5_amd64_gcc472" ]  || [[ $vers == *5.* ]]; then
 elif [ "$scAr" = "osx107_amd64_gcc462" ] ; then
   echo 'Setting up for Mac OS'
   . /Applications/root/bin/thisroot.sh
-  export BOOSTPATH=/Applications/boost_1_49_0
+  export BOOSTPATH=/Applications/boost
 	export PATH=$PWD:$PATH
 	export PYTHONPATH=$PWD:$PYTHONPATH
 	export LD_LIBRARY_PATH=$PWD:$LD_LIBRARY_PATH
