@@ -9,9 +9,9 @@ reliable theory or simulation which can constrain the background shape,
 there is an uncertainty about which function to use to fit
 the background. Hence, different choices of the form of the function
 will give different results for the signal parameters, meaning there is a
-systematic uncertainty associated with the function choice.
-The basic concept discussed in this paper is to consider the background
-function choice as a source of systematic error which is modelled as a nuisance parameter.
+systematic uncertainty associated with the choice of function.
+The basic concept discussed in this paper is to consider this choice 
+as a source of systematic error which is modelled as a nuisance parameter.
 It is then consistently treated like other nuisance parameters as far as
 possible.
 
@@ -41,11 +41,11 @@ is then
 taken as the region for which \nll is less than ${\rm \nll}_{BF}+1$,
 where ${\rm \nll}_{BF}$ is the best-fit value at the overall minimum. 
 Similarly, the 38.3\%, 95.4\% and 99.7\% confidence intervals are defined by the 
-region in which the \nll is less than ${\rm \nll}_{BF}+0.25$, ${\rm \nll}_{BF}+4$ 
+regions in which \nll is less than ${\rm \nll}_{BF}+0.25$, ${\rm \nll}_{BF}+4$ 
 and ${\rm \nll}_{BF}+9$ respectively. 
 
 Consider this absolute minimum in \nll: if the nuisance parameters at that
-point were fixed, then the \nll profile curve would be steeper than for
+point were fixed, then the profile \nll curve would be steeper than for
 the original overall \nll curve. This directly reflects the fact that
 if the nuisance parameters had no uncertainty,
 the error on $x$ would be reduced, i.e. there would be no systematic 
@@ -60,7 +60,7 @@ Finally, there are in general
 many other sets of nuisance parameters which do not result in a point on the
 original profile curve. Fixing the parameters to these values will also result
 in further curves which are enclosed by the original profile curve.
-The critical point is that the overall \nll minimum profile curve as a function
+The critical point is that the overall minimum as a function
 of $x$ encloses the curves for all possible values of the nuisance
 parameters.
 
@@ -100,15 +100,15 @@ parameters, it is seen that the envelope approximates the full profile curve.}
 \label{sec:concept:functions}
 
 The method of picking various sets of nuisance parameters and finding
-an envelope can conceptually be applied to the background function
-uncertainty. Each background function considered can be labelled by an
+an envelope can conceptually be applied to the uncertainty on the background functional form. 
+Each background function considered can be labelled by an
 integer. The integer is then treated as a (discrete) nuisance parameter
 for the profile calculation and hence this method has been termed
 ``discrete profiling''.
 The minimum envelope then gives the overall profile curve including
 all functions considered. This automatically includes any systematic error
-arising from the function choice, as the envelope will in general be broader
-than any of the individual function curves which contribute to the envelope.
+arising from the choice of function, as the envelope will in general be broader
+than any of the individual curves which contribute to the envelope.
 
 In practical terms, most minimisation routines 
 cannot easily handle a discrete parameter, particularly when the

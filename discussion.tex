@@ -2,7 +2,7 @@
 %\label{sec:discussion}
 
 %\subsection{Application to real world case}
-\section{Application to real world case}
+\section{Application to a real case}
 \label{sec:discussion}
 \label{sec:discussion:higgs}
 
@@ -37,9 +37,9 @@ function seems difficult, in practical terms, this means that all possible
 combinations of each function in each category must be fitted.
 The minimum envelope made from the results of all these combinations would
 then be found. While this is conceptually straightforward, the actual
-implementation is probably prohibitive. For example, using the 16 functions
-discussed in this paper, there would be $16^{11} \sim 10^{13}$ combinations 
-of functions to be fitted for the 2011 data sample and $16^{14} \sim 10^{17}$ 
+implementation is prohibitive. For example, using the 16 functions
+discussed in this paper, there would be $16^{11} (\sim 10^{13}$) combinations 
+of functions to be fitted for the 2011 data sample and $16^{14} (\sim 10^{17}$)
 combinations for the 2012 data sample.
 Instead of considering all possible combinations of functions, the function 
 which minimizes the likelihood and its parameters can be determined through 
@@ -55,13 +55,17 @@ Once these functions, and their parameters, are found, the choice of function
 is then fixed while the nuisance parameters are freed and a single fit of the 
 nuisance parameters and chosen background parameters is performed.
 If no significant change in the likelihood is observed, the overall minimum is 
-achieved, however, if this is not the case, the nuisances must be fixed again 
+achieved. However, if this is not the case, the nuisances must be fixed again 
 and the procedure to find the best fit functions given the new values of the 
 nuisance parameters is repeated.
 This iterative procedure continues until the likelihood remains stable.
 This procedure dramatically reduces the number of fits to be performed 
 to minimize the likelihood and is found to produce identical results when 
 compared to trying all combinations in toy examples. 
+The bias and coverage properties of the discrete profiling method were tested 
+extensively in the CMS Higgs analysis using a similar procedure to that described in 
+Section~\ref{sec:correction:bias}. It was found the method gave consistently good 
+coverage and negligible bias.
 
 
 %\subsection{Envelope smoothing}

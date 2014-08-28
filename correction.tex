@@ -11,12 +11,12 @@ functions (such as polynomials of varying order), then the lowest \nll will
 always be given by the highest order considered.
 Because this function also has the
 largest number of parameters, it will generally have the largest statistical
-error and hence widest \nll profile curve.
+error and hence widest profiled \nll curve.
 Hence, simply using the \nll values
 without any ``penalty'' for the number of parameters would effectively
 always result in the minimum envelope being mainly defined by the highest
 order function considered. It would also mean there is no ``natural'' way to know when
-to no longer consider yet more higher order functions. However, decision based
+to no longer consider yet more higher order functions. However, decisions based
 on quantities, such as an F-test~\cite{ref:ftest},
 are standardly used to determine when higher order functions in
 a family can be ignored. Hence, when using functions with different
@@ -87,7 +87,7 @@ the $\chi^2$ assuming a flat p-value distribution is shown on the right.}
 
 
 \item %[Akaike]
-The Akaike basic formula for very large sample sizes is
+The basic Akaike formula for very large sample sizes is
 \begin{displaymath}
 \Lambda_{\mathrm{corr}} = \textrm{\nll} + 2N_{\rm par}
 \end{displaymath}
@@ -138,7 +138,7 @@ can have both even and odd numbers, i.e. $N_{\rm par}=N$.
 The functions listed above were fit to the original dataset for values of
 $2 \le N_{\rm par} \le 6$; this resulted in three fits for the power law and
 exponential functions, and five fits for the Laurent and polynomial functions.
-The profiles for each of these function fits are shown in
+The profile curves from the fits of these functions are shown in
 figure~\ref{fig:correction:profiles}, where results for three different
 corrections to \nll have been shown, namely no correction, the approximate
 p-value correction, and the Akaike correction.
@@ -180,7 +180,7 @@ reasonable description of the data.
 \includegraphics[width=0.43\textwidth]{{correction/EnvelopeAllOrders1.0}.pdf} \\
 \includegraphics[width=0.43\textwidth]{{correction/ProfilesAllOrders2.0}.pdf}
 \includegraphics[width=0.43\textwidth]{{correction/EnvelopeAllOrders2.0}.pdf}
-\caption{Left: Profile \nll scans for all of the functions considered. The \nll values for each profile have been corrected by no units (top), one unit per background function parameter (middle) and two units per background function parameter (bottom). The labels indicate the function and the value of $N_{\rm par}$. Right: Minimum envelope of the functions considered accounting for the correction of either 0, 1 or 2 per background parameter. The \nll scan when only considering the best fit function is shown in red.}
+\caption{Left: Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has been corrected by no units (top), one unit per background function parameter (middle) and two units per background function parameter (bottom). The labels indicate the function and the value of $N_{\rm par}$. Right: Minimum envelope of the functions considered accounting for the correction of either 0, 1 or 2 per background parameter. The \nll scan when only considering the best fit function is shown in red.}
 \label{fig:correction:profiles}
 \end{figure}
 
@@ -235,7 +235,7 @@ functions for each $\mu$ value. The individual functions chosen were those
 which gave the lowest corrected \nll values in
 figure~\ref{fig:correction:profiles}.
 Figure~\ref{fig:correction:allorderbias} shows the average pull vs $\mu$
-for each generating function choice, with the envelope based on the
+for each choice of generating function, with the envelope based on the
 three correction methods considered, i.e.~p-value, approximate p-value
 and Akaike. It is seen that the p-value and approximate p-value corrections give
 effectively identical results. It is also found that the bias for some
@@ -251,7 +251,7 @@ a different background function for toy generation, with the functions
 used being (from the top): polynomial with $N_{\rm par}=6$,
 polynomial with $N_{\rm par}=5$, Laurent with $N_{\rm par}=2$,
 power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
-The lowest plot show the result when the best-fit function at each
+The lowest plots show the result when the best-fit function at each
 value of $\mu$ is used to generate toys.
 %For each plot, the results for the three correction methods are shown,
 %namely the approximate p-value (``$c=1$''), p-value (``$c=p(\chi^2)$'')
@@ -283,7 +283,7 @@ The functions
 used are (from the top): polynomial with $N_{\rm par}=6$,
 polynomial with $N_{\rm par}=5$, Laurent with $N_{\rm par}=2$,
 power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
-The lowest plot show the result when the best-fit function at each
+The lowest plots show the result when the best-fit function at each
 value of $\mu$ is used to generate toys.
 %For each plot, the results for the three correction methods are shown,
 %namely the approximate p-value (``$c=1$''), p-value (``$c=p(\chi^2)$'')
@@ -309,11 +309,11 @@ is defined as half of the 68.3\% interval on $\mu$.
 The distributions are obtained from fitting
 toy datasets generated using the first order power law function for the background, with
 signal generated assuming $\mu=1$. This quantifies the increase in the error
-due to the systematic contribution arising from the function uncertainty.
+due to the systematic contribution arising from the uncertainty in the choice of functional form.
 The tail of the distributions observed
 when considering the envelope of functions are from fits in which functions other than the
 best fitting function contribute to the 68.3\% interval. As expected, correcting using a higher
-penalty reduce the size of this tail since in this case, it is less likely that a higher order
+penalty reduces the size of this tail since in this case, it is less likely that a higher order
 function can contribute.
 
 \begin{figure}[tbp]
