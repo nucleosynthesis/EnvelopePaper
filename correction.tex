@@ -1,7 +1,7 @@
 \section{Using functions with different numbers of parameters} % 5 pages
 \label{sec:correction}
 
-\subsection{Corrections to \nll}
+\subsection{Corrections to the likelihood}
 \label{sec:correction:corrections}
 
 The \nll calculated from the fit of a function to a dataset is purely a measure
@@ -70,7 +70,8 @@ However, it can be seen that the correction is approximately given by
 \Lambda_{\mathrm{corr}} \approx \textrm{\nll} + N_{\rm par}
 \end{displaymath}
 for the central range of p-values. This approximation means the
-$\Lambda_{\mathrm{corr}}$ shape, and hence coverage, is unchanged. Both the exact p-value
+$\Lambda_{\mathrm{corr}}$ shape, and hence coverage, is unchanged. Both the 
+exact p-value
 correction and the $N_{\rm par}$ approximate correction are used in this paper.
 %
 \begin{figure}[tbp]
@@ -115,11 +116,11 @@ Section~\ref{sec:functions:function} and higher order generalisations of
 these. Specifically, these are
 \begin{enumerate}
 \item
-``Power law Sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} x^{p^{b}_{i+1}}$.
+``Power law sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} x^{p^{b}_{i+1}}$.
 \item
-``Exponential Sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} e^{p^{b}_{i+1}x}$.
+``Exponential sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} e^{p^{b}_{i+1}x}$.
 \item
-``Laurent Series''; $f(x) = \sum_{i=0}^N p_i/x^n$.
+``Laurent series''; $f(x) = \sum_{i=0}^N p_i/x^n$.
 \item
 ``Polynomial''; $f(x) = \sum_{i=0}^N p_i x^i$.
 \end{enumerate}
@@ -138,10 +139,14 @@ The functions listed above were fit to the original dataset for values of
 $2 \le N_{\rm par} \le 6$; this resulted in three fits for the power law and
 exponential functions, and five fits for the Laurent and polynomial functions.
 The profiles for each of these function fits are shown in
-figure~\ref{fig:correction:profiles}, for the example case of
-applying the approximate p-value correction to the \nll of one unit per
-background function parameter.
+figure~\ref{fig:correction:profiles}, where results for three different
+corrections to \nll have been shown, namely no correction, the approximate
+p-value correction, and the Akaike correction.
 
+Consider the example case of the approximate p-value correction,
+i.e. correcting by one unit per background function parameter,
+which is shown
+in the middle row of figure~\ref{fig:correction:profiles}.
 For this case, the lowest corrected \nll value is still given by the
 two-parameter power law function and so gives an identical central value
 to that described in Section~\ref{sec:functions:example}. The lowest corrected
@@ -166,23 +171,50 @@ due to the influence of the higher order polynomial functions providing a
 reasonable description of the data.
 %The central value is unchanged since the lowest order power law
 %best desribes the data when including a penalty for using additional parameters in the fit.
-
+%
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.45\textwidth]{{correction/ProfilesAllOrders0.0}.pdf}
-\includegraphics[width=0.45\textwidth]{{correction/EnvelopeAllOrders0.0}.pdf} \\
-\includegraphics[width=0.45\textwidth]{{correction/ProfilesAllOrders1.0}.pdf}
-\includegraphics[width=0.45\textwidth]{{correction/EnvelopeAllOrders1.0}.pdf} \\
-\includegraphics[width=0.45\textwidth]{{correction/ProfilesAllOrders2.0}.pdf}
-\includegraphics[width=0.45\textwidth]{{correction/EnvelopeAllOrders2.0}.pdf}
+\includegraphics[width=0.43\textwidth]{{correction/ProfilesAllOrders0.0}.pdf}
+\includegraphics[width=0.43\textwidth]{{correction/EnvelopeAllOrders0.0}.pdf} \\
+\includegraphics[width=0.43\textwidth]{{correction/ProfilesAllOrders1.0}.pdf}
+\includegraphics[width=0.43\textwidth]{{correction/EnvelopeAllOrders1.0}.pdf} \\
+\includegraphics[width=0.43\textwidth]{{correction/ProfilesAllOrders2.0}.pdf}
+\includegraphics[width=0.43\textwidth]{{correction/EnvelopeAllOrders2.0}.pdf}
 \caption{Left: Profile \nll scans for all of the functions considered. The \nll values for each profile have been corrected by no units (top), one unit per background function parameter (middle) and two units per background function parameter (bottom). The labels indicate the function and the value of $N_{\rm par}$. Right: Minimum envelope of the functions considered accounting for the correction of either 0, 1 or 2 per background parameter. The \nll scan when only considering the best fit function is shown in red.}
 \label{fig:correction:profiles}
 \end{figure}
 
+In contrast, the case with no correction to \nll, shown in the top row of 
+figure~\ref{fig:correction:profiles}, shows that the highest order polynomial
+function used, with $N_{\rm par}=6$, defines the envelope across the whole 
+range of $\mu$. This domination of the functions with the highest numbers of
+parameters is exactly what the penalty correction to \nll is attemping to
+avoid. Finally, the lowest plot in figure~\ref{fig:correction:profiles},
+corresponding to the Akaike correction, shows that all functions with more
+than the minimum of two parameters get a large penalty and so do not
+contribute to the envelope. This hints that this correction may be too severe.
+
+The three corrections shown in figure~\ref{fig:correction:profiles} can be
+considered to be examples of a continuous spectrum of corrections which can
+be written as
+\begin{displaymath}
+\Lambda_{\mathrm{corr}} = \textrm{\nll} + cN_{\rm par}
+\end{displaymath}
+where $c=0$, 1 or 2 in the cases shown. Other values of $c$ are clearly
+also possible.
+Figure~\ref{fig:correction:correction} shows the
+68.3\% and 95.4\% intervals which would be derived from the envelopes
+for these and
+some other values of $c$, as well as for the p-value correction.
+It is seen that the best fit value and intervals change for $c<0.5$ but
+for larger values of $c$ they are quite stable. Hence, the result which would
+be derived from this method is effectively insensitive to the exact correction
+used, as long as $c \gtrsim 1$.
+%
 \begin{figure}[htp]
 \centering
 \includegraphics[width=0.65\textwidth]{correction/correction.pdf}
-\caption{The best fit value of the signal strength, $\mu$, and its uncertainty when fitted to the dataset as a function of the correction apllied per background parameter.}
+\caption{The best fit value of the signal strength, $\mu$, and its uncertainty when fitted to the dataset as a function of the correction applied per background parameter.}
 \label{fig:correction:correction}
 \end{figure}
 
@@ -204,8 +236,8 @@ which gave the lowest corrected \nll values in
 figure~\ref{fig:correction:profiles}.
 Figure~\ref{fig:correction:allorderbias} shows the average pull vs $\mu$
 for each generating function choice, with the envelope based on the
-three correction methods considered, i.e.~exact p-value, approximate p-value
-and Akaike. It is seen that the exact and approximate p-value corrections give
+three correction methods considered, i.e.~p-value, approximate p-value
+and Akaike. It is seen that the p-value and approximate p-value corrections give
 effectively identical results. It is also found that the bias for some
 generating functions can get up to a significant fraction of the error, but
 that the p-value corrections always give less bias than the Akaike correction.
@@ -222,7 +254,7 @@ power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
 The lowest plot show the result when the best-fit function at each
 value of $\mu$ is used to generate toys.
 %For each plot, the results for the three correction methods are shown,
-%namely the approximate p-value (``$c=1$''), exact p-value (``$c=p(\chi^2)$'')
+%namely the approximate p-value (``$c=1$''), p-value (``$c=p(\chi^2)$'')
 %and Akaike (``$c=2$'').
 }
 \label{fig:correction:allorderbias}
@@ -254,7 +286,7 @@ power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
 The lowest plot show the result when the best-fit function at each
 value of $\mu$ is used to generate toys.
 %For each plot, the results for the three correction methods are shown,
-%namely the approximate p-value (``$c=1$''), exact p-value (``$c=p(\chi^2)$'')
+%namely the approximate p-value (``$c=1$''), p-value (``$c=p(\chi^2)$'')
 %and Akaike (``$c=2$'').
 }
 \label{fig:correction:allordercoverage}
@@ -262,12 +294,12 @@ value of $\mu$ is used to generate toys.
 
 Hence, overall the two p-value correction methods seem to give effectively
 identical results and also perform better than the Akaike correction method.
-In practical terms, the approximate p-value correction method is much easier
+In practical terms, the approximate p-value correction method is easier
 to implement than the exact method
 and also can be applied to an unbinned fit (where the $\chi^2$
 is not approximately given by the \nll value). For these reasons, the approximate
-p-value correction was used throughout the Higgs
-to two-photon analysis~\cite{ref:introduction:legacy}.
+p-value correction was used throughout the CMS Higgs
+to two photon analysis~\cite{ref:introduction:legacy}.
 
 Figure~\ref{fig:correction:compareerrors} shows the distribution of the 68.3\%
  uncertainty on $\mu$

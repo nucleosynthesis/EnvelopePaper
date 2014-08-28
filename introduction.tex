@@ -44,11 +44,12 @@ function is denoted by \nll. The fits discussed are binned and the
 likelihood used for each bin is the Poisson likelihood ratio to the best
 possible likelihood given the observed data, i.e.
 \begin{equation}
-{\rm \nll} = \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
+%{\rm \nll}_i = \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
+\nll_i = \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
 \label{eqn:introduction:def2NLL}
 \end{equation}
 where $n_{i}$ are the observed and $\nu_{i}$ is the expected number of events 
-given a particular background model in the $i^{th}$ bin. 
+given a particular background model in the $i^{\rm th}$ bin. 
 
 For the purposes of fitting and generating datasets, the statistics package 
 ``RooFit'' is used throughout this paper~\cite{ref:roofit}. 
