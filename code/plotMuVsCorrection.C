@@ -6,11 +6,11 @@ void plotMuVsCorrection() {
 	const int nPoints = 8;
 	double corr[nPoints] = {0., 0.5, 1., 1.5, 2., 2.5, 3., -1.};
 
-	double mu[nPoints] 			= {1.1 	 			, 0.95 				, 0.95 			, 0.95 			, 0.95 			, 0.95 			, 0.95 			,	0.9 	 			, 	};
-	double muLow1[nPoints] 	= {-0.600908 	, -0.527051 	, -0.560094 , -0.560094 , -0.560094 , -0.560094	, -0.560094	,	-0.558575 	, 	};
-	double muHigh1[nPoints] = {0.597126 	, 0.67814 		, 0.473881 	, 0.473881 	, 0.473881 	, 0.473881	, 0.473881	,	0.373674		, 	};
-	double muLow2[nPoints] 	= {-1.18148 	, -1.05678 		, -1.11012 	, -1.11012	, -1.11012	, -1.11012	, -1.11012	,	-1.10778		, 	};
-	double muHigh2[nPoints] = {1.21183 		, 1.32824 		, 1.18089 	, 0.98518		, 0.98518		, 0.98518		, 0.98518		,	0.841168		, };
+	double mu[nPoints] 			= {1.1 	 			, 0.95 				, 0.95 			, 0.95 			, 0.95 			, 0.95 			, 0.95 			,	0.95 	 				};
+	double muLow1[nPoints] 	= {-0.600908 	, -0.527051 	, -0.560094 , -0.560094 , -0.560094 , -0.560094	, -0.560094	, -0.558362	 		};
+	double muHigh1[nPoints] = {0.597126 	, 0.67814 		, 0.473881 	, 0.473881 	, 0.473881 	, 0.473881	, 0.473881	, +0.472554			};
+	double muLow2[nPoints] 	= {-1.18148 	, -1.05678 		, -1.11012 	, -1.11012	, -1.11012	, -1.11012	, -1.11012	,	-1.10757			};
+	double muHigh2[nPoints] = {1.21183 		, 1.32824 		, 1.18089 	, 0.98518		, 0.98518		, 0.98518		, 0.98518		, +1.06366		};
 
 	TH1F *bestFitH = new TH1F("bestFitH","",nPoints,0,nPoints);
 	bestFitH->SetStats(0);
@@ -54,7 +54,7 @@ void plotMuVsCorrection() {
 	TCanvas *canv = new TCanvas("c","c",800,700);
 	canv->SetBottomMargin(0.2);
 
-	TLegend *leg = new TLegend(0.6,0.7,0.89,0.89);
+	TLegend *leg = new TLegend(0.15,0.7,0.5,0.89);
 	leg->SetFillColor(0);
 	leg->SetLineColor(0);
 	leg->AddEntry(bestFitH,"Fit value","L");
