@@ -142,10 +142,11 @@ curve which would be obtained using just the power law function.}
 \subsection{Bias and coverage}
 \label{sec:functions:coverage}
 
-The discrete profile method was tested for bias and coverage 
+The bias and coverage properties of the discrete profile method was tested 
 using a large ensemble of
-pseudo-experiments (``toys''). For each of these, a toy
-dataset including signal and background events was generated using a Monte Carlo technique. Toy datasets were generated, and consequently the bias and coverage properties tested, under various different background hypotheses and for different values of the signal strength, $\mu$. The background function from which the Monte Carlo events where generated was chosen to be one of the power law,
+pseudo-experiments (``toys''). In each pseudo-experiment, a 
+dataset including signal and background events was generated using a Monte Carlo technique. 
+Ensembles were generated, and consequently the bias and coverage properties tested, under various different background hypotheses and for different values of the signal strength, $\mu$. The background function from which the Monte Carlo events where generated was chosen to be one of the power law,
 exponential or Laurent two-parameter functions discussed above in 
 section~\ref{sec:functions:function}. The background parameters for generating the toys are set to their best fit values for the given value of $\mu$. 
 
@@ -154,25 +155,25 @@ as its parameters, was chosen according to the best fit for each value of $\mu$.
 figure~\ref{fig:functions:envelope}, this means that for values of $\mu < 0.55$ the exponential background 
 function will be used and it will be a power law function otherwise.
 Conceptually, this method again
-treats the function choice as a discrete nuisance parameter and so picks the
+treats the choice of function as a discrete nuisance parameter and so picks the
 best fit values of {\em all\/} nuisance parameters for each $\mu$ value.
 
-The resulting toy datasets are now treated identically to the original dataset. The bias and coverage are assessed by calculating the fitted signal strength, $\mu$, and its error, $\sigma$, for each toy when using different background models. The background functions tested were the four two-parameter functions discussed above and additionally the result of forming the envelope around all four (in other words the result of treating the function choice as a discrete nuisance parameter). 
+The resulting toy datasets are now treated identically to the original dataset. The bias and coverage are assessed by calculating the fitted signal strength, $\mu$, and its error, $\sigma$, for each toy when using different background models. The background functions tested were the four two-parameter functions discussed above and additionally the result of forming the envelope around all four (in other words the result of treating the choice of function as a discrete nuisance parameter). 
 
 We define the bias as the mean of the pull distribution, where the pull for an individual toy is defined as
 \begin{equation}
 	p(\mu,\sigma) = \frac{\hat{\mu}-\mu}{\sigma},
 \end{equation}
-where $\mu$ is the generated value of the signal strength, $\hat{\mu}$ is fitted value of $\mu$ per toy and $\sigma$ is the upper error on $\mu$ if $\mu<\hat{\mu}$ and is the lower error on $\mu$ if $\mu>\hat{\mu}$. The results of the mean pull and as a function of the generated signal strength are shown in figure~\ref{fig:functions:firstorderbias}. It can be seen, as one would expect, that when fitting back with the same background function as used to generate the toy dataset, the bias is negligible. However, when fitting back with a different background function the bias can be large; here up to $\sim 0.5\sigma$. The envelope (discrete profiling) method seems to find a medium between these two in which the bias is small ($\sim 0.1\sigma$) regardless of the generating function used. This is important given that in the real life situation the true underlying function is unknown.
-It is also shown that the bias is not dependent on the value of the generated signal strength.
+where $\mu$ is the generated value of the signal strength, $\hat{\mu}$ is the fitted value of $\mu$ per toy and $\sigma$ is the positive error on $\hat{\mu}$ if $\hat{\mu} < \mu$ and is the negative error on $\hat{\mu}$ if $\hat{\mu} > \mu$. The results of the mean pull as a function of the generated signal strength are shown in figure~\ref{fig:functions:firstorderbias}. It can be seen, as one would expect, that when fitting back with the same background function as used to generate the toy dataset, the bias is negligible. It is also shown that the bias is not dependent on the value of $\mu$ used to generate the signal. However, when fitting back with a different background function the bias can be large; here up to half of the mean pull. The discrete profiling method provides a medium between these two in which the bias is small ($\sim$ one tenth of the mean pull) regardless of the generating function used. This is important given that this method is to be applied when the true underlying function is unknown.
+
 %
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.48\textwidth]{functions/FirstOrderFunctions.pdf}
 \caption{Average pull when fitting with each function as background and when
-using the envelope. The first, second and third panels show the results
+using the discrete profiling method. The first, second and third panels show the results
 when the generating background function is power law, exponential and Laurent,
-respectively. The lowest plot show the result when the best-fit function at each
+respectively. The last plot shows the result when the best-fit function at each
 value of $\mu$ is used to generate toys; this means the exponential function
 below $\mu = 0.55$ and the power law function above this value. Within each panel the different
 points correspond to a different fitting function: Laurent (solid green), power law (open blue), exponential (open red) and the envelope of all four two-parameter functions (solid black). In all cases,
@@ -180,7 +181,7 @@ fitting with the polynomial gives values outside the range of these plots.}
 \label{fig:functions:firstorderbias}
 \end{figure}
 
-The coverage was tested, using the same fits, by determining the fraction of toys for which the \nll difference between the best fit and the true value of $\mu$ was less than 0.25, 1, 4 and 9 (to determine the coverage for the 38.3\%, 68.3\%, 95.4\% and 99.7\% intervals respectively). The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different to the generating function there can be some under-coverage, whereas when using the envelope method the coverage remains well behaved regardless of the generating function. It is also apparent that the coverage is not dependent on the value of the generated signal strength.
+The coverage was tested, using the same fits, by determining the frequency of toys in which the difference in \nll between the best fit and the true value of $\mu$ was less than 0.25, 1, 4 and 9 and compared to the expected frequencies, 38.3\%, 68.3\%, 95.4\% and 99.7\% respectively. The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different to the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. The coverage is found to be good independently of the value of $\mu$ used to generate the signal.
 %
 \begin{figure}[tbp]
 \centering
