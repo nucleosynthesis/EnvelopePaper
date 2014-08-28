@@ -17,7 +17,7 @@ without any ``penalty'' for the number of parameters would effectively
 always result in the minimum envelope being mainly defined by the highest
 order function considered. It would also mean there is no ``natural'' way to know when
 to no longer consider yet more higher order functions. However, decision based
-on quantities, such as an F-test,~\ref{ftest},
+on quantities, such as an F-test~\cite{ref:ftest},
 are standardly used to determine when higher order functions in
 a family can be ignored. Hence, when using functions with different
 numbers of parameters, it seems necessary to have some correction to the \nll
@@ -66,9 +66,11 @@ only considering one fit function.
 However, it can be seen that the correction is approximately given by
 \begin{displaymath}
 \chi^{\prime 2} - \chi^2 \approx N_{\rm par}
+\qquad{\rm so}\qquad
+\Lambda_{\mathrm{corr}} \approx \textrm{\nll} + N_{\rm par}
 \end{displaymath}
 for the central range of p-values. This approximation means the 
-\nll shape, and hence coverage, is unchanged. Both the exact p-value
+$\Lambda_{\mathrm{corr}}$ shape, and hence coverage, is unchanged. Both the exact p-value
 correction and the $N_{\rm par}$ approximate correction are used in this paper.
 %
 \begin{figure}[tbp]
@@ -88,7 +90,7 @@ The Akaike basic formula for very large sample sizes is
 \begin{displaymath}
 \Lambda_{\mathrm{corr}} = \textrm{\nll} + 2N_{\rm par}
 \end{displaymath}
-The resulting value of $A$ is considered here as the corrected \nll,
+%The resulting value of $A$ is considered here as the corrected \nll,
 so the correction is simply $ 2N_{\rm par}$ and
 hence is twice as big as the approximate p-value correction.
 For finite samples, then it is modified to
@@ -156,7 +158,7 @@ Hence, the envelope is formed from four different functions in this
 case. Figure~\ref{fig:correction:profiles} also shows the 68.3\% and 
 95.4\% confidence intervals which would be determined from the 
 profile envelope. The 68.3\% region is identical to that found using
-just the two-parameter functions (Sec~\ref{sec:functions:example}), but
+just the two-parameter functions (see Section~\ref{sec:functions:example}), but
 when including higher order functions, the 95.4\% confidence interval 
 on $\mu$ is $-0.18 < \mu < 2.11$,
 i.e. it is extended to higher $\mu$
@@ -213,9 +215,10 @@ polynomial with $N_{\rm par}=5$, Laurent with $N_{\rm par}=2$,
 power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
 The lowest plot show the result when the best-fit function at each
 value of $\mu$ is used to generate toys.
-For each plot, the results for the three correction methods are shown,
-namely the approximate p-value (``$c=1$''), exact p-value (``$c=p(\chi^2)$'')
-and Akaike (``$c=2$'').}
+%For each plot, the results for the three correction methods are shown,
+%namely the approximate p-value (``$c=1$''), exact p-value (``$c=p(\chi^2)$'')
+%and Akaike (``$c=2$'').
+}
 \label{fig:correction:allorderbias}
 \end{figure}
 
@@ -228,10 +231,10 @@ Akaike correction.
 %
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.48\textwidth]{{correction/AllOrderFunctions_Coverage_0.5_call}.pdf}
-\includegraphics[width=0.48\textwidth]{{correction/AllOrderFunctions_Coverage_1._call}.pdf}\\
-\includegraphics[width=0.48\textwidth]{{correction/AllOrderFunctions_Coverage_2._call}.pdf}
-\includegraphics[width=0.48\textwidth]{{correction/AllOrderFunctions_Coverage_3._call}.pdf}
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_0.5_call}.pdf}
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_1._call}.pdf}\\
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_2._call}.pdf}
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_3._call}.pdf}
 \caption{Fraction of toys in which the fitted value of $\mu$ is within the 38.3\%, 68.3\%, 95.4\% and 
 99.7\% intervals relative to the expected fraction for that interval 
 when correcting 
@@ -244,11 +247,21 @@ polynomial with $N_{\rm par}=5$, Laurent with $N_{\rm par}=2$,
 power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
 The lowest plot show the result when the best-fit function at each
 value of $\mu$ is used to generate toys.
-For each plot, the results for the three correction methods are shown,
-namely the approximate p-value (``$c=1$''), exact p-value (``$c=p(\chi^2)$'')
-and Akaike (``$c=2$'').}
+%For each plot, the results for the three correction methods are shown,
+%namely the approximate p-value (``$c=1$''), exact p-value (``$c=p(\chi^2)$'')
+%and Akaike (``$c=2$'').
+}
 \label{fig:correction:allordercoverage}
 \end{figure}
+
+Hence, overall the two p-value correction methods seem to give effectively 
+identical results and also perform better than the Akaike correction method.
+In practical terms, the approximate p-value correction method is much easier
+to implement than the exact method
+and also can be applied to an unbinned fit (where the $\chi^2$
+is not approximately given by the \nll value). For these reasons, the approximate
+p-value correction was used throughout the Higgs
+to two-photon analysis~\cite{ref:introduction:legacy}.
 
 Figure~\ref{fig:correction:compareerrors} shows the distribution of the 68.3\%
  uncertainty on $\mu$ 
@@ -264,7 +277,7 @@ when considering the envelope of functions are from fits in which functions othe
 best fitting function contribute to the 68.3\% interval. As expected, correcting using a higher 
 penalty reduce the size of this tail since in this case, it is less likely that a higher order 
 function can contribute.
- 
+%
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.45\textwidth]{correction/compare_error_magnitude.pdf}

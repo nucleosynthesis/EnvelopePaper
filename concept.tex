@@ -47,11 +47,11 @@ Consider this absolute minimum in \nll: if the nuisance parameters at that
 point were fixed, then the \nll profile curve would be steeper than for
 the original overall \nll curve. This directly reflects the fact that
 if the nuisance parameters had no uncertainty,
-the error on $\mu$ would be reduced, i.e. there would be no systematic 
+the error on $x$ would be reduced, i.e. there would be no systematic 
 uncertainty arising from this source.
 The same is true for any other point on the original curve; if the nuisance
-parameters were not allowed to vary, each would result in a new steeper curve
-with a minimum above the original curve.
+parameters were not allowed to vary, each would result in a new steeper curve,
+in these cases with a minimum above the original curve.
 The width of these curves would again only be affected by the statistical
 power of the dataset being fitted, not by the systematic errors encompassed
 in the nuisance parameters.
@@ -102,10 +102,11 @@ The method of picking various sets of nuisance parameters and finding
 an envelope can conceptually be applied to the background function
 uncertainty. Each background function considered can be labelled by an
 integer. The integer is then treated as a (discrete) nuisance parameter
-for the profile calculation.
+for the profile calculation and hence this method has been termed
+``discrete profiling''.
 The minimum envelope then gives the overall profile curve including
 all functions considered. This automatically includes any systematic error
-arising from the function choice as the envelope will in general be broader
+arising from the function choice, as the envelope will in general be broader
 than any of the individual function curves which contribute to the envelope.
 
 In practical terms, most minimisation routines 
@@ -113,7 +114,8 @@ cannot easily handle a discrete parameter, particularly when the
 number and values of the other parameters of the fit (i.e. the parameters
 of the functions) change with the discrete parameter.
 Hence, in practice it has
-to be handled by mixing the methods, i.e. choose each function and minimise
+to be handled by mixing the methods as discussed in the previous section,
+i.e. choose each function and minimise
 the other parameters in the usual way to give a profile curve for each function
 in turn. 
 

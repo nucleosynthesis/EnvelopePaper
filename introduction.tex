@@ -15,7 +15,7 @@ A common approach is to try various different plausible functions and
 determine the spread of the signal parameters when using these functions.
 However, these methods tend to have some degree of arbitrariness and so
 a new approach is discussed in this paper.
-This method was developed as part of the analysis of data at the CMS experiment
+This new method was developed as part of the analysis of data at the CMS experiment
 following the discovery of the Higgs
 boson~\cite{ref:introduction:atlasdis,ref:introduction:cmsdis}.
 It was applied to the case where the Higgs decays to two photons, which
@@ -41,15 +41,16 @@ the Higgs measurements, is given in Section~\ref{sec:discussion}.
 
 Within this paper, twice the negative of the logarithm of the likelihood
 function is denoted by \nll. The fits discussed are binned and the 
-likelihood used for each bin is the likelihood ratio to the best
+likelihood used for each bin is the Poisson likelihood ratio to the best
 possible likelihood given the observed data, i.e.
 \begin{equation}
-{\rm \nll} = \mu_i - n_i + n_i \log\left(\frac{n_i}{\mu_i}\right),
+{\rm \nll} = \mu_i - n_i + n_i \ln\left(\frac{n_i}{\mu_i}\right),
 \label{eqn:introduction:def2NLL}
 \end{equation}
 where $n_{i}$ are the observed and $\mu_{i}$ is the expected number of events 
-given a particular background model in the $i-$th bin. 
+given a particular background model in the $i^{th}$ bin. 
 
 For the purposes of fitting and generating datasets, the statistics package 
 ``RooFit'' is used throughout this paper~\cite{ref:roofit}. 
+
 %FREQUENTIST UNLESS OTHERWISE STATED (ALSO SEE DISCUSSION)?
