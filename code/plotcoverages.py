@@ -51,7 +51,7 @@ covCanvs = []
 for i,c in enumerate(cvals):
   	can = ROOT.TCanvas("c%d"%i,"c%d"%i,600,800)
   	covCanvs.append(can)
-  	leg = ROOT.TLegend(0.72,0.52,0.89,0.89)
+  	leg = ROOT.TLegend(0.72,0.4,0.89,0.89)
   	leg.SetFillColor(0)
 
   	pads = []
@@ -88,7 +88,7 @@ for i,c in enumerate(cvals):
 	for i,g in enumerate(gens):
 	 #make some pads?
 	 latlab = ROOT.TLatex()
-	 latlab.SetTextSize(0.08)
+	 latlab.SetTextSize(0.12)
 	 latlab.SetNDC()
 	 latlab.SetTextAngle(90)
 	 p = ROOT.TPad(g,g,0,dy+float(i)*width,1,dy+float(i+1)*width)

@@ -105,7 +105,7 @@ for i,c in enumerate(cvals):
 	for i,g in enumerate(gens):
 	 #make some pads?
 	 latlab = ROOT.TLatex()
-	 latlab.SetTextSize(0.08)
+	 latlab.SetTextSize(0.1)
 	 latlab.SetNDC()
 	 latlab.SetTextAngle(90)
 	 p = ROOT.TPad(g,g,0,dy+float(i)*width,1,dy+float(i+1)*width)
