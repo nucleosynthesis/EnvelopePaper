@@ -28,14 +28,14 @@ cases where more than one parameter is being estimated.
 
 It is useful to consider briefly the usual way in which nuisance 
 parameters are used to incorporate systematic errors. Consider measuring a signal
-strength for a known background functional shape, but with unknown function
+property for a known background functional shape, but with unknown function
 parameters. The background parameters themselves are considered as
 nuisance parameters, since their actual values are not of interest.
-When fitting for the signal size $\mu$, then twice the negative logarithm of the
-likelihood (\nll) is minimised with respect to $\mu$ and all the background
+When fitting for a parameter of interest $x$, then twice the negative logarithm of the
+likelihood (\nll) is minimised with respect to $x$ and all the
 nuisance parameters. It is usual to construct a profile likelihood
-such that \nll is minimised for each value of $\mu$ over a range. 
-The (for example) 68.3\% confidence interval of $\mu$ 
+such that \nll is minimised for each value of $x$ over a range. 
+The (for example) 68.3\% confidence interval of $x$ 
 is then
 taken as the region for which \nll is less than ${\rm \nll}_{BF}+1$,
 where ${\rm \nll}_{BF}$ is the best-fit value at the overall minimum. 
@@ -60,7 +60,7 @@ many other sets of nuisance parameters which do not result in a point on the
 original profile curve. Fixing the parameters to these values will also result
 in further curves which are enclosed by the original profile curve.
 The critical point is that the overall \nll minimum profile curve as a function
-of $\mu$ encloses the curves for all possible values of the nuisance
+of $x$ encloses the curves for all possible values of the nuisance
 parameters.
 
 Now consider finding the profile curve in a different way, illustrated

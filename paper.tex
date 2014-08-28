@@ -1,5 +1,6 @@
 \pdfoutput=1 % only if pdf/png/jpg images are used
 \documentclass{JINST}
+\usepackage{xspace}
 \let\ifpdf\relax
 \title{Handling uncertainties in background shapes: the discrete profiling method}
 
@@ -27,7 +28,7 @@ a realistic example.
 \keywords{Analysis and statistical methods; Simulation methods and programs}
 
 \begin{document}
-\newcommand{\nll}{-2LogL~}
+\newcommand{\nll}{\ensuremath{\Lambda}\xspace}
 
 \input introduction.tex
 \input concept.tex

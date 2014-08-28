@@ -43,7 +43,7 @@ value can now be obtained, namely that which would give the same p-value but
 with a different number of degrees of freedom, equal to the number of bins.
 The corrected \nll is then given by
 \begin{displaymath}
-C = \chi^{\prime 2} = \textrm{\nll} + (\chi^{\prime 2} - \chi^2)
+\Lambda_{\mathrm{corr}} = \chi^{\prime 2} = \textrm{\nll} + (\chi^{\prime 2} - \chi^2)
 \end{displaymath}
 Besides being a function of the number of bins and parameters,
 the size of the correction $\chi^{\prime 2} - \chi^2$
@@ -86,14 +86,14 @@ the $\chi^2$ assuming a flat p-value distribution is shown on the right.}
 \item %[Akaike]
 The Akaike basic formula for very large sample sizes is
 \begin{displaymath}
-A = \textrm{\nll} + 2N_{\rm par}
+\Lambda_{\mathrm{corr}} = \textrm{\nll} + 2N_{\rm par}
 \end{displaymath}
 The resulting value of $A$ is considered here as the corrected \nll,
 so the correction is simply $ 2N_{\rm par}$ and
 hence is twice as big as the approximate p-value correction.
 For finite samples, then it is modified to
 \begin{displaymath}
-A 
+\Lambda_{\mathrm{corr}} 
 = \textrm{\nll} + 2N_{\rm par}  + \frac{2N_{\rm par}(N_{\rm par}+1)}{n-(N_{\rm par}+1)}
 = \textrm{\nll} + \frac{2N_{\rm par}}{1-(N_{\rm par}+1)/n}
 \end{displaymath}
@@ -148,7 +148,7 @@ function, also as for the previous case.
 Indeed, comparison to figure~\ref{fig:functions:profiles} shows that the
 minimum values of the corrected \nll for low $\mu$
 are simply two units larger here than in that figure.
-However, for $1.48 < \mu < 1.69$ 
+However, for $1.48 < \mu < 1.68$ 
 the $N_{\rm par}=5$ polynomial is the lowest function in the profile,
 while for $\mu > 1.68$,
 the $N_{\rm par}=6$ polynomial is lowest.
@@ -204,7 +204,7 @@ that the p-value corrections always give less bias than the Akaike correction.
 %
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.45\textwidth]{correction/AllOrderFunctions_call.pdf}
+\includegraphics[width=0.48\textwidth]{correction/AllOrderFunctions_call.pdf}
 \caption{Average pull when fitting using the envelope as a function of $\mu$ 
 used to generate the signal. Each panel shows the average bias when using 
 a different background function for toy generation, with the functions
@@ -228,10 +228,10 @@ Akaike correction.
 %
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_0.5_call}.pdf}
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_1._call}.pdf}\\
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_2._call}.pdf}
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_3._call}.pdf}
+\includegraphics[width=0.48\textwidth]{{correction/AllOrderFunctions_Coverage_0.5_call}.pdf}
+\includegraphics[width=0.48\textwidth]{{correction/AllOrderFunctions_Coverage_1._call}.pdf}\\
+\includegraphics[width=0.48\textwidth]{{correction/AllOrderFunctions_Coverage_2._call}.pdf}
+\includegraphics[width=0.48\textwidth]{{correction/AllOrderFunctions_Coverage_3._call}.pdf}
 \caption{Fraction of toys in which the fitted value of $\mu$ is within the 38.3\%, 68.3\%, 95.4\% and 
 99.7\% intervals relative to the expected fraction for that interval 
 when correcting 

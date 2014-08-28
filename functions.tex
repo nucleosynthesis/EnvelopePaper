@@ -107,7 +107,7 @@ but now the standard error is enlarged by the exponential function
 contribution to the
 envelope on the lower side of the scan. Hence, taking all four functions into
 account, the 68.3\% confidence interval on $\mu$ is
-$0.27 < \mu < 1.40 $, i.e. the lower limit from the exponential fit and the
+$0.37 < \mu < 1.40 $, i.e. the lower limit from the exponential fit and the
 upper limit from the power law fit,
 and the measured value of $\mu$ which would now be quoted is 
 $\mu = 0.93_{-0.56}^{+0.47}$.
@@ -137,61 +137,46 @@ for which the value of \nll increases by 1 and 4 units from the minimum value as
 The discrete profile method was tested for bias and coverage 
 using a large ensemble of
 pseudo-experiments (``toys''). For each of these, a toy
-dataset including signal and background events is generated using a Monte Carlo technique. 
-The background function was chosen to be one of the four two-parameter functions discussed above, with
-the parameters set to their best fit values for each value of $\mu$.
-Several ensembles of toy pseudo-experiments were 
-generated varying the normalization of the signal function in order to test the properties 
-of the method as a function of the parameter $\mu$.  
+dataset including signal and background events is generated using a Monte Carlo technique. Toy datasets were generated, and consequently the bias and coverage properties tested, under various different background hypotheses and for different values of the signal strength, $\mu$. The background function from which the Monte Carlo events where generated was chosen to be one of the ``Power Law", ``Exponential" or ``Laurent" two-parameter functions discussed above in section~\ref{sec:functions:function}. The background parameters for generating the toys are set to their best fit values for the given value of $\mu$. 
 
-In addition, a further ensemble of toy datasets was generated, for which the
-background function itself, as well as its parameters, was chosen according to
-the best fit for each value of $\mu$. From figure~\ref{fig:functions:profiles},
-it can be seen that this means the exponential function is used for $\mu<0.55$
-and the power law function is used otherwise. Conceptually, this method again
+In addition, a further ensemble of toy datasets was generated, for which the background function itself, as well 
+as its parameters, was chosen according to the best fit for each value of $\mu$. As can be seen from 
+figure~\ref{fig:functions:envelope}, this means that for values of $\mu < 0.55$ the ``Exponential" background 
+function will be used and it will be a ``Power Law" otherwise. Conceptually, this method again
 treats the function choice as a discrete nuisance parameter and so picks the
 best fit values of all parameters for each $\mu$ value.
 
-In all cases, the resulting toy datasets were then treated identically to the
-original dataset, with a fit for the relative signal strength using
-each of the four functions as background, and then forming the envelope.
-For each ensemble of datasets, the mean pull of the relative
-signal strength was determined. Figure~\ref{fig:functions:firstorderbias}
-shows the result of these fits. It is seen that the envelope gives a
-relatively small
-bias ($\sim 0.1\sigma$) for all cases, 
-which is not the case when choosing to use
-any one specific function.
-%
+The resulting toy datasets are now treated identically to the original dataset. The bias and coverage are assessed by calculating the fitted signal strength, $\mu$, and its error, $\sigma$, for each toy when using different background models. The background functions tested were the four two-parameter functions discussed above and additionally the result of forming the envelope around all four (in other words the result of treating the function choice as a discrete nuisance parameter). 
+
+We define the bias as the mean of the pull distribution, where the pull for an individual toy is defined as
+\begin{equation}
+	p(\mu,\sigma) = \frac{\hat{\mu}-\mu}{\sigma},
+\end{equation}
+where $\mu$ is the generated value of the signal strength, $\hat{\mu}$ is fitted value of $\mu$ per toy and $\sigma$ is the upper error on $\mu$ if $\mu<\hat{\mu}$ and is the lower error on $\mu$ if $\mu>\hat{\mu}$. The results of the mean pull and as a function of the generated signal strength are shown in figure~\ref{fig:functions:firstorderbias}. It can be seen, as one would expect, that when fitting back with the same background function as used to generate the bias is negligible. However, when fitting back with a different background function the bias can be large. The envelope (discrete profiling) method seems to find a medium between these two in which the bias is small ($\sim 0.1\sigma$) regardless of the generating function used. This is important given that in the real life situation the true underlying function is unknown. It is clear that the bias is not dependent on the value of the generated signal strength.
+
+
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.45\textwidth]{functions/FirstOrderFunctions.pdf}
+\includegraphics[width=0.48\textwidth]{functions/FirstOrderFunctions.pdf}
 \caption{Average pull when fitting with each function as background and when
-using the envelope. The first, second and third plots shows the results
+using the envelope. The first, second and third panels show the results
 when the generating background function is power law, exponential and Laurent,
 respectively. The lowest plot show the result when the best-fit function at each
 value of $\mu$ is used to generate toys; this means the exponential function
-below $\mu = 0.55$ and the power law function above this value. In all cases,
-the polynomial gives values outside the range of these plots.}
+below $\mu = 0.55$ and the power law function above this value. Within each panel the different
+points correspond to a different fitting function: Laurent (solid green), power law (open blue), exponential (open red) and the envelope of all four two-parameter functions (solid black). In all cases,
+fitting with the polynomial gives values outside the range of these plots.}
 \label{fig:functions:firstorderbias}
 \end{figure}
 
-% COMMENT ON BIAS FROM DISCRETE PARAMETER SPACE!
+The coverage was tested, using the same fits, by determining the fraction of toys for which the \nll difference between the best fit and the true value of $\mu$ was less than 0.25, 1, 4 and 9 (to determine the coverage for the 38.3\%, 68.3\%, 95.4\% and 99.7\% intervals respectively). The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different to the generating function there can be some under coverage, whereas when using the envelope method the coverage remains well behaved regardless of the generating function. It is also apparent that the coverage is not dependent on the value of the generated signal strength.
 
-The coverage was also determined from the same fits. The difference of the
-\nll between the best fit value and the true value of the relative signal 
-strength was found and the fraction of times this was less than 0.25, 1, 4 and 9, was
-determined. Figure~\ref{fig:functions:firstordercoverage}
-shows the result of these studies. It is seen that the envelope gives good
-coverage for all cases, which is again not the case for any of the specific 
-functions.
-%
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.45\textwidth]{{functions/FirstOrderFunctions_Coverage_0.5}.pdf}
-\includegraphics[width=0.45\textwidth]{{functions/FirstOrderFunctions_Coverage_1.}.pdf}\\
-\includegraphics[width=0.45\textwidth]{{functions/FirstOrderFunctions_Coverage_2.}.pdf}
-\includegraphics[width=0.45\textwidth]{{functions/FirstOrderFunctions_Coverage_3.}.pdf}
+\includegraphics[width=0.48\textwidth]{{functions/FirstOrderFunctions_Coverage_0.5}.pdf}
+\includegraphics[width=0.48\textwidth]{{functions/FirstOrderFunctions_Coverage_1.}.pdf}\\
+\includegraphics[width=0.48\textwidth]{{functions/FirstOrderFunctions_Coverage_2.}.pdf}
+\includegraphics[width=0.48\textwidth]{{functions/FirstOrderFunctions_Coverage_3.}.pdf}
 \caption{Fraction of toys in which the fitted value of $\mu$ is within the 38.3\%, 68.3\%, 95.4\% and 
 99.7\% intervals relative to the expected fraction for that interval using a single 
 function and using the envelope.
@@ -200,7 +185,9 @@ the first, second and third plots shows the results
 when the generating background function is power law, exponential and Laurent,
 respectively. The lowest plot in each subfigure
 show the result when the best-fit function at each
-value of $\mu$ is used to generate toys.}
+value of $\mu$ is used to generate toys. Within each panel the different
+points correspond to a different fitting function: Laurent (solid green), power law (open blue), exponential (open red) and the envelope of all four two-parameter functions (solid black). In all cases,
+fitting with the polynomial gives values outside the range of these plots.}
 \label{fig:functions:firstordercoverage}
 \end{figure}
 
