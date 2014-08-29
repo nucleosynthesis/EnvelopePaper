@@ -1,4 +1,5 @@
-#include <algo>
+#include <algorithm>
+#include <pair>
 #include <stdlib>
 #include "RooAbsArg.h"
 #include "getChisq.C"
@@ -10,8 +11,8 @@ bool RUNPVALCORRECTION=true;
 
 double MULOW = -1;
 double MUHIGH = 2.5;
-double MUSTEP = 0.05;
-double CORRECTION = 0.5; // (to NLL (not 2NLL) per parameter)
+double MUSTEP = 0.01;
+double CORRECTION = 0.0; // (to NLL (not 2NLL) per parameter)
 
 double YMIN=206;
 double YMAX=222;
@@ -42,7 +43,7 @@ void getMinPoint(TGraph *gr, double *xmin, double *ymin){
 	}
 }
 double getEnvelopeErrorUp(TGraph *envelope, double sigma){
-	
+
 	double minimumNll = 10000.;
 	double bfval  	  = 0.;
 	getMinPoint(envelope,&bfval,&minimumNll);
@@ -117,7 +118,7 @@ void randomizePars(RooArgSet &pars){
 }
 
 void calculateMinAndErrors(TGraph *envelope, double *min,double *max, double sig, int verb){
-	
+
 	std::cout << envelope->GetName() << std::endl;
 	double minimumNll = 10000.;
 	double bfval  	  = 0.;
@@ -126,7 +127,7 @@ void calculateMinAndErrors(TGraph *envelope, double *min,double *max, double sig
 	*max = getEnvelopeErrorUp(envelope,sig);
 	double elow =  bfval - *min;
 	double ehig =  *max - bfval;
-	if (verb) std::cout << "    mu(from-scan) = "<<bfval<<" ( @ 2xNll =  " << minimumNll << ") ,( " << sig << " sigma ) +" << ehig << " -" << elow << std::endl; 
+	if (verb) std::cout << "    mu(from-scan) = "<<bfval<<" ( @ 2xNll =  " << minimumNll << ") ,( " << sig << " sigma ) +" << ehig << " -" << elow << std::endl;
 }
 
 int countNonConstants(RooArgSet *pars){
@@ -144,7 +145,7 @@ int countNonConstants(RooArgSet *pars){
 	return npar;
 }
 
-TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
+pair<TGraph*,TGraph*> nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &mu){  // correction to NLL (not 2NLL)
 
 
    double xlow = MULOW;
@@ -154,15 +155,17 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    RooRealVar *var=(RooRealVar*)(pdf.getParameters((RooArgSet*)0)->find("CMS_hgg_mass"));
    mu.setConstant(true);
    TGraph *graph = new TGraph();
+	 TGraph *graph_corr = new TGraph();
    RooAbsReal *nll = pdf.createNLL(dat);
    RooMinimizer minim(*nll);
    minim.setStrategy(0);
 
    double cfactor;
-   cfactor = 2*corr*(countNonConstants(nll->getParameters(dat))); // remove mu !
+	 int ncorrpars = countNonConstants(nll->getParameters(dat)); // remove mu !
+   cfactor = 2*corr*ncorrpars;
 
 //   RooFitResult *res = pdf.fitTo(dat,RooFit::Save(1));
-   
+
    // minimize and them randomize (helps?)
 
 
@@ -186,10 +189,19 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
 	nllparams->assignValueOnly(prefitparams);
 	mu.setVal(x);
 	minim.minimize("Minuit","minimize");
-	
+
 	double nllvalue = getChisq(dat,pdf,*var,0);
 
 	graph->SetPoint(cpoint,x,nllvalue+cfactor);
+
+	// pval correction
+	int nbins = var->getBins();
+	double pvalEquiv = TMath::Prob(nllvalue,nbins-ncorrpars);
+	if (pvalEquiv < 1.e-10) pvalEquiv = 1.e-10;
+	double minnllEquiv = TMath::ChisquareQuantile(1.-pvalEquiv,nbins);
+
+	//cout << "nbins: " << nbins << " npars: " << ncorrpars << " nll: " << nllvalue << " pv: " << pvalEquiv << " nlle: " << minnllEquiv << " corr: " << nllvalue-minnllEquiv << endl;
+	graph_corr->SetPoint(cpoint,x,minnllEquiv-nllvalue);
 
 	if (nllvalue < minnll) {
 		minnll=nllvalue;
@@ -202,7 +214,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    graph->GetXaxis()->SetTitle("#mu");
    graph->GetYaxis()->SetTitle("#Lambda + Correction");
    mu.setVal(minmu);
-   // Set all parameters to best fit ones 
+   // Set all parameters to best fit ones
    nllparams->assignValueOnly(bfparams);
    mu.setConstant(false);
    // May be best to minimize overall once more to find absolute minimum
@@ -213,7 +225,7 @@ TGraph *nll2scan(double corr=0.5, RooAbsData &dat, RooAbsPdf &pdf, RooRealVar &m
    //nllparams->Print("v");
 //   nllparams->assignValueOnly((res->randomizePars()));
    graph->SetName(pdf.GetName());
-   return graph;   
+   return make_pair(graph,graph_corr);
 }
 
 const char * GetBkgName(const char* name){
@@ -234,16 +246,16 @@ const char * GetBkgName(const char* name){
    if (str.Contains("exp")) {
 	newname="Exponential Sum";
    }
-   
+
    for (int typ=0;typ<10;typ++){
 	if (str.EndsWith(Form("%d",typ)) ) { npar = typ+1; break;}
    }
 
 //   char np[1];
-//   itoa(npar,np,10); 
+//   itoa(npar,np,10);
    newname += std::string(" (")+std::string(Form("%d",npar))+ std::string("pars)");
    std::cout << newname.c_str() << std::endl;
-   return newname.c_str(); 
+   return newname.c_str();
 }
 
 int generateEnvelope(int ng,TGraph *graphs,TGraph *gr_env,double min,double max, double step, double *minimumnll){
@@ -269,11 +281,11 @@ int generateEnvelope(int ng,TGraph *graphs,TGraph *gr_env,double min,double max,
      }
    }
    *minimumnll=globalMin;
-   return bestpdf; 
+   return bestpdf;
 }
 
 void nllScan_allOrderFunctions(){
-	
+
    RooFit::RooMsgService::instance().setGlobalKillBelow(RooFit::FATAL);
    RooFit::RooMsgService::instance().setSilentMode(true);
    gROOT->ProcessLine(".x paperStyle.C");
@@ -290,12 +302,12 @@ void nllScan_allOrderFunctions(){
    //x->setRange("fitrnge",110,150);
    //x->setRange(110,150);
    //RooDataHist *datatoy = datatoy_in->reduce(RooFit::CutRange("fitrnge"));
-   // pre-emptive fiddling 
+   // pre-emptive fiddling
    //multipdf->var("env_pdf_1_8TeV_pow3_f1")->setVal(0.3);
-   
-   // Make a scan for all of these guys   
- 
-   // Additional parameters 
+
+   // Make a scan for all of these guys
+
+   // Additional parameters
    multipdf->var("sigma")->setConstant(true);
    multipdf->var("mean")->setConstant(true);
    RooRealVar *mu = multipdf->var("r");
@@ -330,42 +342,49 @@ void nllScan_allOrderFunctions(){
    TGraph *graphs = new TGraph[50] ;
    int ngCounter=0;
    if (DOPOL){
-   // Bernsteins 
+   // Bernsteins
    //while (arg = (RooAbsArg*)pdfit->Next()) {
    for (int typeco=0;typeco<maxpdfs;typeco++){
  	// The pdf made from the new background model
         RooAbsPdf *bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_bern%d",typeco));
 	if (!bkg_pdf) continue;
    	RooAddPdf spdf(Form("splusb_%s",bkg_pdf->GetName()),"splusb",RooArgList(*sig_pdf,*bkg_pdf),RooArgList(*nsig,*nbkg));
-	TGraph *gr = nll2scan(CORRECTION,*datatoy,spdf,*mu);
+	pair<TGraph*,TGraph*> gr_pair = nll2scan(CORRECTION,*datatoy,spdf,*mu);
+	TGraph *gr = gr_pair.first;
+	TGraph *gr_corr = gr_pair.second;
 	if (pdfit_c!=0 && pdfit_c%6==0) style++;
 	gr->SetLineColor(color[pdfit_c%7]);
 	gr->SetLineStyle(style);
-	
+	gr->SetName(TString(bkg_pdf->GetName())+"_gr");
+	gr_corr->SetName(TString(bkg_pdf->GetName())+"_gr_corr");
+	outfits->cd();
+	gr->Write();
+	gr_corr->Write();
+
 	//gr->Draw("AL");
 	gr->Draw("L");
 	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
 	leg->AddEntry(gr,GetBkgName(bkg_pdf->GetName()),"L");
 //	listofpdfs.Add(gr);
         pdfit_c++;
-   	calculateMinAndErrors(gr,&mlow,&mhigh,1,1);	
-	
-	RooPlot *frnew = x->frame(); 
+   	calculateMinAndErrors(gr,&mlow,&mhigh,1,1);
+
+	RooPlot *frnew = x->frame();
 	TCanvas *cnew = new TCanvas(bkg_pdf->GetName(),"canv",800,600);
 	cnew->cd();
-	datatoy->plotOn(frnew,RooFit::Binning(BINS));	
-	spdf.plotOn(frnew);	
-	spdf.paramOn(frnew);	
+	datatoy->plotOn(frnew,RooFit::Binning(BINS));
+	spdf.plotOn(frnew);
+	spdf.paramOn(frnew);
 	frnew->Draw();
 	outfits->cd();
 	cnew->Write();
-	
+
 	can->cd();
 	graphs[ngCounter]=*(TGraph*)gr->Clone();
 	ngCounter++;
    }
    }
-   //  
+   //
    //while (arg = (RooAbsArg*)pdfit->Next()) {
    if (DOEXP){
    for (int typeco=0;typeco<maxpdfs;typeco++){
@@ -375,11 +394,18 @@ void nllScan_allOrderFunctions(){
         else bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_exp%d",typeco));
 	if (!bkg_pdf) continue;
    	RooAddPdf spdf(Form("splusb_%s",bkg_pdf->GetName()),"splusb",RooArgList(*sig_pdf,*bkg_pdf),RooArgList(*nsig,*nbkg));
-	TGraph *gr = nll2scan(CORRECTION,*datatoy,spdf,*mu);
+	pair<TGraph*,TGraph*> gr_pair = nll2scan(CORRECTION,*datatoy,spdf,*mu);
+	TGraph *gr = gr_pair.first;
+	TGraph *gr_corr = gr_pair.second;
 	if (pdfit_c!=0 && pdfit_c%6==0) style++;
 	gr->SetLineColor(color[pdfit_c%7]);
 	gr->SetLineStyle(style);
-	
+	gr->SetName(TString(bkg_pdf->GetName())+"_gr");
+	gr_corr->SetName(TString(bkg_pdf->GetName())+"_gr_corr");
+	outfits->cd();
+	gr->Write();
+	gr_corr->Write();
+
 	if (pdfit_c == 0) gr->Draw("L");
 	else gr->Draw("L");
 	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
@@ -388,17 +414,17 @@ void nllScan_allOrderFunctions(){
         pdfit_c++;
 
    	calculateMinAndErrors(gr,&mlow,&mhigh,1,1);
-	RooPlot *frnew = x->frame(); 
+	RooPlot *frnew = x->frame();
 	TCanvas *cnew = new TCanvas(bkg_pdf->GetName(),"canv",800,600);
 	cnew->cd();
-	datatoy->plotOn(frnew,RooFit::Binning(BINS));	
-	spdf.plotOn(frnew);	
-	spdf.paramOn(frnew);	
+	datatoy->plotOn(frnew,RooFit::Binning(BINS));
+	spdf.plotOn(frnew);
+	spdf.paramOn(frnew);
 	frnew->Draw();
 	outfits->cd();
 	cnew->Write();
 	can->cd();
-	
+
 	graphs[ngCounter]=*(TGraph*)gr->Clone();
 	ngCounter++;
    }
@@ -413,25 +439,32 @@ void nllScan_allOrderFunctions(){
         else bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_pow%d",typeco));
 	if (!bkg_pdf) continue;
    	RooAddPdf spdf(Form("splusb_%s",bkg_pdf->GetName()),"splusb",RooArgList(*sig_pdf,*bkg_pdf),RooArgList(*nsig,*nbkg));
-	TGraph *gr = nll2scan(CORRECTION,*datatoy,spdf,*mu);
+	pair<TGraph*,TGraph*> gr_pair = nll2scan(CORRECTION,*datatoy,spdf,*mu);
+	TGraph *gr = gr_pair.first;
+	TGraph *gr_corr = gr_pair.second;
 	if (pdfit_c!=0 && pdfit_c%6==0) style++;
 	gr->SetLineColor(color[pdfit_c%7]);
 	gr->SetLineStyle(style);
-	
+	gr->SetName(TString(bkg_pdf->GetName())+"_gr");
+	gr_corr->SetName(TString(bkg_pdf->GetName())+"_gr_corr");
+	outfits->cd();
+	gr->Write();
+	gr_corr->Write();
+
 	if (pdfit_c == 0) gr->Draw("L");
 	else gr->Draw("L");
 	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
 	leg->AddEntry(gr,GetBkgName(bkg_pdf->GetName()),"L");
 	//listofpdfs.Add(gr);
         pdfit_c++;
-	
+
    	calculateMinAndErrors(gr,&mlow,&mhigh,1,1) ;
-	RooPlot *frnew = x->frame(); 
+	RooPlot *frnew = x->frame();
 	TCanvas *cnew = new TCanvas(bkg_pdf->GetName(),"canv",800,600);
 	cnew->cd();
-	datatoy->plotOn(frnew,RooFit::Binning(BINS));	
-	spdf.plotOn(frnew);	
-	spdf.paramOn(frnew);	
+	datatoy->plotOn(frnew,RooFit::Binning(BINS));
+	spdf.plotOn(frnew);
+	spdf.paramOn(frnew);
 	frnew->Draw();
 	outfits->cd();
 	cnew->Write();
@@ -441,7 +474,7 @@ void nllScan_allOrderFunctions(){
 	ngCounter++;
    }
    }
-   
+
    if (DOLAU){
    for (int typeco=0;typeco<maxpdfs;typeco++){
  	// The pdf made from the new background model
@@ -450,11 +483,18 @@ void nllScan_allOrderFunctions(){
         else bkg_pdf = multipdf->pdf(Form("env_pdf_1_8TeV_lau%d",typeco));
 	if (!bkg_pdf) continue;
    	RooAddPdf spdf(Form("splusb_%s",bkg_pdf->GetName()),"splusb",RooArgList(*sig_pdf,*bkg_pdf),RooArgList(*nsig,*nbkg));
-	TGraph *gr = nll2scan(CORRECTION,*datatoy,spdf,*mu);
+	pair<TGraph*,TGraph*> gr_pair = nll2scan(CORRECTION,*datatoy,spdf,*mu);
+	TGraph *gr = gr_pair.first;
+	TGraph *gr_corr = gr_pair.second;
 	if (pdfit_c!=0 && pdfit_c%6==0) style++;
 	gr->SetLineColor(color[pdfit_c%7]);
 	gr->SetLineStyle(style);
-	
+	gr->SetName(TString(bkg_pdf->GetName())+"_gr");
+	gr_corr->SetName(TString(bkg_pdf->GetName())+"_gr_corr");
+	outfits->cd();
+	gr->Write();
+	gr_corr->Write();
+
 	if (pdfit_c == 0) gr->Draw("L");
 	else gr->Draw("L");
 	spdf.plotOn(pl,RooFit::LineColor(color[pdfit_c%7]),RooFit::LineStyle(style));
@@ -462,12 +502,12 @@ void nllScan_allOrderFunctions(){
 	//listofpdfs.Add(gr);
         pdfit_c++;
    	calculateMinAndErrors(gr,&mlow,&mhigh,1,1);
-	RooPlot *frnew = x->frame(); 
+	RooPlot *frnew = x->frame();
 	TCanvas *cnew = new TCanvas(bkg_pdf->GetName(),"canv",800,600);
 	cnew->cd();
-	datatoy->plotOn(frnew,RooFit::Binning(BINS));	
-	spdf.plotOn(frnew);	
-	spdf.paramOn(frnew);	
+	datatoy->plotOn(frnew,RooFit::Binning(BINS));
+	spdf.plotOn(frnew);
+	spdf.paramOn(frnew);
 	frnew->Draw();
 	outfits->cd();
 	cnew->Write();
@@ -495,8 +535,8 @@ void nllScan_allOrderFunctions(){
    int bestPdf = generateEnvelope(ngCounter,graphs,gr_env,MULOW,MUHIGH,MUSTEP,&globalMin);  // no additional correction
    std::cout << "Best pdf " << bestPdf << std::endl;
    std::cout << " ********************************************************" << std::endl;
-   double mlow=0,mhigh=0; 
-   double mlow2=0,mhigh2=0; 
+   double mlow=0,mhigh=0;
+   double mlow2=0,mhigh2=0;
    std::cout << calculateMinAndErrors(gr_env,&mlow,&mhigh,1,1) << std::endl;
    std::cout << " ********************************************************" << std::endl;
 
@@ -515,19 +555,19 @@ void nllScan_allOrderFunctions(){
    TLine *lin = new TLine(MULOW,minll,MUHIGH,minll);
    TLine *lin2 = new TLine(MULOW,minll+1,MUHIGH,minll+1);
    TLine *lin3 = new TLine(MULOW,minll+4,MUHIGH,minll+4);
-   lin->SetLineColor(1); 
-   lin2->SetLineColor(1); 
+   lin->SetLineColor(1);
    lin2->SetLineColor(1);
-   lin->SetLineWidth(2); 
-   lin3->SetLineWidth(2); 
+   lin2->SetLineColor(1);
+   lin->SetLineWidth(2);
+   lin3->SetLineWidth(2);
    lin2->SetLineWidth(2);
-   lin->SetLineStyle(2); 
+   lin->SetLineStyle(2);
    lin2->SetLineStyle(2);
    lin3->SetLineStyle(2);
    TGraphAsymmErrors *newg = new TGraphAsymmErrors() ;
    TGraphAsymmErrors *newg2 = new TGraphAsymmErrors() ;
    int np = 0;
-    
+
    for (double xcheck = mlow;xcheck<=mhigh;xcheck+=MUSTEP){
 	newg->SetPoint(np,xcheck,minll);
 	newg->SetPointError(np,0.01,0,0,gr_env->Eval(xcheck)-minll);
@@ -548,17 +588,17 @@ void nllScan_allOrderFunctions(){
    newg->Draw("E3same");
    graphs[bestPdf].SetLineColor(2);
    graphs[bestPdf].Draw("same");
-   gr_env->Draw("same"); 
-   lin->Draw(""); 
+   gr_env->Draw("same");
+   lin->Draw("");
    lin2->Draw("");
    lin3->Draw("");
-    
+
    //legf->AddEntry(&graphs[bestPdf],"Single function ","L");
    legf->AddEntry(gr_env,"Minimum Envelope","L");
    legf->AddEntry(newg,"68.3% Interval");
    legf->AddEntry(newg2,"95.4% Interval");
    legf->Draw();
-   envelope->SaveAs("../correction/EnvelopeAllOrders.pdf");  
+   envelope->SaveAs("../correction/EnvelopeAllOrders.pdf");
 
    outfits->cd();
    can->Write();

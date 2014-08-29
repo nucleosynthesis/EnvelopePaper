@@ -55,6 +55,7 @@ class ProfileMultiplePdfs {
 		TGraph *getEnvelopeGraph();
 		double getEnvelopeBestFitValue();
 		string getEnvelopeBestFitName();
+		double getEnvelopeBestFitNll();
 		double getEnvelopeErrorUp(double sigma);
 		double getEnvelopeErrorDn(double sigma);
 
