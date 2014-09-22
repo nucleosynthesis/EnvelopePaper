@@ -73,15 +73,40 @@ if not options.envelopeOnly:
 	toySetup = r.PdfModelBuilder()
 	toySetup.setObsVar(mgg)
 	toySetup.setSignalModifier(mu)
-	toySetup.addBkgPdf(cfg.genpdf_name+','+cfg.ws_name+','+cfg.infile_name,False)
+	if 'profiled_gen:' in cfg.genpdf_name:
+		
+		# specialised version for generating from envelope
+		genProfSetup = 	r.PdfModelBuilder()
+		genProfSetup.setObsVar(mgg)
+		genProfSetup.setSignalModifier(mu)
+		
+		for name in cfg.genpdf_name.split(':')[1:]:
+			genProfSetup.addBkgPdf(name+','+cfg.ws_name+','+cfg.infile_name,False)
+		
+		genProfSetup.setSignalPdf(sig_pdf,nsignal_const)
+		genProfSetup.makeSBPdfs(True)
+		genProfSetup.setSignalModifierVal(cfg.gen_inj_sig)
+		genProfSetup.setSignalModifierConstant(True)
+		genProfSetup.fitToData(dataSet,False,True,True)
+
+		thepdf = genProfSetup.returnProfiledBackground('profiled_gen');
+		toySetup.addBkgPdf(thepdf,False);
+		
+		cfg.fit_gen_to_data_first = 'False'
+		
+
+	else:
+		toySetup.addBkgPdf(cfg.genpdf_name+','+cfg.ws_name+','+cfg.infile_name,False)
+	
 	toySetup.setSignalPdf(sig_pdf,nsignal_const)
 	toySetup.makeSBPdfs(True)
 	if cfg.fit_gen_to_data_first!='' and cfg.fit_gen_to_data_first!='false' and cfg.fit_gen_to_data_first!='False':
 		toySetup.setSignalModifierVal(cfg.gen_inj_sig)
 		toySetup.setSignalModifierConstant(True)
 		toySetup.fitToData(dataSet,False,True,True)
-		toySetup.plotPdfsToData(dataSet,80,'diagnostics/genPdfFit',False)
-		toySetup.setSignalModifierConstant(False)
+	
+	toySetup.plotPdfsToData(dataSet,80,'diagnostics/genPdfFit',False)
+	toySetup.setSignalModifierConstant(False)
 	toySetup.setSeed(cfg.seed)
 
 	# setup envelope

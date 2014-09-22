@@ -89,6 +89,19 @@ RooAbsPdf* PdfModelBuilder::getPdfFromFile(string &prefix){
   return pdf;
 }
 
+void PdfModelBuilder::addBkgPdf(RooAbsPdf *pdf, bool cache){
+  assert(pdf);
+  if (cache) {
+    wsCache->import(*pdf);
+    RooAbsPdf *cachePdf = wsCache->pdf(pdf->GetName());
+    bkgPdfs.insert(pair<string,RooAbsPdf*>(cachePdf->GetName(),cachePdf));
+  }
+  else {
+    bkgPdfs.insert(pair<string,RooAbsPdf*>(pdf->GetName(),pdf));
+  }
+	
+}
+
 void PdfModelBuilder::addBkgPdf(string name, bool cache){
  
   if (!obs_var_set){
@@ -106,6 +119,24 @@ void PdfModelBuilder::addBkgPdf(string name, bool cache){
     bkgPdfs.insert(pair<string,RooAbsPdf*>(pdf->GetName(),pdf));
   }
 
+}
+
+double PdfModelBuilder::getFractionValue(string name){
+	return 1.;
+}
+
+RooAbsPdf *PdfModelBuilder::returnProfiledBackground(string name){
+	
+	RooArgList *functions;
+	RooArgList *fractions;
+	for (map<string,RooAbsPdf*>::iterator it=bkgPdfs.begin(); it!=bkgPdfs.end(); it++){
+		functions->add(*(it->second));
+		RooRealVar var(Form("f%d",fractions->getSize(),"f",getFractionValue(it->first)));	
+		var.setConstant(true);
+		fractions->add(var);
+	}
+	RooAddPdf *theNewPdf = new RooAddPdf(name.c_str(),name.c_str(),*functions,*fractions);
+	return theNewPdf;
 }
 
 void PdfModelBuilder::setSignalPdf(RooAbsPdf *pdf, RooRealVar *norm){

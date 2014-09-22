@@ -30,6 +30,7 @@ class PdfModelBuilder {
     void setSignalModifierConstant(bool val);
 
     void addBkgPdf(string name, bool cache=true);
+    void addBkgPdf(RooAbsPdf *pdf, bool cache=true);
     RooAbsPdf* getPdfFromFile(string &prefix);
     
 		void setSignalPdf(RooAbsPdf *pdf, RooRealVar *norm=NULL);
@@ -51,6 +52,9 @@ class PdfModelBuilder {
 
     void saveWorkspace(TFile* file);
     void saveWorkspace(string filename);
+
+    RooAbsPdf* returnProfiledBackground(string name);
+    double getFractionValue(string name);
 
   private:
    
