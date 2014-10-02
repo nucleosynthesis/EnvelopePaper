@@ -135,7 +135,7 @@ for m,gen in enumerate(gens):
 lat = ROOT.TLatex()
 lat.SetTextSize(0.05)
 lat.SetNDC()
-lat.DrawLatex(0.6,0.012,"Correction / dof")
+lat.DrawLatex(0.6,0.012,"Correction / par")
 #lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 lat.SetTextAngle(90)
 lat.DrawLatex(0.075,0.7,"< (#hat{#mu} - #mu)/#sigma >")
