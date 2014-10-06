@@ -1,4 +1,6 @@
+# vim: ts=2 sw=2 noexpandtab
 import ROOT as r
+import array as a
 
 class biasComputer:
 
@@ -20,6 +22,26 @@ class biasComputer:
 		# results
 		self.ntoys = 0
 		self.ntoysInCoverage = { 1. : 0}
+
+	def setTree(self,tree):
+		# tree vars
+		self.mu_gen = a.array('d',[-999.])
+		self.mu_fit = a.array('d',[-999.])
+		self.errsUp = []
+		self.errsDown = []
+		for cov in self.coverageValues:
+			self.errsUp.append(a.array('d',[-999.]))
+			self.errsDown.append(a.array('d',[-999.]))
+		self.corr = a.array('d',[-999.])
+
+		# set branches
+		self.tree = tree
+		self.tree.Branch("mu_gen",self.mu_gen,"mu_gen/Double_t")
+		self.tree.Branch("mu_fit",self.mu_fit,"mu_fit/Double_t")
+		for i, cov in enumerate(self.coverageValues):
+			self.tree.Branch("mu_err_up_cov%3.1f"%cov,self.errsUp[i],"mu_err_up_cov%3.1f/Double_t"%cov)
+			self.tree.Branch("mu_err_down_cov%3.1f"%cov,self.errsDown[i],"mu_err_down_cov%3.1f/Double_t"%cov)
+		self.tree.Branch("corr",self.corr,"corr/Double_t")
 
 	def printCoverageInfo(self):
 		print 'nToys Tot: ', self.ntoys
@@ -266,7 +288,7 @@ class biasComputer:
 			self.coverage_hist.GetXaxis().SetBinLabel(i+1,'%3.1f'%cov)
 		self.coverage_hist.GetXaxis().SetBinLabel(len(self.coverageValues)+1,'Total')
 
-		for file in self.list_of_files:
+		for f, file in enumerate(self.list_of_files):
 			infile = r.TFile(file)
 			valid=True
 			toyn=0
@@ -295,6 +317,13 @@ class biasComputer:
 					fit_val = profiler.getEnvelopeBestFitValue()
 					fit_pdf = profiler.getEnvelopeBestFitName()
 
+					self.mu_gen[0] = self.mu_val
+					self.mu_fit[0] = fit_val
+					if self.correction == 'P':
+						self.corr[0] = -99
+					else:
+						self.corr[0] = float(self.correction)
+
 					# pull
 					if (fit_val-self.mu_val) >= 0:
 						self.pull_hist.Fill((fit_val-self.mu_val)/(profiler.getEnvelopeErrorUp(1.)-fit_val))
@@ -303,9 +332,11 @@ class biasComputer:
 
 					# coverage
 					self.coverage_hist.Fill(len(self.coverageValues))
-					for cov in self.coverageValues:
+					for i, cov in enumerate(self.coverageValues):
 						errUp = profiler.getEnvelopeErrorUp(cov)
 						errDn = profiler.getEnvelopeErrorDn(cov)
+						self.errsUp[i][0] = errUp
+						self.errsDown[i][0] = errDn
 						cov_ind = self.coverage_hist_dict[cov]
 						if (self.mu_val >= errDn and self.mu_val <= errUp):
 							self.ntoysInCoverage[cov] += 1
@@ -316,6 +347,9 @@ class biasComputer:
 					self.whichpdf_hist.Fill(fit_pdf_ind)
 					toyn += 1
 					self.ntoys += 1
+
+					# fill tree
+					self.tree.Fill()
 
 			infile.Close()
 

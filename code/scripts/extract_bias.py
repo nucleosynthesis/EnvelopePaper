@@ -164,6 +164,7 @@ def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs,file_names):
 		os.system('mkdir -p %s'%outfiledir)
 
 	outf = r.TFile(outfname,'RECREATE')
+	biasTree = r.TTree('BiasTree','BiasTree')
 
 	biasComp = biasComputer()
 	biasComp.setCoverageValues([float(x) for x in cfg['coverageValues'].split(',')])
@@ -174,6 +175,7 @@ def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs,file_names):
 	biasComp.setMuVal(mu_val)
 	biasComp.setEnvPdfs(env_pdfs)
 	biasComp.doPlots = False
+	biasComp.setTree(biasTree)
 
 	for c in cfg['corrVals'].split(','):
 		biasComp.setCorrection(c)
@@ -181,6 +183,8 @@ def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs,file_names):
 		pullHist = biasComp.getPullHist()
 		covHist = biasComp.getCoverageHist()
 		whichHist = biasComp.getWhichPdfHist()
+		#residHist = biasComp.getResidHist()
+		#errorHist = biasComp.getErrorHist()
 		outf.cd()
 		pullHist.Write()
 		covHist.Write()
@@ -197,6 +201,10 @@ def postProcessToys(outfiledir,gen_pdf,mu_val,env_pdfs,file_names):
 		outf.cd()
 		whichCanv.SetName('pdf_choice_canv_c%s'%c)
 		whichCanv.Write()
+
+	outf.cd()
+	biasTree.Write()
+	outf.Close()
 	del biasComp
 	sw.Stop()
 	print '-----------------------------------------------------'

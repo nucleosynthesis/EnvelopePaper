@@ -23,7 +23,7 @@ savePVal=True
 compute_pdf_sets=[env_pdf_1_8TeV_exp1,env_pdf_1_8TeV_exp3,env_pdf_1_8TeV_exp5,env_pdf_1_8TeV_pow1,env_pdf_1_8TeV_pow3,env_pdf_1_8TeV_pow5,env_pdf_1_8TeV_lau1,env_pdf_1_8TeV_lau2,env_pdf_1_8TeV_lau3,env_pdf_1_8TeV_lau4,env_pdf_1_8TeV_lau5,env_pdf_1_8TeV_bern1,env_pdf_1_8TeV_bern2,env_pdf_1_8TeV_bern3,env_pdf_1_8TeV_bern4,env_pdf_1_8TeV_bern5]
 compute_names=envelope
 filename=bias_hists.root
-corrVals=0.,1.,2.,P
+corrVals=0.,0.25,0.5,0.75,1.,1.25,1.5,1.75,2.,2.25,2.5,2.75,3.,P
 coverageValues=0.5,1.,2.,3.
 
 # -------------

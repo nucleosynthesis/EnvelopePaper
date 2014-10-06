@@ -1,4 +1,4 @@
-#ifndef PdfModelBuilder_h 
+#ifndef PdfModelBuilder_h
 #define PdfModelBuilder_h
 
 #include <iostream>
@@ -19,7 +19,7 @@ using namespace std;
 using namespace RooFit;
 
 class PdfModelBuilder {
-  
+
   public:
     PdfModelBuilder();
     ~PdfModelBuilder();
@@ -32,7 +32,7 @@ class PdfModelBuilder {
     void addBkgPdf(string name, bool cache=true);
     void addBkgPdf(RooAbsPdf *pdf, bool cache=true);
     RooAbsPdf* getPdfFromFile(string &prefix);
-    
+
 		void setSignalPdf(RooAbsPdf *pdf, RooRealVar *norm=NULL);
     void setSignalPdfFromMC(RooDataSet *data);
     void makeSBPdfs(bool cache=true);
@@ -44,7 +44,7 @@ class PdfModelBuilder {
     void fitToData(RooAbsData *data, bool bkgOnly=true, bool cache=true, bool print=false);
     void plotPdfsToData(RooAbsData *data, int binning, string name, bool bkgOnly=true, string specificPdfName="");
     void plotToysWithPdfs(string prefix, int binning, bool bkgOnly=true);
-    
+
     void setSeed(int seed);
     void throwToy(string name, int nEvents, bool bkgOnly=true, bool binned=true, bool poisson=true, bool cache=true);
     map<string,RooAbsData*> getToyData();
@@ -56,14 +56,23 @@ class PdfModelBuilder {
     RooAbsPdf* returnProfiledBackground(string name);
     double getFractionValue(string name);
 
+    void setPValueCorrection(bool arg=true);
+    void setCorrectionValue(double value);
+
   private:
-   
+
     map<string,RooAbsPdf*> bkgPdfs;
     map<string,RooAbsPdf*> sbPdfs;
     RooAbsPdf* sigPdf;
     RooAbsReal* sigNorm;
     RooRealVar *bkgYield;
     RooAbsReal *sigYield;
+
+    // this is for the frequentist toy function
+    double getChisq(RooAbsData *dat, RooAbsPdf *pdf, bool prt=false);
+    map<string,double> cachedNllVals;
+    double correctionValue;
+    bool isPValueCorrection;
 
     map<string,RooAbsData*> toyData;
     map<string,RooDataSet*> toyDataSet;

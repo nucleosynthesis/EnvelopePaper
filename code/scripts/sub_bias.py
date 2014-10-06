@@ -89,6 +89,7 @@ def writeSubScript(scriptname,datfilename,outfilename):
 		os.system('bsub -q %s -o %s.log %s'%(options.queue,f.name,f.name))
 
 readConfig(options.datfile)
+corrValsCache = cfg['corrVals']
 os.system('mkdir -p %s'%cfg['store_directory'])
 os.system('mkdir -p %s/dat'%cfg['store_directory'])
 os.system('mkdir -p %s/outfiles'%cfg['store_directory'])
@@ -97,10 +98,22 @@ for val in cfg['inj_mu_vals'].split(','):
 	mu_val = float(val)
 	for gen_pdf in cfg['gen_pdfs'].split(','):
 		for job in range(int(cfg['njobs'])):
-			outfilename = 'BiasResults_mu%4.2f_gen%s_job%d.root'%(mu_val,gen_pdf,job)
-			datfilename = 'cfg_mu%4.2f_gen%s_job%d.dat'%(mu_val,gen_pdf,job)
-			scriptname = 'sub_mu%4.2f_gen%s_job%d.sh'%(mu_val,gen_pdf,job)
-			writeDatFile(cfg['store_directory']+'/dat/'+datfilename,gen_pdf,mu_val,outfilename)
-			writeSubScript(scriptname,datfilename,outfilename)
+			gen_pdf_title = gen_pdf
+			if 'profiled_gen:' in gen_pdf:
+				gen_pdf_title = 'profiled_gen'
+			outfilename = 'BiasResults_mu%4.2f_gen%s_job%d.root'%(mu_val,gen_pdf_title,job)
+			datfilename = 'cfg_mu%4.2f_gen%s_job%d.dat'%(mu_val,gen_pdf_title,job)
+			scriptname = 'sub_mu%4.2f_gen%s_job%d.sh'%(mu_val,gen_pdf_title,job)
+			if 'profiled_gen:' in gen_pdf: # need to split corr values for this
+				for val in corrValsCache.split(','):
+					cfg['corrVals'] = val
+					ofname = outfilename.replace('.root','_c%s.root'%val)
+					dfname = datfilename.replace('.dat','_c%s.dat'%val)
+					scname = scriptname.replace('.sh','_c%s.sh'%val)
+					writeDatFile(cfg['store_directory']+'/dat/'+dfname,gen_pdf,mu_val,ofname)
+					writeSubScript(scname,dfname,ofname)
+			else:
+				writeDatFile(cfg['store_directory']+'/dat/'+datfilename,gen_pdf,mu_val,outfilename)
+				writeSubScript(scriptname,datfilename,outfilename)
 
 
