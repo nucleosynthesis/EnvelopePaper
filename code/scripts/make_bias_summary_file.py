@@ -123,7 +123,6 @@ def getStats(gen_pdf,env_name,cval,covval):
 		residStatSumSq = 0.
 		for e in range(tree.GetEntries()):
 			tree.GetEntry(e)
-			if len(residStatNumbs)>100: continue
 			if not (r.TMath.Abs(cval-tree.corr)<0.001): continue
 
 			resid = tree.mu_gen - tree.mu_fit
