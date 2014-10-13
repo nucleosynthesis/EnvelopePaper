@@ -30,7 +30,7 @@ def getError(gr,x):
 #fil = ROOT.TFile.Open("biastoys.root")
 #fil = ROOT.TFile.Open("BiasNarrowRangeSummary.root")
 #fil = ROOT.TFile.Open("BiasFirstOrdersSummary.root")
-fil = ROOT.TFile.Open("BiasAllOrdersSummary_morecorrections.root")
+fil = ROOT.TFile.Open("BiasAllOrdersSummary_morecorrections_errs.root")
 
 gens = [
 		#"bestfit_"
@@ -55,7 +55,7 @@ gnames = [
 #colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kMagenta,ROOT.kRed,ROOT.kBlack]
 #names = ["Laurent","Power Law","Exponential","Envelope"]
 #fits = ["lau1","pow1","exp1","envelope"]
-styles = [20,20,20,20]
+styles = [23,25,28,23]
 colors = [ROOT.kBlack,ROOT.kBlue,ROOT.kMagenta+1,ROOT.kGreen+2]
 muvals = ["-0.75","0.","1.","1.5"]
 corrections = ["0.25","0.5","0.75","1.","1.25","1.5","1.75","2.","2.25","2.5","2.75","3."]#numpy.arange(0.25,3.25,0.25)
@@ -73,7 +73,7 @@ pads = []
 np = len(gens)
 hists = []
 dh = ROOT.TH1F("hd%s","hd",1,0,3.2);
-dh.GetYaxis().SetRangeUser(-.99,.99);
+dh.GetYaxis().SetRangeUser(0.11,1.59);
 #dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
 #dh.GetXaxis().SetTitle("#mu");
 dy = 0.04
@@ -97,34 +97,38 @@ for m,gen in enumerate(gens):
  p.cd()
  pads.append(p)
  grs = []
- for i,g in enumerate(muvals):
-  ng = ROOT.TGraphErrors()
+ for kk,midtype in enumerate(["median"]):
+  for i,g in enumerate(muvals):
+   ng = ROOT.TGraphErrors()
 # hists.append(dh)
-  f = "envelope"
-  for j,cVal in enumerate(corrections):
+   f = "envelope"
+   for j,cVal in enumerate(corrections):
    #print g,f
    #gr = fil.Get("pull_mean_gen%sfit%s_c%s"%("bestfit_",f,cVal))
-   gr = fil.Get("pull_mean_gen%sfit%s_c%s"%(gen,f,cVal))
-   bval = gr.Eval(float(g))
-   ng.SetPoint(j,float(cVal),bval) 
-   ex,ey = getError(gr,float(g))
-   print gen, cVal,g,bval,ey
-   ng.SetPointError(j,0.05,ey) 
-  ng.SetMarkerStyle(styles[i])
-  ng.SetMarkerColor(colors[i])
-  ng.SetLineColor(colors[i])
-  ng.SetMarkerSize(0.9)
-  #trimers(ng)
-  grs.append(ng.Clone())
-  allgrs.append(grs)
+    gr = fil.Get("errors_%s_gen%sfit%s_c%s"%(midtype,gen,f,cVal))
+    bval = gr.Eval(float(g))
+    ng.SetPoint(j,float(cVal),bval) 
+    ex,ey = getError(gr,float(g))
+    print gen, cVal,g,bval,ey
+    ng.SetPointError(j,0.05,ey) 
+   ng.SetMarkerStyle(styles[i])
+   ng.SetMarkerColor(colors[i])
+   ng.SetLineColor(colors[i])
+   ng.SetMarkerSize(0.9)
+   #trimers(ng)
+   if kk == 0 : ng.SetMarkerStyle(20)
+   if kk == 1 : ng.SetMarkerStyle(24)
+   grs.append(ng.Clone())
+   allgrs.append(grs)
 
  print "Drawing", len(pads)
  #dh.GetXaxis().SetTitle("c")
  #dh.GetYaxis().SetTitle("< (#hat{#mu} - #mu)/#sigma >")
  dh.Draw("axis")
- line.Draw()
+ #line.Draw()
  for i,gg in enumerate(grs): 
-  if m==0:leg.AddEntry(gg,names[i],"P")
+  if m==0:
+   if i< len(names): leg.AddEntry(gg,names[i],"P")
   gg.Draw("ePsame")
  latlab.DrawLatex(0.935,0.15,gnames[m])
  if m==np-1: leg.Draw()
@@ -138,6 +142,6 @@ lat.SetNDC()
 lat.DrawLatex(0.6,0.012,"Correction / par")
 #lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 lat.SetTextAngle(90)
-lat.DrawLatex(0.075,0.7,"< (#hat{#mu} - #mu)/#sigma >")
-c.SaveAs("../correction/AllOrderFunctions_bias_vs_correction.pdf")
+lat.DrawLatex(0.075,0.7,"< #sigma_{#mu} >")
+c.SaveAs("../correction/AllOrderFunctions_errors_vs_correction.pdf")
 #raw_input()
