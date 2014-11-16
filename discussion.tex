@@ -2,7 +2,7 @@
 %\label{sec:discussion}
 
 %\subsection{Application to real world case}
-\section{Application to a real case}
+\section{Application to the Higgs case}
 \label{sec:discussion}
 \label{sec:discussion:higgs}
 
@@ -15,7 +15,7 @@ is significantly more
 complex than the simplified version used here. In particular, the 2011 
 and 2012 data
 samples are split into eleven and fourteen categories, respectively, which have
-differing signal:background ratios.
+differing signal to background ratios.
 Because the categories (by definition) have different selection criteria,
 they can have different background shapes.
 There is no {\it a priori} reason to make any assumptions that the functions
@@ -44,17 +44,19 @@ combinations for the 2012 data sample.
 Instead of considering all possible combinations of functions, the function 
 which minimizes the likelihood and its parameters can be determined through 
 an iterative procedure. The first step is to determine the set of functions 
-which best fit the data, in each category, fixing the values of all nuisance 
-parameters.
+which best fit the data, in each category, fixing the values of all 
+signal nuisance parameters.
 Since the signal parameter, $\mu$, is also fixed for a given point in the scan 
 no free parameters are correlated between categories.
 Finding the functions which minimize the likelihood in 
 this case then reduces to the simple case, namely finding the minimum in each 
 category independently. 
 Once these functions, and their parameters, are found, the choice of function 
-is then fixed while the nuisance parameters are freed and a single fit of the 
+is then fixed while the signal nuisance parameters are freed and a 
+single fit of these
 nuisance parameters and chosen background parameters is performed.
-If no significant change in the likelihood is observed, the overall minimum is 
+If no significant change in the likelihood is observed, the overall minimum
+has been 
 achieved. However, if this is not the case, the nuisances must be fixed again 
 and the procedure to find the best fit functions given the new values of the 
 nuisance parameters is repeated.
