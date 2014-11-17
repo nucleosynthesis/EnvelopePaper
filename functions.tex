@@ -43,11 +43,12 @@ This original dataset was generated in 160 bins between 110 and 150\,GeV in
 the mass variable used, $m_{\gamma\gamma}$.
 It included signal events
 generated according to a Gaussian distribution with a normalization of 50.8 events, a mean of 125\,GeV and a 
-width of 1.19\,GeV. These values are taken from a single category of the CMS Higgs to two photon analysis.
+width of 1.19\,GeV. These values are taken from a single category of the 
+Higgs analysis.
 In the following, the signal strength results are given in
 terms of the relative strength $\mu$, 
 meaning the ratio of the measured number of the signal events relative
-to the expected. 
+to the expected number.
 
 The four two-parameter functions mentioned above were each 
 separately fitted to this
@@ -57,8 +58,8 @@ generate the events.
 The magnitude of the signal Gaussian and both parameters in the
 background function were determined from the fit.
 The results are shown in figure~\ref{fig:functions:bestfits}.
-It is clear the first order polynomial does not fit well at all, while the 
-other three functions appear to give reasonable fits.
+It is clear the first order polynomial does not fit particularly well, 
+while the other three functions appear to give reasonable fits.
 %
 \begin{figure}[tbp]
 \centering
@@ -68,7 +69,8 @@ text).
 %The dashed lines indicate the background component of the fit while the solid 
 %lines include the signal component. 
 The Laurent function is effectively identical to the power law function
-and so is hidden below the power law line. Note, for clarity in this plot, the
+and so is hidden underneath the power law line.
+Note, for clarity in this plot, the
 data have been rebinned into 40 bins, although the fits were done with
 finer binning of 160 bins.}
 \label{fig:functions:bestfits}
@@ -83,8 +85,9 @@ strength of $\mu = 0.93$. If just considering this function,
 then one would set a 68.3\% confidence interval on $\mu$ of  
 $0.43 < \mu < 1.40 $, determined as the interval for which $\Delta{\rm \nll} = \nll - \nll_{BF} < 1$. 
 The measurement would therefore be reported with its standard error as $\mu=0.93^{+0.47}_{-0.50}$. The Laurent function gives an identical result within the precision given.
-When fitting the exponential function a very similar \nll value is obtained
-at its best fit, but gives a best relative signal strength of $\mu = 0.72$
+When fitting the exponential function a similar but slightly higher
+\nll value is obtained
+at its best fit, but it gives a best relative signal strength of $\mu = 0.72$
 and a 68.3\% confidence interval of
 $0.27 < \mu < 1.24 $, which would be quoted as $\mu = 0.72^{+0.52}_{-0.45}$.
 Fitting with the straight line yields a very different result of 
@@ -98,9 +101,10 @@ with the choice of function.
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.45\textwidth]{functions/Profiles.pdf}
-\caption{Profile \nll scans for the four functions discussed in the text.
-The polynominal function is always above the top of the \nll scale shown in this
-figure. }
+\caption{Profile \nll scans for the four two-parameter
+functions discussed in the text.
+The polynominal function is above the top of the \nll scale for all 
+$\mu$ values shown in this figure. }
 \label{fig:functions:profiles}
 \end{figure}
 
@@ -142,7 +146,7 @@ curve which would be obtained using just the power law function.}
 \subsection{Bias and coverage}
 \label{sec:functions:coverage}
 
-The bias and coverage properties of the discrete profiling method was tested 
+The bias and coverage properties of the discrete profiling method were tested 
 using a large ensemble of
 pseudo-experiments (``toys''). In each pseudo-experiment, a 
 dataset including signal and background events was generated using a Monte Carlo technique. 
@@ -164,7 +168,8 @@ We define the bias as the mean of the pull distribution, where the pull for an i
 \begin{equation}
 	p(\mu,\sigma) = \frac{\hat{\mu}-\mu}{\sigma},
 \end{equation}
-where $\mu$ is the generated value of the signal strength, $\hat{\mu}$ is the fitted value of $\mu$ per toy and $\sigma$ is the positive error on $\hat{\mu}$ if $\hat{\mu} < \mu$ and is the negative error on $\hat{\mu}$ if $\hat{\mu} > \mu$. The results of the mean pull as a function of the generated signal strength are shown in figure~\ref{fig:functions:firstorderbias}. It can be seen, as one would expect, that when fitting back with the same background function as used to generate the toy dataset, the bias is negligible. It is also shown that the bias is not dependent on the value of $\mu$ used to generate the signal. However, when fitting back with a different background function the bias can be large; here up to half of the mean pull. The discrete profiling method provides a medium between these two in which the bias is small ($\sim$ one tenth of the mean pull) regardless of the generating function used. This is important given that this method is to be applied when the true underlying function is unknown.
+where $\mu$ is the generated value of the signal strength, $\hat{\mu}$ is the fitted value of $\mu$ per toy and $\sigma$ is the positive error on $\hat{\mu}$ if $\hat{\mu} < \mu$ and is the negative error on $\hat{\mu}$ if $\hat{\mu} > \mu$. The results of the mean pull as a function of the generated signal strength are shown in figure~\ref{fig:functions:firstorderbias}. It can be seen, as one would expect, that when fitting back with the same background function as used to generate the toy dataset, the bias is negligible. It is also shown that the bias is not dependent on the value of $\mu$ used to generate the signal. However, when fitting back with a different background function the bias can be large; here giving a mean pull up to 0.5.
+The discrete profiling method provides a medium between these two in which the bias is small (a mean pull of around 0.1) regardless of the generating function used. This is important given that this method is to be applied when the true underlying function is unknown.
 
 %
 \begin{figure}[tbp]
@@ -181,7 +186,9 @@ fitting with the polynomial gives values outside the range of these plots.}
 \label{fig:functions:firstorderbias}
 \end{figure}
 
-The coverage was tested, using the same fits, by determining the frequency of toys in which the difference in \nll between the best fit and at the value of $\mu$ used to generate the signal was less than 0.25, 1, 4 and 9 and compared to the expected frequencies, 38.3\%, 68.3\%, 95.4\% and 99.7\% respectively. The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different to the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. The coverage is found to be good independently of the value of $\mu$ used to generate the signal.
+The coverage was tested, using the same fits, by determining the frequency of toys in which the difference in \nll between the best fit and at the value of $\mu$ used to generate the signal was less than 0.25, 1, 4 and 9.
+These frequencies were compared with the expected frequencies, 38.3\%, 68.3\%, 95.4\% and 99.7\% respectively. The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different from the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. The coverage is found to be good,
+independent of the value of $\mu$ used to generate the signal.
 %
 \begin{figure}[tbp]
 \centering

@@ -43,7 +43,7 @@ value can now be obtained, namely that which would give the same p-value but
 with a different number of degrees of freedom, equal to the number of bins.
 The corrected \nll is then given by
 \begin{displaymath}
-\Lambda_{\mathrm{corr}} = \chi^{\prime 2} = \textrm{\nll} + (\chi^{\prime 2} - \chi^2)
+\Lambda_{\mathrm{corr}} = \chi^{\prime 2} = \textrm{\nll} + (\chi^{\prime 2} - \chi^2).
 \end{displaymath}
 Besides being a function of the number of bins and parameters,
 the size of the correction $\chi^{\prime 2} - \chi^2$
@@ -65,7 +65,7 @@ only considering one fit function.
 %in practice.
 However, it can be seen that the correction is approximately given by
 \begin{displaymath}
-\chi^{\prime 2} - \chi^2 \approx N_{\rm par}
+\chi^{\prime 2} - \chi^2 \approx N_{\rm par},
 \qquad{\rm so}\qquad
 \Lambda_{\mathrm{corr}} \approx \textrm{\nll} + N_{\rm par}
 \end{displaymath}
@@ -89,7 +89,7 @@ the $\chi^2$ assuming a flat p-value distribution is shown on the right.}
 \item %[Akaike]
 The basic Akaike formula for very large sample sizes is
 \begin{displaymath}
-\Lambda_{\mathrm{corr}} = \textrm{\nll} + 2N_{\rm par}
+\Lambda_{\mathrm{corr}} = \textrm{\nll} + 2N_{\rm par},
 \end{displaymath}
 %The resulting value of $A$ is considered here as the corrected \nll,
 so the correction is simply $ 2N_{\rm par}$ and
@@ -98,7 +98,7 @@ For finite samples, then it is modified to
 \begin{displaymath}
 \Lambda_{\mathrm{corr}}
 = \textrm{\nll} + 2N_{\rm par}  + \frac{2N_{\rm par}(N_{\rm par}+1)}{n-(N_{\rm par}+1)}
-= \textrm{\nll} + \frac{2N_{\rm par}}{1-(N_{\rm par}+1)/n}
+= \textrm{\nll} + \frac{2N_{\rm par}}{1-(N_{\rm par}+1)/n},
 \end{displaymath}
 where $n$ is the sample size, i.e. the number of bins (for a binned likelihood
 fit) or events (for an unbinned likelihood fit). For large $n$, the original
@@ -155,7 +155,7 @@ function, also as for the previous case.
 Indeed, comparison to figure~\ref{fig:functions:profiles} shows that the
 minimum values of the corrected \nll for low $\mu$
 are simply two units larger here than in that figure.
-However, for $1.48 < \mu < 1.68$
+However, for $1.48 < \mu < 1.68$,
 the $N_{\rm par}=5$ polynomial is the lowest function in the profile,
 while for $\mu > 1.68$,
 the $N_{\rm par}=6$ polynomial is lowest.
@@ -198,7 +198,7 @@ The three corrections shown in figure~\ref{fig:correction:profiles} can be
 considered to be examples of a continuous spectrum of corrections which can
 be written as
 \begin{displaymath}
-\Lambda_{\mathrm{corr}} = \textrm{\nll} + cN_{\rm par}
+\Lambda_{\mathrm{corr}} = \textrm{\nll} + cN_{\rm par},
 \end{displaymath}
 where $c=0$, 1 or 2 in the cases shown. Other values of $c$ are clearly
 also possible.
@@ -246,7 +246,9 @@ that the p-value corrections always give less bias than the Akaike correction.
 \centering
 \includegraphics[width=0.48\textwidth]{correction/AllOrderFunctions_call.pdf}
 \caption{Average pull when fitting using the envelope as a function of $\mu$
-used to generate the signal. Each panel shows the average bias when using
+used to generate the signal when correcting
+with the different \nll correction schemes.
+Each panel shows the average bias when using
 a different background function for toy generation, with the functions
 used being (from the top): polynomial with $N_{\rm par}=6$,
 polynomial with $N_{\rm par}=5$, Laurent with $N_{\rm par}=2$,
@@ -264,7 +266,7 @@ Similarly, figure~\ref{fig:correction:allordercoverage} shows the fraction of
 times the envelope fit result was within the various \nll ranges, as used
 previously in figure~\ref{fig:functions:firstordercoverage}. Again, the
 coverage is reasonably good for all cases. As for the bias, the two
-p-value corrections are identical and always give a better result than the
+p-value corrections are very similar and always give better coverage than the
 Akaike correction.
 %
 \begin{figure}[tbp]
@@ -322,11 +324,73 @@ function can contribute.
 \caption{Distribution of $\sigma_{\mu}$ in toy datasets
 comparing the three correction schemes
 when including the full set of functions
-to the case when considering only a single power law function
+with the case when considering only a single power law function
 with $N_{\rm par}=2$ for the fit.}
 \label{fig:correction:compareerrors}
 \end{figure}
 
-%ERROR VS CORRECTION.
+\subsection{Comments on the choice of correction}
+\label{sec:correction:comments}
+ As mentioned at the end of Section~\ref{sec:correction:example}, 
+the correction can be considered to have the form
+\begin{displaymath}
+\Lambda_{\mathrm{corr}} = \textrm{\nll} + cN_{\rm par},
+\end{displaymath}
+giving a continuum of possible values of $c$, not just $c=1$ or 2.
+The choice of a particular value of $c$ to use depends on the application
+and the amount of data available.
 
-%DOES BIAS $\rightarrow 0$ for CORRECTION $\rightarrow 0$?
+Figure~\ref{fig:correction:allordererrvscorr} shows the mean of the difference
+between the best fit $\mu$ value and the true $\mu$ and also the 68.3\%
+statistical uncertainty on $\mu$ from the fit, calculated from the toy
+samples discussed above, as a function of $c$, 
+both for the true $\mu=0$ and 1. It is seen that the $\mu$ offset
+is generally small but increases with the correction value $c$. This is
+because lower order functions are favoured for large $c$ and these cannot
+necessarily describe more complicated shapes as well. Note the largest
+offset is found when generating with the six-parameter polynomial, as there
+are no other functions being used in this study which have a similar number
+of parameters. 
+Conversely, the
+statistical error gets smaller for large $c$ as there tend to be less parameters
+in the functions making up the envelope. 
+
+In principle, these results could be used to choose an optimal value of $c$
+for a given dataset. It is clear the optimal value will change with the 
+amount of data as the
+statistical errors will become smaller but the offset will stay the same and
+hence lower values of $c$ will be favoured for larger data volumes.
+However, defining how to optimise the value is somewhat arbitrary. It depends
+on whether accurately knowing the true uncertainty on $\mu$ is critically
+important. The statistical error will be well known but the bias depends on the
+underlying background shape which is by definition not well known. Hence,
+how to weigh the relative important of these two contributions is not unqiuely
+defined. For example, the offset and statistical error could be added in
+quadrature to give an estimate of the overall error. For the case of
+figure~\ref{fig:correction:allordererrvscorr}, this has its smallest
+value at high $c$. However, for the actual Higgs analysis, the value of $c=1$
+was chosen. This is more conservative, in that it means the known statistical
+error will dominate more over the unknown offset, hence meaning there is more
+confidence in the error quoted.
+%
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_errors_vs_correction_0.}.pdf}
+\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_errors_vs_correction_1.}.pdf}
+\caption{Mean value of the difference between the fitted and true values
+of $\mu$  (data points)
+and 68.3\% uncertainty (bands)
+as a function of the correction $c$ applied to \nll, for true $\mu=0$ (left)
+and $\mu=1$ (right), calculated from toys.
+The results when generating with different functions
+are shown in the different panels.
+The functions
+used are (from the top): polynomial with $N_{\rm par}=6$,
+polynomial with $N_{\rm par}=5$, Laurent with $N_{\rm par}=2$,
+power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
+}
+\label{fig:correction:allordererrvscorr}
+\end{figure}
+
+A decision on the value of $c$ will therefore depend on the application and
+no absolute method for determining this can be given.
