@@ -79,7 +79,8 @@ fstyles = [1001,1001]
 #muvals = ["1.","0."]
 muvals = ["0."]
 corrections = ["0.25","0.5","0.75","1.","1.25","1.5","1.75","2.","2.25","2.5","2.75","3."]#numpy.arange(0.25,3.25,0.25)
-names  = ["<#hat{#mu} - %s>"%mv for mv in muvals]#["approx. p-value","p-value","Akaike"]
+#names  = ["<#hat{#mu} - %s>"%mv for mv in muvals]#["approx. p-value","p-value","Akaike"]
+names  = ["#mu = %s"%mv for mv in muvals]#["approx. p-value","p-value","Akaike"]
 fits = ["envelope"]
 #styles = [23]
 #colors = [ROOT.kBlack]
@@ -97,7 +98,7 @@ dh.GetYaxis().SetRangeUser(-0.79,1.19);
 lineDashed = ROOT.TLine(dh.GetXaxis().GetXmin(),0,dh.GetXaxis().GetXmax(),0)
 lineDashed.SetLineColor(1)
 lineDashed.SetLineStyle(2)
-#dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
+#dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma > or <68.3\% interval>");
 #dh.GetXaxis().SetTitle("#mu");
 dy = 0.04
 width = (1./np) - dy/np
@@ -180,7 +181,7 @@ for m,gen in enumerate(gens):
   for i,gg in enumerate(zip(grs,grbs)): 
    if i< len(names): 
    	leg.AddEntry(gg[0],names[i],"P")
-	leg.AddEntry(gg[1],"<68.3% Interval>","F")
+	#leg.AddEntry(gg[1],"<68.3% Interval>","F")
  if m==np-1: leg.Draw()
  c.cd()
 #raw_input()
@@ -192,6 +193,6 @@ lat.SetNDC()
 lat.DrawLatex(0.6,0.012,"Correction / par")
 #lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 lat.SetTextAngle(90)
-#lat.DrawLatex(0.075,0.7,"< #sigma_{#mu} >")
+lat.DrawLatex(0.06,0.45,"< (#mu - #hat{#mu})/#sigma > or <68.3% interval>")
 c.SaveAs("../correction/AllOrderFunctions_errors_vs_correction_%s.pdf"%muvals[0])
 #raw_input()
