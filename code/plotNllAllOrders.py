@@ -4,6 +4,8 @@ import ROOT as r
 import math
 import numpy
 import time
+import sys
+import array
 #r.gROOT.LoadClass('ProfileMultiplePdfs','lib/libEnvelopeCode.so')
 r.gROOT.ProcessLine('.L lib/libEnvelopeCode.so')
 r.gROOT.ProcessLine('.x paperStyle.C')
@@ -14,25 +16,27 @@ pnames = {'bern':'Polynomial', 'exp':'Exponential Sum', 'pow':'Power Law Sum', '
 
 graphs = []
 
-corr_vals = [0.0,0.25,0.5,0.75,1.0,1.25,1.5,1.75,2.0,2.25,2.5]
+corr_vals = []
+corr_vals = [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.25,2.5]
 corr_vals = corr_vals + ['P']
 
 r.gROOT.SetBatch()
 
-print 'Hi Nick and Paul. You need to run nllScan_allOrders.C first and make sure the correction value is set to 0 in that script'
-print 'Then you can run this bad boy for various different correction schemes'
-print 'Corrections being run at the moment are:'
-print '\t', corr_vals
-raw_input('Are you happy to go ahead? Press return')
-print '\n\n Segmentation Violation ! \n\n'
-time.sleep(2)
-print 'Just kidding you bus. I\'ll carry on now'
-time.sleep(1)
+if len(sys.argv)<=1:
+	print 'Hi Nick and Paul. You need to run nllScan_allOrders.C first and make sure the correction value is set to 0 in that script'
+	print 'Then you can run this bad boy for various different correction schemes'
+	print 'Corrections being run at the moment are:'
+	print '\t', corr_vals
+	raw_input('Are you happy to go ahead? Press return')
+	print '\n\n Segmentation Violation ! \n\n'
+	time.sleep(2)
+	print 'Just kidding you bus. I\'ll carry on now'
+	time.sleep(1)
 
 ##
 ## setup
 ##
-epsilon = 0.1 # bin width offset
+epsilon = 0.01 # bin width offset
 bestFitH = r.TH1F("bestFitH","",len(corr_vals),0,len(corr_vals))
 bestFitH.SetStats(0)
 bestFitH.SetLineWidth(3)
@@ -106,6 +110,65 @@ def getCorrectedGraph(gr,corr,gr_corr,nparams):
 
 	return gr_corrected
 
+def getSmoothedGraph(gr):
+
+	# get graph min and assume it isn't a spike
+	min_p = -100
+	min_y = 1.e6
+	x = r.Double()
+	y = r.Double()
+	for p in range(gr.GetN()):
+		gr.GetPoint(p,x,y)
+		if float(y) < min_y:
+			min_y = float(y)
+			min_p = p
+
+	smooth_gr = r.TGraph()
+	# now loop again trying to remove spikes
+	# but have to do it in two halves
+	y_prev = 0.
+	new_p = 0
+
+	# lower half (below best fit first)
+	for p in range(min_p+1):
+		gr.GetPoint(p,x,y)
+		if p==0 or float(y)<y_prev:
+			smooth_gr.SetPoint(new_p,x,y)
+			new_p += 1
+			y_prev = float(y)
+		else:
+				continue
+
+	new_points = []
+	# now the upper half (counting backwards)
+	for p in range(gr.GetN()-1,min_p,-1):
+		gr.GetPoint(p,x,y)
+		if p==gr.GetN()-1 or float(y)<y_prev:
+			new_points.append([float(x),float(y)])
+			y_prev = float(y)
+
+	# now add the upper half points to the graph
+	new_points.sort(key=lambda x: x[0])
+	for xn, yn in new_points:
+		smooth_gr.SetPoint(new_p,xn,yn)
+		new_p += 1
+
+	return smooth_gr
+
+def getCorrectedSmoothedGraph(gr,corr,gr_corr,nparams):
+
+	gr_corrected = getCorrectedGraph(gr,corr,gr_corr,nparams)
+	gr_smoothed = getSmoothedGraph(gr_corrected)
+	return gr_smoothed
+
+def getBestFitGraph(graphs,best_fit_name):
+	for name, graph in graphs:
+		if graph.GetName()==best_fit_name:
+			return graph
+	return None
+
+# __main__
+
 dummyHist = r.TH1F("dummy","",1,-1.,2.6)
 dummyHist.SetStats(0)
 dummyHist.GetXaxis().SetTitle("#mu")
@@ -128,7 +191,9 @@ for p, corr in enumerate(corr_vals):
 			gr = infile.Get("env_pdf_1_8TeV_%s%d_gr"%(pdf,order))
 			gr_corr = infile.Get("env_pdf_1_8TeV_%s%d_gr_corr"%(pdf,order))
 
-			gr_corrected = getCorrectedGraph(gr,corr,gr_corr,nparams)
+			#gr_corrected = getCorrectedGraph(gr,corr,gr_corr,nparams)
+			gr_corrected = getCorrectedSmoothedGraph(gr,corr,gr_corr,nparams)
+			gr_corrected.SetName(gr.GetName())
 
 			if pdfit_c!=0 and pdfit_c%6==0:
 				style += 1
@@ -154,6 +219,7 @@ for p, corr in enumerate(corr_vals):
 	errLow1 = fit_val - profiler.getEnvelopeErrorDn(1.)
 	errHigh2 = profiler.getEnvelopeErrorUp(2.)-fit_val
 	errLow2 = fit_val - profiler.getEnvelopeErrorDn(2.)
+	bestFitGraph = getBestFitGraph(graphs,fit_pdf)
 
 	##
 	## profiles plot
@@ -185,6 +251,9 @@ for p, corr in enumerate(corr_vals):
 	##
 	## envelope plot
 	##
+	bestFitGraph.SetLineWidth(2)
+	bestFitGraph.SetLineColor(r.kRed)
+	bestFitGraph.SetLineStyle(r.kDashed)
 	envelope.SetLineColor(r.kBlack)
 	envelope.SetLineWidth(2)
 	# dashed lines
@@ -223,6 +292,7 @@ for p, corr in enumerate(corr_vals):
 
 	canv.Clear()
 	dummyHist.Draw("AXIS")
+	bestFitGraph.Draw("Lsame")
 	envelope.Draw("Lsame")
 	gr_err2.Draw("E3same")
 	gr_err1.Draw("E3same")
@@ -255,8 +325,8 @@ for p, corr in enumerate(corr_vals):
 	print 'c =', corr, ' mu =', fit_val, ' +', errHigh1, ' -', errLow1, ' (1sigma) +', errHigh2, ' -', errLow2, ' (2sigma)'
 
 # now do correction plot stuff
-canv = r.TCanvas("c","c",900,700)
-canv.SetBottomMargin(0.23)
+canv = r.TCanvas("c","c",100*len(corr_vals),700)
+canv.SetBottomMargin(0.25)
 canv.SetLeftMargin(0.1)
 
 leg = r.TLegend(0.15,0.7,0.5,0.89)
@@ -268,16 +338,16 @@ leg.AddEntry(err2sigma,"95.4% Interval", "LF")
 
 bestFitH.GetYaxis().SetRangeUser(-1.,4.)
 bestFitH.GetYaxis().SetTitle("#mu")
-bestFitH.GetYaxis().SetTitleSize(0.045)
-bestFitH.GetYaxis().SetTitleOffset(1.)
-bestFitH.GetYaxis().SetLabelSize(0.04)
+bestFitH.GetYaxis().SetTitleSize(0.08)
+bestFitH.GetYaxis().SetTitleOffset(0.4)
+bestFitH.GetYaxis().SetLabelSize(0.06)
 
 bestFitH.GetXaxis().LabelsOption("d");
 bestFitH.GetXaxis().SetLabelOffset(0.01);
-bestFitH.GetXaxis().SetLabelSize(0.048);
+bestFitH.GetXaxis().SetLabelSize(0.07);
 bestFitH.GetXaxis().SetTitle("#Lambda correction");
-bestFitH.GetXaxis().SetTitleSize(0.06);
-bestFitH.GetXaxis().SetTitleOffset(1.7);
+bestFitH.GetXaxis().SetTitleSize(0.08);
+bestFitH.GetXaxis().SetTitleOffset(1.4);
 
 line = r.TLine()
 line.SetLineWidth(3)

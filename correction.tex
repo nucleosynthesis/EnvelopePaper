@@ -70,7 +70,7 @@ However, it can be seen that the correction is approximately given by
 \Lambda_{\mathrm{corr}} \approx \textrm{\nll} + N_{\rm par}
 \end{displaymath}
 for the central range of p-values. This approximation means the
-$\Lambda_{\mathrm{corr}}$ shape, and hence coverage, is unchanged. Both the 
+$\Lambda_{\mathrm{corr}}$ shape, and hence coverage, is unchanged when considering one function alone. Both the
 exact p-value
 correction and the $N_{\rm par}$ approximate correction are used in this paper.
 %
@@ -106,7 +106,7 @@ formula is clearly regained. This can be used for binned or unbinned fits.
 Also the correction does not depend on the \nll value and
 so is a simple shift of
 the whole profile curve, without changing its shape.
-Hence, it also has no effect on coverage.
+Hence, it also has no effect on coverage, when considering one function alone.
 \end{enumerate}
 
 \subsection{Function definitions}
@@ -116,9 +116,11 @@ Section~\ref{sec:functions:function} and higher order generalisations of
 these. Specifically, these are
 \begin{enumerate}
 \item
-``Power law sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} x^{p^{b}_{i+1}}$.
+%``Power law sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} x^{p^{b}_{i+1}}$.
+``Power law sum''; $f(x) = \sum_{i=0}^N p_{2i} x^{p_{2i+1}}$.
 \item
-``Exponential sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} e^{p^{b}_{i+1}x}$.
+%``Exponential sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} e^{p^{b}_{i+1}x}$.
+``Exponential sum''; $f(x) = \sum_{i=0}^N p_{2i} e^{p_{2i+1}x}$.
 \item
 ``Laurent series''; $f(x) = \sum_{i=0}^N p_i/x^n$.
 \item
@@ -184,9 +186,9 @@ reasonable description of the data.
 \label{fig:correction:profiles}
 \end{figure}
 
-In contrast, the case with no correction to \nll, shown in the top row of 
+In contrast, the case with no correction to \nll, shown in the top row of
 figure~\ref{fig:correction:profiles}, shows that the highest order polynomial
-function used, with $N_{\rm par}=6$, defines the envelope across the whole 
+function used, with $N_{\rm par}=6$, defines the envelope across the whole
 range of $\mu$. This domination of the functions with the highest numbers of
 parameters is exactly what the penalty correction to \nll is attemping to
 avoid. Finally, the lowest plot in figure~\ref{fig:correction:profiles},
@@ -205,7 +207,7 @@ also possible.
 Figure~\ref{fig:correction:correction} shows the
 68.3\% and 95.4\% intervals which would be derived from the envelopes
 for these and
-some other values of $c$, as well as for the p-value correction.
+some other values of $c$, as well as for the exact p-value correction.
 It is seen that the best fit value and intervals change for $c<0.5$ but
 for larger values of $c$ they are quite stable. Hence, the result which would
 be derived from this method is effectively insensitive to the exact correction
@@ -213,7 +215,7 @@ used, as long as $c \gtrsim 1$.
 %
 \begin{figure}[htp]
 \centering
-\includegraphics[width=0.65\textwidth]{correction/correction.pdf}
+\includegraphics[width=0.95\textwidth]{correction/correction.pdf}
 \caption{The best fit value of the signal strength, $\mu$, and its uncertainty when fitted to the dataset as a function of the correction applied per background parameter.}
 \label{fig:correction:correction}
 \end{figure}
@@ -331,7 +333,7 @@ with $N_{\rm par}=2$ for the fit.}
 
 \subsection{Comments on the choice of correction}
 \label{sec:correction:comments}
- As mentioned at the end of Section~\ref{sec:correction:example}, 
+ As mentioned at the end of Section~\ref{sec:correction:example},
 the correction can be considered to have the form
 \begin{displaymath}
 \Lambda_{\mathrm{corr}} = \textrm{\nll} + cN_{\rm par},
@@ -343,20 +345,25 @@ and the amount of data available.
 Figure~\ref{fig:correction:allordererrvscorr} shows the mean of the difference
 between the best fit $\mu$ value and the true $\mu$ and also the 68.3\%
 statistical uncertainty on $\mu$ from the fit, calculated from the toy
-samples discussed above, as a function of $c$, 
+samples discussed above, as a function of $c$,
 both for the true $\mu=0$ and 1. It is seen that the $\mu$ offset
 is generally small but increases with the correction value $c$. This is
 because lower order functions are favoured for large $c$ and these cannot
 necessarily describe more complicated shapes as well. Note the largest
 offset is found when generating with the six-parameter polynomial, as there
 are no other functions being used in this study which have a similar number
-of parameters. 
+of parameters.
 Conversely, the
 statistical error gets smaller for large $c$ as there tend to be less parameters
-in the functions making up the envelope. 
+in the functions making up the envelope.
 
-In principle, these results could be used to choose an optimal value of $c$
-for a given dataset. It is clear the optimal value will change with the 
+Clearly there is a trade off between statistical power and systematic bias. Furthermore, the
+size of this effect is somewhat hidden by the fact that the highest order functions considered
+in this example only go up to 6 free parameters. If even higher order functions were considered
+the statistical uncertainty at low values of $c$ would become unnecessarily large.
+
+In principle, the results of figure~\ref{fig:correction:allordererrvscorr} could be used to choose an optimal value of $c$
+for a given dataset. It is clear the optimal value will change with the
 amount of data as the
 statistical errors will become smaller but the offset will stay the same and
 hence lower values of $c$ will be favoured for larger data volumes.
@@ -393,4 +400,6 @@ power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
 \end{figure}
 
 A decision on the value of $c$ will therefore depend on the application and
-no absolute method for determining this can be given.
+no absolute method for determining this can be given. It is up to the discretion
+of the user which correction is more appropriate to each specific use case. In general a very small
+value of $c$ will result in a large statistical uncertainty and a large value will result in a larger systematic bias.
