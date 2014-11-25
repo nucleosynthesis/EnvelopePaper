@@ -10,6 +10,7 @@ import array
 r.gROOT.ProcessLine('.L lib/libEnvelopeCode.so')
 r.gROOT.ProcessLine('.x paperStyle.C')
 infile = r.TFile("allorderfits.root")
+newoutfile = r.TFile("allorderfits_smoothed.root","RECREATE")
 
 ptypes = ['bern','exp','pow','lau']
 pnames = {'bern':'Polynomial', 'exp':'Exponential Sum', 'pow':'Power Law Sum', 'lau':'Laurent Series'}
@@ -91,15 +92,16 @@ def getName(pdf,nparams):
 def getCorrectedGraph(gr,corr,gr_corr,nparams):
 	gr_corrected = r.TGraph()
 	if corr=='P':
-		assert(gr.GetN()==gr_corr.GetN())
+		#assert(gr.GetN()==gr_corr.GetN())
 		x = r.Double()
 		y = r.Double()
 		x_corr = r.Double()
 		y_corr = r.Double()
 		for p in range(gr.GetN()):
 			gr.GetPoint(p,x,y)
-			gr_corr.GetPoint(p,x_corr,y_corr)
-			assert(r.TMath.Abs(x_corr-x)<1.e-3)
+			#gr_corr.GetPoint(p,x_corr,y_corr)
+			#assert(r.TMath.Abs(x_corr-x)<1.e-3)
+			y_corr = gr_corr.Eval(x)
 			gr_corrected.SetPoint(p,x,y+y_corr)
 	else:
 		x = r.Double()
@@ -124,6 +126,7 @@ def getSmoothedGraph(gr):
 			min_p = p
 
 	smooth_gr = r.TGraph()
+	lower_smooth = r.TGraph()
 	# now loop again trying to remove spikes
 	# but have to do it in two halves
 	y_prev = 0.
@@ -133,32 +136,70 @@ def getSmoothedGraph(gr):
 	for p in range(min_p+1):
 		gr.GetPoint(p,x,y)
 		if p==0 or float(y)<y_prev:
-			smooth_gr.SetPoint(new_p,x,y)
+			lower_smooth.SetPoint(new_p,x,y)
 			new_p += 1
 			y_prev = float(y)
 		else:
 				continue
 
 	new_points = []
+	upper_smooth = r.TGraph()
+	upper_c = 0
 	# now the upper half (counting backwards)
 	for p in range(gr.GetN()-1,min_p,-1):
 		gr.GetPoint(p,x,y)
 		if p==gr.GetN()-1 or float(y)<y_prev:
 			new_points.append([float(x),float(y)])
+			#upper_smooth.SetPoint(upper_c,float(x),float(y))
+			#upper_c+=1
 			y_prev = float(y)
 
-	# now add the upper half points to the graph
+	# make a TGraph from the lower andi upper halfs
+	# re-order
+	nl = lower_smooth.GetN()
+	
 	new_points.sort(key=lambda x: x[0])
-	for xn, yn in new_points:
-		smooth_gr.SetPoint(new_p,xn,yn)
-		new_p += 1
+	for i,p in enumerate(new_points):
+		lower_smooth.SetPoint(i+nl,p[0],p[1]) # also add to lower, for fitting 
+		upper_smooth.SetPoint(i,p[0],p[1])
+	if "pow5" in gr.GetName(): 
+		lower_smooth.Fit("pol2")
+	
+	nu = upper_smooth.GetN()
+	# run through and set points to smoothed points 
+	for i in range(nl+nu):
+	  if i< nl: 
+		lower_smooth.GetPoint(i,x,y)
+	  	if "pow5" in gr.GetName(): smooth_gr.SetPoint(i,x,lower_smooth.GetFunction("pol2").Eval(x))
+		else: smooth_gr.SetPoint(i,x,y)
+	  else: 
+		upper_smooth.GetPoint(i-nl,x,y)
+	  	if "pow5" in gr.GetName(): smooth_gr.SetPoint(i,x,lower_smooth.GetFunction("pol2").Eval(x))
+		else :smooth_gr.SetPoint(i,x,y)
+
+	#now add the upper half points to the graph
+	#new_points.sort(key=lambda x: x[0])
+	#for xn, yn in new_points:
+	#	smooth_gr.SetPoint(new_p,xn,yn)
+	#	new_p += 1
+
 
 	return smooth_gr
 
 def getCorrectedSmoothedGraph(gr,corr,gr_corr,nparams):
 
+	#gr_smoothed = getSmoothedGraph(gr)
+	#gr_corrected = getCorrectedGraph(gr_smoothed,corr,gr_corr,nparams)
 	gr_corrected = getCorrectedGraph(gr,corr,gr_corr,nparams)
+	gr_corrected.SetName(gr.GetName()+"corrected_%s"%str(corr))
 	gr_smoothed = getSmoothedGraph(gr_corrected)
+	"""
+	if not (newoutfile.Get(gr.GetName())):
+		gr_smoothed.SetName(gr.GetName())
+		newoutfile.WriteTObject(gr_smoothed)
+	if not (newoutfile.Get(gr_corr.GetName())):
+		newoutfile.WriteTObject(gr_corr)
+	"""		
 	return gr_smoothed
 
 def getBestFitGraph(graphs,best_fit_name):
