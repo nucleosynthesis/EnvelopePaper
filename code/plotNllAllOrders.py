@@ -18,8 +18,9 @@ pnames = {'bern':'Polynomial', 'exp':'Exponential Sum', 'pow':'Power Law Sum', '
 graphs = []
 
 corr_vals = []
-corr_vals = [0.0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.25,2.5]
+corr_vals = [x for x in numpy.arange(0.0,2.6,0.1)]
 corr_vals = corr_vals + ['P']
+corr_vals_str = [str(x) for x in corr_vals]
 
 r.gROOT.SetBatch()
 
@@ -27,7 +28,7 @@ if len(sys.argv)<=1:
 	print 'Hi Nick and Paul. You need to run nllScan_allOrders.C first and make sure the correction value is set to 0 in that script'
 	print 'Then you can run this bad boy for various different correction schemes'
 	print 'Corrections being run at the moment are:'
-	print '\t', corr_vals
+	print '\t', corr_vals_str
 	raw_input('Are you happy to go ahead? Press return')
 	print '\n\n Segmentation Violation ! \n\n'
 	time.sleep(2)
@@ -157,22 +158,22 @@ def getSmoothedGraph(gr):
 	# make a TGraph from the lower andi upper halfs
 	# re-order
 	nl = lower_smooth.GetN()
-	
+
 	new_points.sort(key=lambda x: x[0])
 	for i,p in enumerate(new_points):
-		lower_smooth.SetPoint(i+nl,p[0],p[1]) # also add to lower, for fitting 
+		lower_smooth.SetPoint(i+nl,p[0],p[1]) # also add to lower, for fitting
 		upper_smooth.SetPoint(i,p[0],p[1])
-	if "pow5" in gr.GetName(): 
+	if "pow5" in gr.GetName():
 		lower_smooth.Fit("pol2")
-	
+
 	nu = upper_smooth.GetN()
-	# run through and set points to smoothed points 
+	# run through and set points to smoothed points
 	for i in range(nl+nu):
-	  if i< nl: 
+	  if i< nl:
 		lower_smooth.GetPoint(i,x,y)
 	  	if "pow5" in gr.GetName(): smooth_gr.SetPoint(i,x,lower_smooth.GetFunction("pol2").Eval(x))
 		else: smooth_gr.SetPoint(i,x,y)
-	  else: 
+	  else:
 		upper_smooth.GetPoint(i-nl,x,y)
 	  	if "pow5" in gr.GetName(): smooth_gr.SetPoint(i,x,lower_smooth.GetFunction("pol2").Eval(x))
 		else :smooth_gr.SetPoint(i,x,y)
@@ -199,7 +200,7 @@ def getCorrectedSmoothedGraph(gr,corr,gr_corr,nparams):
 		newoutfile.WriteTObject(gr_smoothed)
 	if not (newoutfile.Get(gr_corr.GetName())):
 		newoutfile.WriteTObject(gr_corr)
-	"""		
+	"""
 	return gr_smoothed
 
 def getBestFitGraph(graphs,best_fit_name):
@@ -287,7 +288,7 @@ for p, corr in enumerate(corr_vals):
 	drawLabel(canv,corr)
 	canv.Update()
 	canv.Modified()
-	canv.Print("../correction/ProfilesAllOrders%s.pdf"%str(corr))
+	#canv.Print("../correction/ProfilesAllOrders%s.pdf"%str(corr))
 
 	##
 	## envelope plot
@@ -349,7 +350,7 @@ for p, corr in enumerate(corr_vals):
 	leg.Draw()
 	canv.Update()
 	canv.Modified()
-	canv.Print("../correction/EnvelopeAllOrders%s.pdf"%str(corr))
+	#canv.Print("../correction/EnvelopeAllOrders%s.pdf"%str(corr))
 
 
 	# set values
@@ -366,11 +367,11 @@ for p, corr in enumerate(corr_vals):
 	print 'c =', corr, ' mu =', fit_val, ' +', errHigh1, ' -', errLow1, ' (1sigma) +', errHigh2, ' -', errLow2, ' (2sigma)'
 
 # now do correction plot stuff
-canv = r.TCanvas("c","c",100*len(corr_vals),700)
+canv = r.TCanvas("c","c",100*len(corr_vals),800)
 canv.SetBottomMargin(0.25)
 canv.SetLeftMargin(0.1)
 
-leg = r.TLegend(0.15,0.7,0.5,0.89)
+leg = r.TLegend(0.68,0.64,0.85,0.89)
 leg.SetFillColor(0)
 leg.SetLineColor(0)
 leg.AddEntry(bestFit,"Fit value", "L")
@@ -391,7 +392,7 @@ bestFitH.GetXaxis().SetTitleSize(0.08);
 bestFitH.GetXaxis().SetTitleOffset(1.4);
 
 line = r.TLine()
-line.SetLineWidth(3)
+line.SetLineWidth(2)
 line.SetLineStyle(7)
 line.SetLineColor(r.kBlack)
 
