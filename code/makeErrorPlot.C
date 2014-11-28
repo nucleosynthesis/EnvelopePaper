@@ -1,5 +1,6 @@
 {
 
+  gROOT->SetBatch(1);
   gROOT->ProcessLine(".x paperStyle.C");
   TFile *fi = TFile::Open("symmetrized_errors_powerlawtoys_compare_corrections.root");
 

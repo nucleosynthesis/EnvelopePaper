@@ -117,18 +117,18 @@ these. Specifically, these are
 \begin{enumerate}
 \item
 %``Power law sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} x^{p^{b}_{i+1}}$.
-``Power law sum''; $f(x) = \sum_{i=0}^N p_{2i} x^{p_{2i+1}}$.
+``Power law sum''; $f(x) = \sum_{i=0}^N p_{2i} x^{p_{2i+1}} = p_{0}x^{p_{1}} + p_{2}x^{p_{3}} + p_{4}x^{p_{5}}+\cdots$. 
 \item
 %``Exponential sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} e^{p^{b}_{i+1}x}$.
-``Exponential sum''; $f(x) = \sum_{i=0}^N p_{2i} e^{p_{2i+1}x}$.
+``Exponential sum''; $f(x) = \sum_{i=0}^N p_{2i} e^{p_{2i+1}x} = p_{0} e^{p_{1}x} + p_{2} e^{p_{3}x} + p_{4} e^{p_{5}x}+\cdots$.
 \item
-``Laurent series''; $f(x) = \sum_{i=0}^N p_i/x^n$.
+``Laurent series''; $f(x) = \sum_{i=0}^N p_i/x^n_{i}$.
 \item
 ``Polynomial''; $f(x) = \sum_{i=0}^N p_i x^i$.
 \end{enumerate}
-The Laurent function values of $n$ used for $i=0,1,2,3,4,5\dots$ are
-$n=4,5,3,6,2,7\dots$, meaning they are grouped around the original
-two $n$ values of 4 and 5 as used throughout Section~\ref{sec:functions}.
+The Laurent function values of $n_{i}$ used for $i=0,1,2,3,4,5\dots$ are
+$n_{i}=4,5,3,6,2,7\dots$, meaning they are grouped around the original
+two $n_{i}$ values of 4 and 5 as used throughout Section~\ref{sec:functions}.
 Note the power law and exponential functions can only have even numbers of
 parameters, i.e. $N_{\rm par}=2N$, while the Laurent and polynomial functions
 can have both even and odd numbers, i.e. $N_{\rm par}=N$.
@@ -355,11 +355,11 @@ are no other functions being used in this study which have a similar number
 of parameters.
 Conversely, the
 statistical error gets smaller for large $c$ as there tend to be less parameters
-in the functions constituting the envelope.
+in the functions that contribute to the envelope.
 
 Clearly there is a trade off between statistical power and systematic bias. Furthermore, the
 size of this effect is somewhat hidden by the fact that the highest order functions considered
-in this example only go up to 6 free parameters. If even higher order functions were considered
+in this example only go up to six free parameters. If even higher order functions were considered
 the statistical uncertainty at low values of $c$ would become unnecessarily large.
 
 In principle, the results of figure~\ref{fig:correction:allordererrvscorr} could be used to choose an optimal value of $c$
@@ -371,13 +371,13 @@ However, defining how to optimise the value is somewhat arbitrary. It depends
 on whether accurately knowing the true uncertainty on $\mu$ is critically
 important. The statistical error will be well known but the bias depends on the
 underlying background shape which is by definition not well known. Hence,
-how to weigh the relative important of these two contributions is not unqiuely
+how to weigh the relative important of these two contributions is not uniquely
 defined. For example, the offset and statistical error could be added in
 quadrature to give an estimate of the overall error. For the case of
 figure~\ref{fig:correction:allordererrvscorr}, this has its smallest
-value at high $c$. However, for the actual Higgs analysis, the value of $c=1$
+value at high $c$. However, for the actual Higgs to two photon analysis, the value of $c=1$
 was chosen. This is more conservative, in that it means the known statistical
-error will dominate more over the unknown offset.
+error will dominate.
 %
 \begin{figure}[tbp]
 \centering
@@ -399,6 +399,6 @@ power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
 \end{figure}
 
 A decision on the value of $c$ will therefore depend on the application and
-no absolute method for determining this can be given. It is up to the discretion
-of the user which correction is more appropriate to each specific use case. In general a very small
-value of $c$ will result in a large statistical uncertainty and a large value will result in a larger systematic bias.
+no absolute method for determining this can be given. FIXME GAVIN \emph{It is up to the discretion
+of the user which correction is more appropriate to each specific use case.} In general a very small
+value of $c$ will result in a larger statistical uncertainty and a large value will result in a larger systematic bias.
