@@ -28,6 +28,7 @@ gnames = [
 	,"Exponential"
  	,"Power Law"
 	]
+panelnames = ["(d)","(c)","(b)","(a)"]
 # these are the same sizes  (add back in poly)
 #names = ["Laurent","Power Law","Polynomial","Exponential","Envelope"]
 #fits = ["lau1","pow1","bern1","exp1","envelope"]
@@ -38,7 +39,8 @@ fits = ["lau1","pow1","exp1","envelope"]
 styles = [20,24,25,23]
 colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kRed,ROOT.kBlack]
 
-leg = ROOT.TLegend(0.65,0.52,0.89,0.89)
+leg = ROOT.TLegend(0.45,0.52,0.89,0.89)
+leg.SetNColumns(2)
 leg.SetFillColor(0)
 
 c = ROOT.TCanvas("c","c",600,800)
@@ -73,6 +75,9 @@ for i,g in enumerate(gens):
  dh.Draw("axis")
  line.Draw()
  latlab.DrawLatex(0.935,0.15,gnames[i])
+ latlab.SetTextAngle(0)
+ if i==np-1: latlab.DrawLatex(0.2,0.76,panelnames[i])
+ else: latlab.DrawLatex(0.2,0.81,panelnames[i])
 # hists.append(dh)
  for j,f in enumerate(fits):
    #print g,f

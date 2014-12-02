@@ -11,14 +11,14 @@
 %the function used. This issue is exacerbated in the case of a small signal to
 %background ratio.
 
-A common problem in data analysis is that the underlying model, or components of it, which is used to describe a dataset
-is not always known. In high energy physics, determination of signal parameters is
+A common problem in data analysis is that the underlying physics parameters of a model, or components of it, which is used to describe a dataset
+is not known. In high energy physics, determination of signal parameters is
 often achieved using a maximum likelihood technique~\cite{ref:Fisher01011922}
 in which parametric models for the signal and background processes are constructed and
 ``fit'' to the data. However in certain circumstances the exact parametrisation, not just the parameter
 values, of the underlying models is not {\it a priori} known. Consequently, there is some uncertainty in the parameters which results from the uncertainty in the function used.
 
-A common approach to asses this systematic is to fit various different plausible functions and
+A common approach to asses this systematic uncertainty is to fit various different plausible functions and
 determine the spread of the parameters of interest when using these functions.
 However, these methods tend to have some degree of arbitrariness and so
 a new approach is discussed in this paper.
@@ -29,7 +29,7 @@ It was applied to the analysis of Higgs decays to two photons, which
 results in a narrow signal on a large
 background~\cite{ref:introduction:legacy}.
 
-The method presented tries to be less
+The method presented is less
 arbitrary and treats the uncertainty associated with the
 background parameterisation in a way
 which is more comparable with the treatment of other
@@ -45,20 +45,19 @@ The application of the method to functions with the same number of parameters
 is described in Section~\ref{sec:functions} and to functions with different
 numbers of parameters in Section~\ref{sec:correction}. Further discussion on
 the method, namely its practical application to the real-world problem of
-the Higgs measurements, is given in Section~\ref{sec:discussion}.
+the Higgs boson measurements, is given in Section~\ref{sec:discussion}.
 
 Within this paper, twice the negative of the logarithm of the likelihood ratio 
 function is denoted by \nll. The data are binned and the
 likelihood model used for each bin is the Poisson likelihood ratio to the best
 possible likelihood given the observed data, i.e.
-\begin{equation}
+\begin{displaymath}
 %{\rm \nll}_i = \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
 \nll = 2\cdot\sum_{i} \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
-\label{eqn:introduction:def2NLL}
-\end{equation}
+%\label{eqn:introduction:def2NLL}
+\end{displaymath}
 where $n_{i}$ is the observed and $\nu_{i}$ is the expected number of events
 given a particular background model in the $i^{\rm th}$ bin.
-
 For the purposes of fitting and generating datasets, the statistical package
 ``RooFit'' is used throughout this paper~\cite{ref:roofit}.
 

@@ -32,6 +32,7 @@ gens = [
 		,"env_pdf_1_8TeV_bern4_"
 		,"env_pdf_1_8TeV_bern5_"
 	   ]
+panelnames = ["(f)","(e)","(d)","(c)","(b)","(a)"]
 gnames = [
  	"Profiled Function"
 	,"Exponential (2 pars)"
@@ -55,9 +56,9 @@ fits = ["envelope"]
 #styles = [23]
 #colors = [ROOT.kBlack]
 
-leg = ROOT.TLegend(0.65,0.52,0.89,0.89)
+leg = ROOT.TLegend(0.45,0.52,0.89,0.89)
 leg.SetFillColor(0)
-
+leg.SetNColumns(2)
 c = ROOT.TCanvas("c","c",600,800)
 pads = []
 np = len(gens)
@@ -90,6 +91,10 @@ for i,g in enumerate(gens):
  dh.Draw("axis")
  line.Draw()
  latlab.DrawLatex(0.935,0.15,gnames[i])
+ latlab.SetTextAngle(0)
+ latlab.SetTextSize(0.2)
+ if i==np-1: latlab.DrawLatex(0.2,0.16,panelnames[i])
+ else: latlab.DrawLatex(0.2,0.76,panelnames[i])
 # hists.append(dh)
  f = "envelope"
  for j,cVal in enumerate(corrections):

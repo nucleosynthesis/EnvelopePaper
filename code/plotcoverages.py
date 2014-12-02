@@ -40,6 +40,7 @@ gnames = [
 #fits = ["lau1","pow1","bern1","exp1","envelope"]
 #styles = [20,24,21,25,23]
 #colors = [ROOT.kGreen+2,ROOT.kBlue,ROOT.kMagenta,ROOT.kRed,ROOT.kBlack]
+panelnames = ["(d)","(c)","(b)","(a)"]
 names = ["Laurent","Power Law","Exponential","Envelope"]
 fits = ["lau1","pow1","exp1","envelope"]
 styles = [20,24,25,23]
@@ -102,6 +103,9 @@ for i,c in enumerate(cvals):
 	 dh.Draw("axis")
 	 for line in lines: line.Draw()
 	 latlab.DrawLatex(0.935,0.15,gnames[i])
+	 #if (i==np-1): 
+ 	 #latlab.SetTextAngle(0)
+ 	 #latlab.DrawLatex(0.2,0.9,panelnames[i])
 	# hists.append(dh)
 	 for j,f in enumerate(fits):
 	   #print g,f

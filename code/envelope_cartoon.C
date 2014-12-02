@@ -64,7 +64,7 @@ void envelope_cartoon(){
   TF1 f2("f2","(1.5*(x-125))*(1.5*(x-125))",120,130);
   f2.SetLineColor(kBlue);
   f2.SetLineWidth(3);
-  leg->AddEntry(&f2,"Fit freezing nuisance parameter to best fit","L");
+  leg->AddEntry(&f2,"Fit fixing nuisance parameter to best fit","L");
 
   
   TGraph *envelope = new TGraph();
@@ -87,7 +87,7 @@ void envelope_cartoon(){
     fS->SetLineStyle(kDashed);
     fS->Draw("Lsame");
     if (m==122) {
-      leg->AddEntry(fS,"Fits freezing nuisance parameter to arbitary values","L");
+      leg->AddEntry(fS,"Fits fixing nuisance parameter to arbitary values","L");
     }
     for (int p=0; p<npoints; p++){
       envelope->GetPoint(p,x,y);
