@@ -51,11 +51,11 @@ Within this paper, twice the negative of the logarithm of the likelihood ratio
 function is denoted by \nll. The data are binned and the
 likelihood model used for each bin is the Poisson likelihood ratio to the best
 possible likelihood given the observed data, i.e.
-\begin{displaymath}
+\begin{equation}
 %{\rm \nll}_i = \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
 \nll = 2\cdot\sum_{i} \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
-%\label{eqn:introduction:def2NLL}
-\end{displaymath}
+\label{eqn:introduction:def2NLL}
+\end{equation}
 where $n_{i}$ is the observed and $\nu_{i}$ is the expected number of events
 given a particular background model in the $i^{\rm th}$ bin.
 For the purposes of fitting and generating datasets, the statistical package
