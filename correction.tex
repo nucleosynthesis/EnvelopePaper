@@ -76,17 +76,13 @@ correction and the $N_{\rm par}$ approximate correction are used in this paper.
 %
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}[b]{0.5\textwdith}
- \includegraphics[width=0.45\textwidth]{correction/DeltaChiSq1.pdf}
-\label{fig:correction:DeltaChiSq:a}
-\end{subfigure}
-\begin{subfigure}[b]{0.5\textwdith}
-\includegraphics[width=0.45\textwidth]{correction/DeltaChiSq2.pdf}
-\label{fig:correction:DeltaChiSq:b}
-\end{subfigure}
+ \subfigure[]{\includegraphics[width=0.46\textwidth]{correction/DeltaChiSq1.pdf}
+\label{fig:correction:DeltaChiSq:a}}
+ \subfigure[]{\includegraphics[width=0.46\textwidth]{correction/DeltaChiSq2.pdf}
+\label{fig:correction:DeltaChiSq:b}}
 \caption{Change of $\chi^2$ when correcting for between one and five parameters
-in a fit with 160 bins.~\ref{fig:correction:DeltaChiSq:a} The change to the $\chi^2$ as a function of the
-original p-value.~\ref{fig:correction:DeltaChiSq:b} The distribution of the change of
+in a fit with 160 bins. (a) The change to the $\chi^2$ as a function of the
+original p-value. (b) The distribution of the change of
 the $\chi^2$ assuming a flat p-value distribution.}
 \label{fig:correction:DeltaChiSq}
 \end{figure}
@@ -147,20 +143,20 @@ The functions listed above were fit to the original dataset for values of
 $2 \le N_{\rm par} \le 6$; this resulted in three fits for the power law and
 exponential functions, and five fits for the Laurent and polynomial functions.
 The profile curves from the fits of these functions are shown in
-figure~\ref{fig:correction:profiles}, where results for three different
+figures~\ref{fig:correction:profiles-no},~\ref{fig:correction:profiles-pval} and~\ref{fig:correction:profiles-akaike} where results for three different
 corrections to \nll have been shown, namely no correction, the approximate
-p-value correction, and the Akaike correction.
+p-value correction, and the Akaike correction respectively.
 
 Consider the example case of the approximate p-value correction,
 i.e. correcting by one unit per background function parameter,
 which is shown
-in the middle row of figure~\ref{fig:correction:profiles}.
+in figure~\ref{fig:correction:profiles-pval}.
 For this case, the lowest corrected \nll value is still given by the
 two-parameter power law function and so gives an identical central value
 to that described in Section~\ref{sec:functions:example}. The lowest corrected
 \nll value for $\mu < 0.55$ is also again given by the two-parameter exponential
 function, also as for the previous case.
-Indeed, comparison to figure~\ref{fig:functions:profiles} shows that the
+Indeed, comparison to figure~\ref{fig:functions:profiles-pval} shows that the
 minimum values of the corrected \nll for low $\mu$
 are simply two units larger here than in that figure.
 However, for $1.48 < \mu < 1.68$,
@@ -168,7 +164,7 @@ the $N_{\rm par}=5$ polynomial is the lowest function in the profile,
 while for $\mu > 1.68$,
 the $N_{\rm par}=6$ polynomial is lowest.
 Hence, the envelope is formed from four different functions in this
-case. Figure~\ref{fig:correction:profiles} also shows the 68.3\% and
+case. Figures~\ref{fig:correction:profiles-no},~\ref{fig:correction:profiles-pval} and~\ref{fig:correction:profiles-akaike} also show the 68.3\% and
 95.4\% confidence intervals which would be determined from the
 profile envelope. The 68.3\% region is identical to that found using
 just the two-parameter functions (see Section~\ref{sec:functions:example}), but
@@ -182,39 +178,61 @@ reasonable description of the data.
 %
 \begin{figure}[tbp]
 \centering
-\begin{subfigure}[b]{0.5\textwdith}
-\includegraphics[width=0.11\textwidth]{{correction/AllFunctionsLegend}.pdf}
-\includegraphics[width=0.33\textwidth]{{correction/ProfilesAllOrders0.0}.pdf}
-\includegraphics[width=0.33\textwidth]{{correction/EnvelopeAllOrders0.0}.pdf} 
-\label{fig:correction:profile:a}
-\end{subfigure}\\
-\begin{subfigure}[b]{0.5\textwdith}
-\includegraphics[width=0.11\textwidth]{{correction/AllFunctionsLegend}.pdf}
-\includegraphics[width=0.33\textwidth]{{correction/ProfilesAllOrders1.0}.pdf}
-\includegraphics[width=0.33\textwidth]{{correction/EnvelopeAllOrders1.0}.pdf} 
-\label{fig:correction:profile:b}
-\end{subfigure}\\
-\begin{subfigure}[b]{0.5\textwdith}
-\includegraphics[width=0.11\textwidth]{{correction/AllFunctionsLegend}.pdf}
-\includegraphics[width=0.33\textwidth]{{correction/ProfilesAllOrders2.0}.pdf}
-\includegraphics[width=0.33\textwidth]{{correction/EnvelopeAllOrders2.0}.pdf}
-\label{fig:correction:profile:c}
-\end{subfigure}
-\caption{Left: Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has been corrected by no units (top), one unit per background function parameter (middle) and two units per background function parameter (bottom). The labels indicate the function and the value of $N_{\rm par}$. Right: Minimum envelope of the functions considered accounting for the correction of either 0, 1 or 2 per background parameter. The \nll scan when only considering the best fit function is shown in red.}
-\label{fig:correction:profiles}
+\subfigure[]{
+ \includegraphics[width=0.46\textwidth]{{correction/ProfilesAllOrders0.0}.pdf}
+ \includegraphics[width=0.46\textwidth]{{correction/AllFunctionsLegend}.pdf}
+\label{fig:correction:profiles-no:a}
+}
+\subfigure[]{
+ \includegraphics[width=0.46\textwidth]{{correction/EnvelopeAllOrders0.0}.pdf}
+\label{fig:correction:profiles-no:b}
+}
+\caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has not been corrected. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions. The \nll scan when only considering the best fit function is shown in red.}
+\label{fig:correction:profiles-no}
 \end{figure}
 
-In contrast, the case with no correction to \nll, shown in the top row of
-figure~\ref{fig:correction:profiles}, shows that the highest order polynomial
+\begin{figure}[tbp]
+\centering
+\subfigure[]{
+ \includegraphics[width=0.46\textwidth]{{correction/ProfilesAllOrders1.0}.pdf}
+ \includegraphics[width=0.46\textwidth]{{correction/AllFunctionsLegend}.pdf}
+\label{fig:correction:profiles-pval:a}
+}
+\subfigure[]{
+ \includegraphics[width=0.46\textwidth]{{correction/EnvelopeAllOrders1.0}.pdf}
+\label{fig:correction:profiles-pval:b}
+}
+\caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has not been corrected using the approximate p-value correction of 1 per background parameter. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions after applying a correction of 1 per background parameter to each \nll curve. The \nll scan when only considering the best fit function is shown in red.}
+\label{fig:correction:profiles-pval}
+\end{figure}
+
+\begin{figure}[tbp]
+\centering
+\subfigure[]{
+ \includegraphics[width=0.46\textwidth]{{correction/ProfilesAllOrders2.0}.pdf}
+ \includegraphics[width=0.46\textwidth]{{correction/AllFunctionsLegend}.pdf}
+\label{fig:correction:profiles-akaike:a}
+}
+\subfigure[]{
+ \includegraphics[width=0.46\textwidth]{{correction/EnvelopeAllOrders2.0}.pdf}
+\label{fig:correction:profiles-akaike:b}
+}
+\caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has not been corrected using the Akaike correction of 2 per background parameter. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions after applying a correction of 2 per background parameter to each \nll curve. The \nll scan when only considering the best fit function is shown in red.}
+\label{fig:correction:profiles-akaike}
+\end{figure}
+ 
+
+In contrast, the case with no correction to \nll, shown in figure
+figure~\ref{fig:correction:profiles-no}, shows that the highest order polynomial
 function used, with $N_{\rm par}=6$, defines the envelope across the whole
 range of $\mu$. This domination of the functions with the highest numbers of
-parameters is exactly what the penalty correction to \nll is attemping to
-avoid. Finally, the lowest plot in figure~\ref{fig:correction:profiles},
+parameters is exactly what the penalty correction to \nll is attempting to
+avoid. Finally, figure~\ref{fig:correction:profiles-akaike},
 corresponding to the Akaike correction, shows that all functions with more
 than the minimum of two parameters get a large penalty and so do not
 contribute to the envelope. This hints that this correction may be too severe.
 
-The three corrections shown in figure~\ref{fig:correction:profiles} can be
+The three corrections shown can be
 considered to be examples of a continuous spectrum of corrections which can
 be written as
 \begin{displaymath}
@@ -233,7 +251,7 @@ used, as long as $c \gtrsim 1$.
 %
 \begin{figure}[htp]
 \centering
-\includegraphics[width=0.98\textwidth]{correction/correction.pdf}
+\includegraphics[angle=90,width=0.4\textwidth]{correction/correction.pdf}
 \caption{The best fit value of the signal strength, $\mu$, and its uncertainty when fitted to the dataset as a function of the correction applied per background parameter.}
 \label{fig:correction:correction}
 \end{figure}
@@ -264,7 +282,7 @@ that the p-value corrections always give less bias than the Akaike correction.
 %
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.48\textwidth]{correction/AllOrderFunctions_call.pdf}
+\includegraphics[width=0.8\textwidth]{correction/AllOrderFunctions_call.pdf}
 \caption{Average pull when fitting using the envelope as a function of $\mu$
 used to generate the signal when correcting
 with the different \nll correction schemes.
@@ -291,18 +309,30 @@ Akaike correction.
 %
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_0.5_call}.pdf}
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_1._call}.pdf}\\
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_2._call}.pdf}
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_Coverage_3._call}.pdf}
-\caption{Fraction of toys in which the fitted value of $\mu$ is within the 38.3\%, 68.3\%, 95.4\% and
-99.7\% intervals relative to the expected fraction for that interval
+\subfigure[]{
+\includegraphics[width=0.46\textwidth]{{correction/AllOrderFunctions_Coverage_0.5_call}.pdf}
+\label{fig:correction:allorderecoverage:a}
+}
+\subfigure[]{
+\includegraphics[width=0.46\textwidth]{{correction/AllOrderFunctions_Coverage_1._call}.pdf}
+\label{fig:correction:allorderecoverage:b}
+}\\
+\subfigure[]{
+\includegraphics[width=0.46\textwidth]{{correction/AllOrderFunctions_Coverage_2._call}.pdf}
+\label{fig:correction:allorderecoverage:c}
+}
+\subfigure[]{
+\includegraphics[width=0.46\textwidth]{{correction/AllOrderFunctions_Coverage_3._call}.pdf}
+\label{fig:correction:allorderecoverage:d}
+}
+\caption{Fraction of toys in which the fitted value of $\mu$ is within the 38.3\% (a), 68.3\% (b), 95.4\% (c) and
+99.7\% (d) intervals relative to the expected fraction for that interval
 when correcting
 with the different \nll correction schemes.
 The results when generating with different functions and generating using the
 profiled function for each value of $\mu$ are shown in the different panels.
 The functions
-used are (from the top): polynomial with $N_{\rm par}=6$,
+used are (from the top panels): polynomial with $N_{\rm par}=6$,
 polynomial with $N_{\rm par}=5$, Laurent with $N_{\rm par}=2$,
 power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
 The lowest plots show the result when the best-fit function at each
@@ -399,8 +429,14 @@ error will dominate.
 %
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_errors_vs_correction_0.}.pdf}
-\includegraphics[width=0.45\textwidth]{{correction/AllOrderFunctions_errors_vs_correction_1.}.pdf}
+\subfigure[]{
+ \includegraphics[width=0.46\textwidth]{{correction/AllOrderFunctions_errors_vs_correction_0.}.pdf}
+\label{fig:correction:allordererrvscorr-0}
+}
+\subfigure[]{
+\includegraphics[width=0.46\textwidth]{{correction/AllOrderFunctions_errors_vs_correction_1.}.pdf}
+\label{fig:correction:allordererrvscorr-0}
+}
 \caption{Mean value of the difference between the fitted and true values
 of $\mu$  (data points)
 and 68.3\% uncertainty (bands)

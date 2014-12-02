@@ -52,8 +52,9 @@ covCanvs = []
 for i,c in enumerate(cvals):
   	can = ROOT.TCanvas("c%d"%i,"c%d"%i,600,800)
   	covCanvs.append(can)
-  	leg = ROOT.TLegend(0.72,0.4,0.89,0.89)
+  	leg = ROOT.TLegend(0.55,0.4,0.89,0.89)
   	leg.SetFillColor(0)
+	leg.SetNColumns(2)
 
   	pads = []
   	np = len(gens)
