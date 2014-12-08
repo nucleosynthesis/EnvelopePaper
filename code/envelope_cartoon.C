@@ -20,7 +20,7 @@
 #include "RooAddPdf.h"
 #include "RooArgList.h"
 #include "RooConstVar.h"
-#include "RooFormulaVar.h"  
+#include "RooFormulaVar.h"
 #include "RooDataSet.h"
 #include "RooFitResult.h"
 #include "RooAbsPdf.h"
@@ -35,7 +35,7 @@ void envelope_cartoon(){
   dummy.GetYaxis()->SetRangeUser(0.,5.5);
   dummy.SetStats(0);
   dummy.GetXaxis()->SetTitle("x");
-  dummy.GetYaxis()->SetTitle("#Delta#Lambda");
+  dummy.GetYaxis()->SetTitle("#Lambda");
 
   TCanvas c("c","c",800,600);
   c.SetGrid();
@@ -55,7 +55,7 @@ void envelope_cartoon(){
   l2.SetLineColor(kBlack);
   l2.SetLineStyle(kDashed);
 
-  
+
   TF1 f("f1","(0.5*(x-125))*(0.5*(x-125))",120,130);
   f.SetLineColor(kBlack);
   f.SetLineWidth(3);
@@ -66,7 +66,7 @@ void envelope_cartoon(){
   f2.SetLineWidth(3);
   leg->AddEntry(&f2,"Fit fixing nuisance parameter to best fit","L");
 
-  
+
   TGraph *envelope = new TGraph();
   envelope->SetLineWidth(3);
   envelope->SetLineStyle(4);
@@ -81,7 +81,7 @@ void envelope_cartoon(){
 
   for (int m=122; m<=128; m+=1){
     double yval = f.Eval(m);
-    yval *= 1.+0.05*TMath::Abs(m-125.); 
+    yval *= 1.+0.05*TMath::Abs(m-125.);
     TF1 *fS = new TF1(Form("fS_%d",m),Form("(1.5*(x-%d))*(1.5*(x-%d))+%6.3f",m,m,yval),120,130);
     fS->SetLineColor(kRed);
     fS->SetLineStyle(kDashed);
@@ -93,7 +93,7 @@ void envelope_cartoon(){
       envelope->GetPoint(p,x,y);
       if (fS->Eval(x)<y) envelope->SetPoint(p,x,fS->Eval(x));
     }
-  
+
   }
   leg->AddEntry(envelope,"Envelope","L");
   envelope->Draw("Csame");
