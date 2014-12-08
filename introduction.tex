@@ -16,9 +16,9 @@ is not known. In high energy physics, determination of signal parameters is
 often achieved using a maximum likelihood technique~\cite{ref:Fisher01011922}
 in which parametric models for the signal and background processes are constructed and
 ``fit'' to the data. However in certain circumstances the exact parametrisation, not just the parameter
-values, of the underlying models is not {\it a priori} known. Consequently, there is some uncertainty in the parameters which results from the uncertainty in the function used.
+values, of the underlying models is not {\it a priori} known. Consequently, there is some uncertainty in the signal parameters which results from the uncertainty in the function used.
 
-A common approach to asses this systematic uncertainty is to fit various different plausible functions and
+A common approach to assess this systematic uncertainty is to fit various different plausible functions and
 determine the spread of the parameters of interest when using these functions.
 However, these methods tend to have some degree of arbitrariness and so
 a new approach is discussed in this paper.
@@ -53,7 +53,8 @@ likelihood model used for each bin is the Poisson likelihood ratio to the best
 possible likelihood given the observed data, i.e.
 \begin{equation}
 %{\rm \nll}_i = \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
-\nll = 2\cdot\sum_{i} \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
+\nll = 2%\cdot
+\sum_{i} \nu_i - n_i + n_i \ln\left(\frac{n_i}{\nu_i}\right),
 \label{eqn:introduction:def2NLL}
 \end{equation}
 where $n_{i}$ is the observed and $\nu_{i}$ is the expected number of events

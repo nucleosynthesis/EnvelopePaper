@@ -15,8 +15,8 @@ as a source of systematic error which is modelled as a nuisance parameter.
 It is then consistently treated like other nuisance parameters as far as
 possible.
 
-The two main parameters of a resonant signal are the position (i.e. the mean)
-and size (i.e. the amplitude), although other
+The two main parameters of a resonant signal are the position (i.e.~the mean)
+and size (i.e.~the amplitude), although other
 quantities such as the width may also be of interest. This results in a
 multi-dimensional parameter space. For simplicity in this paper, the position
 and width of the signal are considered to be known and only the signal
@@ -47,11 +47,11 @@ and ${\rm \nll}_{BF}+9$, respectively.
 An example of a profile likelihood curve for some parameter of interest $x$,
 which depends on some nuisance parameters,
 is shown by the solid black line in figure~\ref{fig:concept:cartoon}. If the
-nuisance parameters were fixed to their values at the best fit point (i.e. the
+nuisance parameters were fixed to their values at the best fit point (i.e.~the
 absolute minimum in \nll) then the profile \nll curve would be much narrower.
 This directly reflects the fact that
 if the nuisance parameters had no uncertainty,
-the error on $x$ would be reduced, i.e. there would be no systematic
+the error on $x$ would be reduced, i.e.~there would be no systematic
 uncertainty arising from this source and the width of this curve would only
 be affected by the statistical power of the dataset being fitted.
 The same is true for any other values of the nuisance parameters; if their values
@@ -72,8 +72,8 @@ parameter values would be needed to make this curve smooth. However, in
 principle, sampling the nuisance parameter space sufficiently
 and then finding the enclosing
 minimum envelope should give the profile curve required.
-Note, it would of course be possible to mix the two methods, i.e.
-choose sets of only some of the parameter values and fit for the others.
+Note, it would of course be possible to mix the two methods, i.e.~choose 
+sets of only some of the parameter values and fit for the others.
 %
 \begin{figure}[tbp]
 \centering
@@ -86,7 +86,7 @@ values is shown by the blue, solid line. The full profile curve allowing the
 nuisance parameters to be fitted for every value of $x$ is shown by the
 black, solid line. The red dashed lines show the \nll curves for fixed
 nuisance parameter values other than those at the best fit, while the green
-dashed line is the envelope, i.e. the lowest value of any of the red dashed
+dashed line is the envelope, i.e.~the lowest value of any of the red dashed
 curves for each $x$. Even with such a coarse sampling of the nuisance
 parameters, it is seen that the envelope approximates the full profile curve.}
 \label{fig:concept:cartoon}
@@ -108,16 +108,16 @@ than any of the individual curves which contribute to the envelope.
 
 In practical terms, most minimisation routines
 cannot easily handle a discrete parameter, particularly when the
-number and values of the other parameters of the fit (i.e. the parameters
+number and values of the other parameters of the fit (i.e.~the parameters
 of the functions) change with the discrete parameter.
 Hence, in practice it has
 to be handled by mixing the methods as discussed in the previous section,
-i.e. as a discrete set of continuous minimisations (one for each function in turn).
+i.e.~as a discrete set of continuous minimisations (one for each function in turn).
 
 While the concept is straightforward, there are some statistical
 issues in applying it.
 Firstly, there is a question of whether the \nll minimum envelope has the correct coverage,
-i.e. the properties desired for a profile curve.
+i.e.~the properties desired for a profile curve.
 This is discussed in Section~\ref{sec:functions}.
 Secondly, obtaining the envelope profile curve requires a
 comparison between the absolute \nll values obtained from fits with different functions, which

@@ -51,7 +51,7 @@ depends on the original fit quality
 (or equivalently p-value). Figure~\ref{fig:correction:DeltaChiSq}
 shows examples of the size of the correction as a function of the
 fit p-value, when correcting for various numbers of parameters.
-The correction is monotonically increasing as the p-value gets smaller.
+The correction is monotonically decreasing as the p-value gets larger.
 Hence, when correcting the profile likelihood curve, the fits further away from
 the best fit minimum will get a larger correction. Hence, the profile curve
 becomes steeper, which could in principle affect the coverage, even if
@@ -102,13 +102,13 @@ For finite samples, then it is modified to
 = \textrm{\nll} + 2N_{\rm par}  + \frac{2N_{\rm par}(N_{\rm par}+1)}{n-(N_{\rm par}+1)}
 = \textrm{\nll} + \frac{2N_{\rm par}}{1-(N_{\rm par}+1)/n},
 \end{displaymath}
-where $n$ is the sample size, i.e. the number of bins (for a binned likelihood
+where $n$ is the sample size, i.e.~the number of bins (for a binned likelihood
 fit) or events (for an unbinned likelihood fit). For large $n$, the original
 formula is clearly regained. 
 Also the correction does not depend on the \nll value and
 so is a simple shift of
 the whole profile curve, without changing its shape.
-Hence, it also has no effect on coverage, when considering one function alone.
+Hence, it also has no effect on coverage when considering one function alone.
 \end{enumerate}
 
 \subsection{Function definitions}
@@ -124,7 +124,7 @@ these. Specifically, these are
 %``Exponential sum''; $f(x) = \sum_{i=0}^N p^{a}_{i} e^{p^{b}_{i+1}x}$.
 ``Exponential sum''; $f(x) = \sum_{i=0}^N p_{2i} e^{p_{2i+1}x} = p_{0} e^{p_{1}x} + p_{2} e^{p_{3}x} + p_{4} e^{p_{5}x}+\cdots$.
 \item
-``Laurent series''; $f(x) = \sum_{i=0}^N p_i/x^n_{i}$.
+``Laurent series''; $f(x) = \sum_{i=0}^N p_i/x^{n_i}$.
 \item
 ``Polynomial''; $f(x) = \sum_{i=0}^N p_i x^i$.
 \end{enumerate}
@@ -132,8 +132,8 @@ The Laurent function values of $n_{i}$ used for $i=0,1,2,3,4,5\dots$ are
 $n_{i}=4,5,3,6,2,7\dots$, meaning they are grouped around the original
 two $n_{i}$ values of 4 and 5 as used throughout Section~\ref{sec:functions}.
 Note the power law and exponential functions can only have even numbers of
-parameters, i.e. $N_{\rm par}=2N$, while the Laurent and polynomial functions
-can have both even and odd numbers, i.e. $N_{\rm par}=N$.
+parameters, i.e.~$N_{\rm par}=2N$, while the Laurent and polynomial functions
+can have both even and odd numbers, i.e.~$N_{\rm par}=N$.
 
 
 \subsection{Example case}
@@ -148,7 +148,7 @@ corrections to \nll have been shown, namely no correction, the approximate
 p-value correction, and the Akaike correction respectively.
 
 Consider the example case of the approximate p-value correction,
-i.e. correcting by one unit per background function parameter,
+i.e.~correcting by one unit per background function parameter,
 which is shown
 in figure~\ref{fig:correction:profiles-pval}.
 For this case, the lowest corrected \nll value is still given by the
@@ -170,7 +170,7 @@ profile envelope. The 68.3\% region is identical to that found using
 just the two-parameter functions (see Section~\ref{sec:functions:example}), but
 when including higher order functions, the 95.4\% confidence interval
 on $\mu$ is $-0.18 < \mu < 2.11$,
-i.e. it is extended to higher $\mu$
+i.e.~it is extended to higher $\mu$
 due to the influence of the higher order polynomial functions providing a
 reasonable description of the data.
 %The central value is unchanged since the lowest order power law
@@ -187,7 +187,7 @@ reasonable description of the data.
  \includegraphics[width=0.46\textwidth]{{correction/EnvelopeAllOrders0.0}.pdf}
 \label{fig:correction:profiles-no:b}
 }
-\caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has not been corrected. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions. The \nll scan when only considering the best fit function is shown in red.}
+\caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has not been corrected. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions. The \nll scan when only considering the best fit function is drawn in red, although this is completely obscured by the envelope curve in this case.}
 \label{fig:correction:profiles-no}
 \end{figure}
 
@@ -202,7 +202,7 @@ reasonable description of the data.
  \includegraphics[width=0.46\textwidth]{{correction/EnvelopeAllOrders1.0}.pdf}
 \label{fig:correction:profiles-pval:b}
 }
-\caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has not been corrected using the approximate p-value correction of 1 per background parameter. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions after applying a correction of 1 per background parameter to each \nll curve. The \nll scan when only considering the best fit function is shown in red.}
+\caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has been corrected using the approximate p-value correction of 1 per background parameter. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions after applying a correction of 1 per background parameter to each \nll curve. The \nll scan when only considering the best fit function is shown in red.}
 \label{fig:correction:profiles-pval}
 \end{figure}
 
@@ -217,7 +217,7 @@ reasonable description of the data.
  \includegraphics[width=0.46\textwidth]{{correction/EnvelopeAllOrders2.0}.pdf}
 \label{fig:correction:profiles-akaike:b}
 }
-\caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has not been corrected using the Akaike correction of 2 per background parameter. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions after applying a correction of 2 per background parameter to each \nll curve. The \nll scan when only considering the best fit function is shown in red.}
+\caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has been corrected using the Akaike correction of 2 per background parameter. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions after applying a correction of 2 per background parameter to each \nll curve. The \nll scan when only considering the best fit function is shown in red.}
 \label{fig:correction:profiles-akaike}
 \end{figure}
  
@@ -286,7 +286,7 @@ that the p-value corrections always give less bias than the Akaike correction.
 \caption{Average pull when fitting using the envelope as a function of $\mu$
 used to generate the signal when correcting
 with the different \nll correction schemes.
-Each panel shows the average bias when using
+Each panel shows the bias when using
 a different background function for toy generation, with the functions
 used being: polynomial with $N_{\rm par}=6$ (a),
 polynomial with $N_{\rm par}=5$ (b), Laurent with $N_{\rm par}=2$ (c),
@@ -332,10 +332,10 @@ with the different \nll correction schemes.
 The results when generating with different functions and generating using the
 profiled function for each value of $\mu$ are shown in the different panels.
 The functions
-used are (from the top panels): polynomial with $N_{\rm par}=6$,
+used are (from the top panel in each case): polynomial with $N_{\rm par}=6$,
 polynomial with $N_{\rm par}=5$, Laurent with $N_{\rm par}=2$,
 power law with $N_{\rm par}=2$, and exponential with $N_{\rm par}=2$.
-The lowest plots show the result when the best-fit function at each
+The lowest panel in each case shows the result when the best-fit function at each
 value of $\mu$ is used to generate toys.
 %For each plot, the results for the three correction methods are shown,
 %namely the approximate p-value (``$c=1$''), p-value (``$c=p(\chi^2)$'')
@@ -391,7 +391,7 @@ The choice of a particular value of $c$ to use depends on the application
 and the amount of data available.
 
 Figure~\ref{fig:correction:allordererrvscorr} shows the mean of the difference
-between the best fit $\mu$ value and the true $\mu$ and also the 68.3\%
+between the best fit $\mu$ value and the true $\mu$, and also the 68.3\%
 statistical uncertainty on $\mu$ from the fit, calculated from the toy
 samples discussed above, as a function of $c$,
 both for the true $\mu=0$ and 1. It is seen that the $\mu$ offset
