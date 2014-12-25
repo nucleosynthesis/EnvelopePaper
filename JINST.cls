@@ -1,18 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%% JINST.cls 1.0.1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%% JINST.cls 1.0.3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 %% This file is Copyright JINST 2006:  it can be freely distributed  but
 %% NOT modified preserving its name, even in similar forms.
-%% 
-%% JINST.cls is a LaTeX2e class file used to typeset manuscripts in 
-%% Journal of Instrumentation (http://jinst.sissa.it) style. It was 
-%% written by P. Dall'Aglio as a modification of the class JHEP3.cls 
-%% 
+%%
+%% JINST.cls is a LaTeX2e class file used to typeset manuscripts in
+%% Journal of Instrumentation (http://jinst.sissa.it) style. It was
+%% written by P. Dall'Aglio as a modification of the class JHEP3.cls
+%%
 %% JINST.cls is only for internal use of the JINST typesetting office.
-%% 
+%%
 %% For bugs, comments, suggestions email to jinst-eo@jhep.sissa.it
-%% 
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -31,7 +31,7 @@
 %%   Right brace   \}     Tilde         \~}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{JINST} [2006/07/11 v1.0.1 LaTeX document class - P.D.]
+\ProvidesClass{JINST} [2014/06/17 v1.0.3 LaTeX document class - P.D.]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \def\logo{\raisebox{-10.5\p@}{\hb@xt@85\p@{\includegraphics{JINSTlogo}\hfil}}}
@@ -41,7 +41,7 @@
 \newif\if@draft   \@draftfalse			% DEFAULT IS NOT DRAFT
 \newif\if@hyper   \@hypertrue			% DEFAULT IS HYPER
 \newif\if@proc	  \@procfalse			% DEFAULT IS NOT PROC
-
+\newif\if@tech \@techfalse                      % DEFAULT IS NOT TECHNICAL REPORT
 \newif\if@author\@authorfalse			%
 \newif\if@abstract\@abstractfalse		% FOR FRONTMATTER DECLARATIONS
 \newif\if@keywords\@keywordsfalse		%
@@ -54,17 +54,19 @@
 \newif\if@conf\@conffalse			%
 \newif\if@Jspecialurl\@Jspecialurlfalse
 \newif\if@Jcits\@Jcitsfalse
-\newif\ifpdf
-\ifx\pdfoutput\undefined
-\else
-  \ifx\pdfoutput\relax
-  \else
-    \ifcase\pdfoutput
-    \else
-      \pdftrue
-    \fi
-  \fi
-\fi
+
+\RequirePackage{ifpdf}
+%\newif\ifpdf
+%\ifx\pdfoutput\undefined
+%\else
+%  \ifx\pdfoutput\relax
+%  \else
+%    \ifcase\pdfoutput
+%    \else
+%      \pdftrue
+%    \fi
+%  \fi
+%\fi
 
 
 \if@compatibility
@@ -92,12 +94,13 @@
 
 \DeclareOption{published}{%
 \ifpdf
-%\JINST@warnl{Option 'published' incompatible with 
+%\JINST@warnl{Option 'published' incompatible with
 %pdf output, turning to dvi output}\pdffalse\pdfoutput=0
 \@preprintfalse
 \else
 \@preprintfalse%
 \fi}
+\DeclareOption{tech}{\@techtrue}
 \DeclareOption{nocits}{\if@preprint\@OImess{ is default for preprints}\else
 		       \@Jcitsfalse
                        \fi}
@@ -105,22 +108,22 @@
 \DeclareOption{cits}{%\if@preprint
                      \@Jcitstrue %\else
                      %\@OImess{ is automatic for published papers}\fi
-                     }	
+                     }
 
 \DeclareOption{hyper}{\@hypertrue}	% HYPER IS 11 PT
 \DeclareOption{nohyper}{\@hyperfalse}	% PAPER IS ALSO 11 PT (v1.3)
 \DeclareOption{paper}{\@hyperfalse}	% PAPER IS ALSO 11 PT
 \DeclareOption{11pt}{\renewcommand\@ptsize{1}\ExecuteOptions{@FONT}}
 \DeclareOption{12pt}{\renewcommand\@ptsize{2}\ExecuteOptions{@FONT}}
-\if@compatibility\else                          % LATEX2.09 HAS NO 10PT 
+\if@compatibility\else                          % LATEX2.09 HAS NO 10PT
 \DeclareOption{10pt}{\renewcommand\@ptsize{0}\ExecuteOptions{@FONT}}% v1.4
 \fi       				% CHOSEN TO FREE MEMORY LATER:
 \DeclareOption{@FONT}{\if@preprint              % IF PREPRINT ALLOW ANY,
-                        \else			              % IF PUBLISHED: 
+                        \else			              % IF PUBLISHED:
 			\renewcommand\@ptsize{1}\@NFmess{11pt}% ALWAYS 11PT
                         \fi
 			}
-                        
+
 \if@compatibility\else
 \DeclareOption{oneside}{\@twosidefalse \@mparswitchfalse}\fi
 \DeclareOption{twoside}{\if@preprint\if@hyper\@OImess{ in hyper-mode}
@@ -147,7 +150,7 @@
 				\if@twoside\ifodd\c@page
 				  \kern-2\marginparsep\kern-\textwidth
 				  \llap\bgroup\else\bgroup\fi
-				\else\bgroup\fi				
+				\else\bgroup\fi
 				\fi
 				\sf\scriptsize\@eqnlabel\egroup}%
 				\gdef\@eqnlabel{}}
@@ -167,8 +170,8 @@
 					\raggedleft\fi\fi\sf\scriptsize #1#2}%
 			 \fi}%
 	\AtBeginDocument{\newbox\drft@box\setbox\drft@box=\hbox{%
-			\framebox[\textwidth]{\sf\small JINST DRAFT 
-			\ttfamily(\cur@opt)\hfill\sf\bfseries\jobname\sf, 
+			\framebox[\textwidth]{\sf\small JINST DRAFT
+			\ttfamily(\cur@opt)\hfill\sf\bfseries\jobname\sf,
 			\today, \militarytime}}}
 	\@drafttrue}
 
@@ -193,7 +196,7 @@
 \newcommand\JINST@ignol[1]{\JINST@warnl{IGNORED \protect#1}}
 \newcommand\@OImess[1]{\JINST@ignol{OPTION '\CurrentOption'#1}}
 \newcommand\@NFmess[1]{\JINST@mess{Normalsize set to #1}}
-\newcommand\@ENVwarn[1]{\JINST@warn{Please use \protect#1 in place 
+\newcommand\@ENVwarn[1]{\JINST@warn{Please use \protect#1 in place
 						of LaTeX environment}}
 %%%%%%%%%%%%%%%%%%%%%%%%%% PROCESS OPTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ExecuteOptions{a4paper,oneside,hyper} %WERE ALSO 10pt,onecolumn
@@ -378,7 +381,7 @@
 	 \if@draft\norm@note{CIT: }{#2}\fi			% **DRAFT**
     }% end definition of \@citex
 %This really prints out the cit-numbers
-\def\@citeo{\ifnum\@tempcnta>\@tempcntb%    
+\def\@citeo{\ifnum\@tempcnta>\@tempcntb%
             \else\@citea\def\@citea{,\penalty\@m\ }%
                   \ifnum\@tempcnta=\@tempcntb%
                   \intJlink{\hash bib\the\@tempcnta}{\the\@tempcnta}% if there is no range
@@ -416,9 +419,9 @@
 %-----------------------------------------------------------------%
 % LABEL, REF AND PAGEREF, TEXTREF, ~ COMPATIBLE:
 \let\old@label\label						% OLD LATEX COMMAND.
-\def\label{\bgroup\catcode`\>=15\catcode`\"=15 \catcode`\==15\@@label}		
+\def\label{\bgroup\catcode`\>=15\catcode`\"=15 \catcode`\==15\@@label}
 \newcommand{\@@label}[1]{\egroup\name{ref-#1}%		% LABEL IN HYPER TAG.
-			 \old@label{#1}%		% 
+			 \old@label{#1}%		%
 			 \if@draft%			% DRAFT:
 			 \ifmmode\math@note{#1}%
 			 \else\norm@note{}{LAB: #1}\fi%
@@ -443,7 +446,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%% END HYPER-STUFF %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% JINST HEADINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\def\ps@JINST{% 			
+\def\ps@JINST{%
     \def\@oddfoot{\ifnum\thepage=0\if@preprint\else
 		\Jcopyright@box\fi\hfill % copyright only on front page of published papers
 		\if@Jspecialurl\copy\Jspecial@url\else\if@preprint\else\copy\Jpaper@url\fi\fi %possible url
@@ -466,11 +469,11 @@
 	 \newpage				%
 	 \@maketitle				% CALL ACTUAL FORMATTING
 	 \@thanks				% TITLE THANKS
-	 \thispagestyle{JINST} 
+	 \thispagestyle{JINST}
  	 \setcounter{page}\z@
 	 \newpage				% FINE PAGINA
   \endgroup
-  \setcounter{footnote}{0}%			
+  \setcounter{footnote}{0}%
   \if@todotoc					% IF THERE IS A SECTION
       \noindent\rule\textwidth{.1pt}		% THEN MAKE TOC...
       \vskip 2em \@plus 3ex \@minus 3ex
@@ -485,7 +488,7 @@
   \global\let\thanks\@gobble
   \global\let\@maketitle\relax			%
   \global\let\@thanks\@empty			%
-  \global\let\@author\@empty			% KILL ALL 
+  \global\let\@author\@empty			% KILL ALL
   \global\let\@date\@empty			%
   \global\let\@title\@empty			%
   \global\let\@abstract\@empty			%
@@ -507,7 +510,7 @@
 \newskip\titlesk@ja		% Skips for titlepage
 \newskip\titlesk@jb		%
 \newskip\titlesk@jc		%
-\titlesk@ja= 1.6em plus .4fil%			% Before title 
+\titlesk@ja= 1.6em plus .4fil%			% Before title
 \titlesk@jb= 2em   plus .06fil minus  .5ex%	% Between title/rule
 \titlesk@jc= 2em   plus .05fil minus 1.2ex%	% Before authors
 
@@ -532,7 +535,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
     \setcounter{page}{0}
 \fi
 %header for preprints
-\if@preprint					%%% PREPRINT HEADER: 
+\if@preprint					%%% PREPRINT HEADER:
     \vskip-7em					%
     \underline{\tiny Preprint typeset 		%
                 in JINST style -		        %
@@ -540,13 +543,14 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 		\else{PAPER VERSION}\fi } 	%
     \normalsize\hfill%				%
     \begin{tabular}[t]{r}\@preprint\end{tabular}%   % PREPRINT NUMBERS
+%header for technical reports
 \else						%
 % header for published papers
     \vskip-7em\hfill
-    {\small\scshape Published by Institute of Physics 
+    {\small\scshape Published by Institute of Physics
  	               Publishing and SISSA}
     \vskip-1.35\baselineskip\logo\hrulefill
-    \vskip-1.5\baselineskip\hskip21.73\p@%	
+    \vskip-1.5\baselineskip\hskip21.73\p@%
     \hfill{\parbox[t]{30em}{\begin{flushright}\setlength\baselineskip{11pt}\footnotesize
 				\Jrece@cs\\
 				\if@revi\Jrevi@cs\\\fi
@@ -555,9 +559,14 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 			      \end{flushright}}}%
 \fi\null
 % end headers
+
+\if@tech					%%% TECHNICAL REPORT HEADER:
+    {\sffamily \bfseries \scshape technical report}
+\fi
+
 \vskip \titlesk@ja		   % vspace before title
 % TITLE large sans-serif bf
-{\LARGE \sffamily\bfseries\@title\par}  
+{\LARGE \sffamily\bfseries\@title\par}
 %
 \vskip \titlesk@jb                 % vspace between title and rule
 % RULE
@@ -570,16 +579,16 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 %
 \vskip \titlesk@jc                 % vspace between authors and abstract
 % ABSTRACT
-\parbox\textwidth{\abstract@cs}%	
+\parbox\textwidth{\abstract@cs}%
 \normalsize                        % why reset size?
 % KEYWORDS IF PRESENT
-\if@keywords	
+\if@keywords
 \vskip .9\titlesk@jc	   % vspace between abstract and keywords
 \par
-\@keywords				
+\@keywords
 \fi
 % DEDICATION, IF PRESENT
-\dedic@box				
+\dedic@box
 \end{flushleft}%			% FINISHED.
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%% STANDARD STUFF %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -745,7 +754,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 			\par				% FIRST TIME \\=>ADDR.
 			\vskip\addr@skip		% GLUE UNDER AUTHOR
 			\hskip1em%			% ADDRESS INDENT
-			\vbox\bgroup\hsize=.9\textwidth	% 
+			\vbox\bgroup\hsize=.9\textwidth	%
 			\small\it\raggedright		% STYLE FOR ADDRESSES
 			\def\\{\par\leavevmode\ignorespaces}%\let\\\relax%
 			\leavevmode\ignorespaces}%
@@ -759,7 +768,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 		\long\xdef\@author{\the\prev@t\the\cur@t}%STORE ALL IN \@AUTHOR
 		}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% RECEIVED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand\received[1]{\gdef\Jrece@cs{{\scshape\receivedname} 
+\newcommand\received[1]{\gdef\Jrece@cs{{\scshape\receivedname}
                                        {\itshape #1}}\@recetrue\let\received\gobble}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% REVISED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand\revised[1]{\gdef\Jrevi@cs{{\scshape\revisedname}
@@ -789,7 +798,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 \newcommand\email[1]{{\tt\href{mailto:#1}{#1}}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PREPRINT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \let\@preprint\relax
-\newcommand\preprint[1]{\long\gdef\@preprint{#1}} 
+\newcommand\preprint[1]{\long\gdef\@preprint{#1}}
 %%%%%%%%%%%%%%%%% SPECIAL URL overrides paper@url %%%%%%%%%%%%%%%%%%%%%
 \newbox\Jspecial@url
 \newcommand\Jspecialurl[1]{\global\setbox\Jspecial@url\hbox{\tiny\ttfamily
@@ -858,7 +867,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 
 \if@preprint%\ifx\@thmcountersep\@undefined
 %\def\@xthm#1#2{\@begintheorem{#2}{\csname the#1\endcsname.}\ignorespaces}% after thm number
-\else									 % if published 
+\else									 % if published
 \def\@xthm#1#2{\@begintheorem{#2\if@twothms\else.\fi}			 % theorems are numbered
 		{\if@twothms\csname the#1\endcsname.\fi}		 % only if more than one
 		\ifnum \csname the#1\endcsname>1 \immediate\write\@auxout% and not within sections
@@ -940,12 +949,12 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 %% correct incompatibility with \marginpar;
 %% correct incompatibility with \@startsection;
 %% correct persisting indentation in following pars;
-%% let float also at beginning of pages; 
+%% let float also at beginning of pages;
 %% avoid the widht specification.
-%% 
-%% Original was 1994-1996 by Mats Dahlgren <matsd@physchem.kth.se>. 
-%% 
-%%%%%%%%\NeedsTeXFormat{LaTeX2e}[1994/06/01]		%LEFT THIS STUFF TO 
+%%
+%% Original was 1994-1996 by Mats Dahlgren <matsd@physchem.kth.se>.
+%%
+%%%%%%%%\NeedsTeXFormat{LaTeX2e}[1994/06/01]		%LEFT THIS STUFF TO
 %%%%%%%%\ProvidesPackage{floatflt}[1996/02/27 v. 1.3]	%RECONVERT TO PACKAGE.
 \newcounter{OptionTest}
 \if@twoside
@@ -989,16 +998,16 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 \newtoks\outputpretest
 \def\@captype{}
 %%---------------- ORRIBLE HACKS, SORRY -------------------------%%
-\let\old@marginpar\marginpar				% 
+\let\old@marginpar\marginpar				%
 \renewcommand\marginpar[1]{{\outputpretest={\outputtrue}% REDEF \marginpar.
 			    \old@marginpar{#1}}}	%
 \def\g@addto#1#2{{\toks@\expandafter{#1#2}%
 		  \xdef#1{\the\toks@}}}%
 \def\postpone@captions{%			%
 	\global\let\tmp@caption\caption		% \label, LATER.
-	\global\let\later@capt\relax		% UN PO' PESANTI 
+	\global\let\later@capt\relax		% UN PO' PESANTI
 	\gdef\later@label{}%			% MA D'ALTRONDE...
-	\let\J@ref\ref\def\ref{\protect\J@ref}% % protect ref in captions.. 
+	\let\J@ref\ref\def\ref{\protect\J@ref}% % protect ref in captions..
 	\renewcommand\caption{\@ifnextchar[\J@@caption\J@caption}%
 	\newcommand\J@caption[1]{\gdef\later@capt{\tmp@caption{##1}}}% LOCAL!!
 	\newcommand\J@@caption[2][v]%
@@ -1010,7 +1019,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 \AtEndDocument{\iftryingfig\JINST@warnl{Floating figure \the\ffigcount\space
 					remains undone}\fi
 		\iftryingtab\JINST@warnl{Floating table \the\ftabcount\space
-					remains undone}\fi} 
+					remains undone}\fi}
 %%----------------- FIGURE ---------------------------------------%%
 \newenvironment{floatingfigure}[1][v]%
 {\@tfor \@tempa :=#1\do {\xdef\@fside{\@tempa}}%
@@ -1018,7 +1027,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
  \iffigprocessing {\count0=\ffigcount\advance\count0 by -1%
    		   \JINST@warnl{Floating figures \the\count0\space\space and
        			\the\ffigcount\space colliding}}\fi
- \iftabprocessing  \JINST@warnl{Floating table \the\ftabcount\space and 
+ \iftabprocessing  \JINST@warnl{Floating table \the\ftabcount\space and
 			floating figure \the\ffigcount\space colliding}\fi
  \postpone@captions
  \global\setbox\@tmpbox=\hbox\bgroup% begin of figbox %HBOX FOR AUTO WIDTH!
@@ -1038,7 +1047,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
  \global\everypar={\tryfig\oldeverypar}% must be set globally!
  \figinsert\par
 \else%					% ELSE NORMAL LATEX FIGURE, SIGH.
-% \JINST@mess{Floating figure \the\ffigcount\space is 
+% \JINST@mess{Floating figure \the\ffigcount\space is
 %			wide becomes a LaTeX float}%
  \if\@fside v \def\@fside{ht}\fi
  \ifdim\floatfltwidth<\columnwidth
@@ -1056,7 +1065,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
  \iftabprocessing {\count0=\ftabcount\advance\count0 by -1%
      		   \JINST@warnl{Floating tables \the\count0\space
             		\space and \the\ftabcount \space colliding}}\fi
- \iffigprocessing  \JINST@warnl{Floating figure \the\ffigcount\space and 
+ \iffigprocessing  \JINST@warnl{Floating figure \the\ffigcount\space and
 			floating table \the\ftabcount\space colliding}\fi
  \postpone@captions
  \global\setbox\@tmpbox=\hbox\bgroup% begin of tabbox, ACTUALLY AN HBOX.
@@ -1073,7 +1082,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
   \global\everypar={\trytab\oldeverypar}%
   \tabinsert\par%
 \else%					% ELSE NORMAL LATEX TABLE.
-%  \JINST@mess{Floating table \the\ftabcount\space is 
+%  \JINST@mess{Floating table \the\ftabcount\space is
 %			wide becomes a LaTeX float}%
   \ifdim\floatfltwidth<1.1\columnwidth
     \if\@tside v \def\@tside{ht}\fi
@@ -1175,10 +1184,10 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 	  \global\htdone=\z@
 	  \dohang
 	  \ifnum\nosuccesstryfig>0%
-	   \JINST@mess{Flt. fig. \the\ffigcount\space set on page \the\count0, 
+	   \JINST@mess{Flt. fig. \the\ffigcount\space set on page \the\count0,
 	 		shifted \the\nosuccesstryfig\space par(s) forward}%
 %	  \else
-%	   \JINST@mess{Floating figure \the\ffigcount\space 
+%	   \JINST@mess{Floating figure \the\ffigcount\space
 %			set on page \the\count0}%
 	  \fi
 	\else
@@ -1236,10 +1245,10 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
        \global\htdone=\z@
        \dohang
        \ifnum\nosuccesstrytab>0%
-	\JINST@mess{Flt. tab. \the\ftabcount\space set on page \the\count0, 
+	\JINST@mess{Flt. tab. \the\ftabcount\space set on page \the\count0,
 			shifted \the\nosuccesstrytab\space par(s) forward}%
 %       \else
-%	\JINST@mess{Floating table \the\ftabcount\space 
+%	\JINST@mess{Floating table \the\ftabcount\space
 %			set on page \the\count0}%
        \fi
      \else
@@ -1280,7 +1289,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
      \advance\dimen0 by \fl@gut
      \ifoddpages
        \global\hangindent=-\dimen0% placing right
-     \else 
+     \else
        \global\hangindent=\dimen0% placing left
      \fi
    \global\hangafter=-\hangcount
@@ -1296,7 +1305,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
   \addtolength{\fltitemwidth}{-0.5em}%
   \item[#2] \parbox[t]{\fltitemwidth}{#3}\\[#1]}
 %%%%%%\endinput
-%%% 
+%%%
 %%% End of ex-file `floatflt.sty'.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CAPTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1340,7 +1349,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
     \section*{\contentsname\label{-TOC-}}
     \@starttoc{toc}%
     \gdef\tableofcontents{\JINST@igno{\tableofcontents\space already done}}}
-\newcommand*\l@part[2]{\def\hyp@typ{part}%	
+\newcommand*\l@part[2]{\def\hyp@typ{part}%
   \ifnum \c@tocdepth >-2\relax
     \addpenalty\@secpenalty
     \addvspace{2.25em \@plus\p@}%
@@ -1404,7 +1413,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 
 
 %%%%%%%%%%%%%%%%%%%%%% LIST OF FIGURES AND TABLES %%%%%%%%%%%%%%%%%%%%%
-\if@draft			% ONLY IF DRAFT! ... 
+\if@draft			% ONLY IF DRAFT! ...
  \newcommand\listoffigures{%
      \section*{\listfigurename
        \@mkboth{\MakeUppercase\listfigurename}%
@@ -1451,7 +1460,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 \fi
 \let\@openbib@code\@empty
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% JOURNALS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\def\@spires#1{\href{http://www-spires.slac.stanford.edu/spires/find/hep/www?j=#1}} 
+\def\@spires#1{\href{http://www-spires.slac.stanford.edu/spires/find/hep/www?j=#1}}
 %                               	%PITY THAT target IS NOT IMPLEMENTED.
 \catcode`\%=12
 \catcode`\|=14
@@ -1463,7 +1472,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 \def\splitJINST#120#2#3#4#5#6#7#8#9{\href{http://www.iop.org/EJ/abstract/1748-0221/#1/#5#6/#4#5#6#7#8#9}
 		{20#2#3 {\it JINST }{\bf #1} #4#5#6#7#8#9}}
 \newcommand\jinst[3]   {\splitJINST#1#2#3}
-                  
+
 \def\splitJSTAT 20#1#2#3#4#5#6#7#8{\href{http://www.iop.org/EJ/abstract/1742-5468/20#1#2/#4#5/#3#4#5#6#7#8}
 		{{\it J. Stat. Mech.\ }(20#1#2) #3#4#5#6#7#8}}
 \newcommand\jstat[2]{\splitJSTAT#1#2}
@@ -1487,7 +1496,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 \newcommand\rsi[3]{\href{http://scitation.aip.org/getabs/servlet/GetabsServlet?prog=normal&id=RSINAK0000#1000001#3000001}
 {\emph{Rev.\ Sci.\ Instrum.} {\bf #1} (#2) #3}}
 | }}}}}}}}}}}}}}}}}}}}}} "|" is here a comment (catcode defined above) to
-| }}}}}}}}}}}}}}}}}}}}}} include parenthesis for emacs to parse properly. 
+| }}}}}}}}}}}}}}}}}}}}}} include parenthesis for emacs to parse properly.
 \newcommand\ibid[3]{{\it ibid.\ }{\bf #1} (#2) #3}
 \catcode`\%=14
 \catcode`\|=12
@@ -1516,7 +1525,7 @@ preprint page on \href{http://jinst.sissa.it}{\tt http://jinst.sissa.it}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% BopHook %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ifpdf
 \newcommand\Jwatermark[1]{\relax}
-\JINST@warnl{ATTENTION!!! watermark disabled. Add it with pdftk 
+\JINST@warnl{ATTENTION!!! watermark disabled. Add it with pdftk
 (use compilaJINSTpdflatex for instance)}
 \else
 \newcommand\Jwatermark[1]{\special{!userdict begin
@@ -1585,12 +1594,12 @@ end
 	\let\pagenumbering\@gobble
 \fi
 \onecolumn
-						
+
 % FOR REQUESTED FRONTMATTER ...
-\AtBeginDocument{\bgroup%		SOME NICE (LOCAL) MESSAGES... 
-	\def\@APPwarn#1{\JINST@warnl{\protect#1 should appear 
+\AtBeginDocument{\bgroup%		SOME NICE (LOCAL) MESSAGES...
+	\def\@APPwarn#1{\JINST@warnl{\protect#1 should appear
 					before \protect\begin{document}}}%
-	\def\@APPerr#1{\ClassError{JINST}{\protect#1 should appear 
+	\def\@APPerr#1{\ClassError{JINST}{\protect#1 should appear
 					before \protect\begin{document}}}%
 	\if@author\else\@APPerr{Some \protect\author{...}}\fi
 	\if@abstract\else\@APPerr{\abstract{...}}\fi
@@ -1602,7 +1611,7 @@ end
 		\if@keywords\else\@APPwarn{\keywords{...}}\fi
 	\fi
 	\egroup
-	\auto@maketitle}% 
+	\auto@maketitle}%
 \endinput
-%% 
+%%
 %% End of file `JINST.cls'.
