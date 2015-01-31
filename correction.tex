@@ -37,14 +37,32 @@ criterion~\cite{ref:correction:akaike}.
 For a binned fit using the expression for the \nll ratio
 for each bin specified in equation~\ref{eqn:introduction:def2NLL}, then for
 the large statistics case, the \nll becomes equivalent to a $\chi^2$ for the
-fit. In this case, it is meaningful to find the p-value of the $\chi^2$ value.
+fit. In this case, it is meaningful to find the p-value of the $\chi^2$ value,
+which also depends on the number of degrees of freedom, $N_{\mathrm{dof}}$.
 A new $\chi^{\prime 2}$
 value can now be obtained, namely that which would give the same p-value but
-with a different number of degrees of freedom, equal to the number of bins.
-The corrected \nll is then given by
+with a different number of degrees of freedom $N_{\mathrm{dof}}^\prime$,
+equal to the number of bins.
+Explicitly, the p-value $p$ is the upper 
+tail integral of the $\chi^2$ probability
+distribution which we write as
 \begin{displaymath}
-\Lambda_{\mathrm{corr}} = \chi^{\prime 2} = \textrm{\nll} + (\chi^{\prime 2} - \chi^2).
+p = F(\chi^2,N_{\mathrm{dof}})\qquad\mathrm{so}\qquad
+\chi^2 = F^{-1}(p,N_{\mathrm{dof}}),
 \end{displaymath}
+Hence, the new $\chi^{\prime 2}$ value which gives the same p-value with the
+new $N_{\mathrm{dof}}^\prime$ is given by
+\begin{displaymath}
+\chi^{\prime 2} = F^{-1}(p,N_{\mathrm{dof}}^\prime)
+\end{displaymath}
+and the corrected \nll is then given by
+\begin{displaymath}
+\Lambda_{\mathrm{corr}} = \textrm{\nll} + (\chi^{\prime 2} - \chi^2).
+\end{displaymath}
+In the work presented here, 
+this correction was applied even in cases with lower statistics,
+where the \nll is not a particularly good approximation to the $\chi^2$.
+
 Besides being a function of the number of bins and parameters,
 the size of the correction $\chi^{\prime 2} - \chi^2$
 depends on the original fit quality
@@ -142,6 +160,8 @@ can have both even and odd numbers, i.e.~$N_{\rm par}=N$.
 The functions listed above were fit to the original dataset for values of
 $2 \le N_{\rm par} \le 6$; this resulted in three fits for the power law and
 exponential functions, and five fits for the Laurent and polynomial functions.
+This range was chosen for practical purposes as these functions gave reasonable
+fits, without requiring larger numbers of parameters.
 The profile curves from the fits of these functions are shown in
 figures~\ref{fig:correction:profiles-no},~\ref{fig:correction:profiles-pval} and~\ref{fig:correction:profiles-akaike} where results for three different
 corrections to \nll have been shown, namely no correction, the approximate
@@ -275,9 +295,21 @@ figure~\ref{fig:correction:profiles-pval}.
 Figure~\ref{fig:correction:allorderbias} shows the average pull vs $\mu$
 for each choice of generating function, with the envelope based on the
 three correction methods considered, i.e.~approximate p-value, p-value 
-and Akaike. It is seen that the approximate p-value and p-value corrections give
-effectively identical results. It is also found that the bias for some
-generating functions can get up to a significant fraction of the error, but
+and Akaike. 
+Some obvious biases are seen, in particular for the cases when
+generating with polynomials of five or six parameters. It seems that in these
+cases, which are among the functions with the highest numbers of parameters,
+the generated data are too complex to be described well by the lower order
+functions. The choice of the Akaike correction makes the bias worse, as it
+tends to emphasise the contribution of lower order function to the envelope.
+This effect could be reduced by working with even higher order functions, but
+these were not found to be needed to describe the original data and so were
+not included.
+
+However,
+even with the bias being a significant fraction of the error for some functions,
+it is seen that the approximate p-value and p-value corrections give
+effectively identical results. It is also found 
 that the p-value corrections always give less bias than the Akaike correction.
 %
 \begin{figure}[tbp]
@@ -387,7 +419,11 @@ the correction can be considered to have the form
 \Lambda_{\mathrm{corr}} = \textrm{\nll} + cN_{\rm par},
 \end{displaymath}
 giving a continuum of possible values of $c$, not just $c=1$ or 2.
-The choice of a particular value of $c$ to use depends on the application
+Figure~\ref{fig:correction:allordercoverage} indicates that in most cases, the
+coverage is effectively independent of the value of $c$. This means that,
+within a reasonable range,
+the value of $c$ used can be motivated by other considerations. In general,
+the choice of a particular value of $c$ to use depends on the application
 and the amount of data available.
 
 Figure~\ref{fig:correction:allordererrvscorr} shows the mean of the difference
@@ -410,8 +446,12 @@ size of this effect is somewhat hidden by the fact that the highest order functi
 in this example only go up to six free parameters. If even higher order functions were considered
 the statistical uncertainty at low values of $c$ would become unnecessarily large.
 
-In principle, the results of figure~\ref{fig:correction:allordererrvscorr} could be used to choose an optimal value of $c$
-for a given dataset. It is clear the optimal value will change with the
+In principle, the results of figure~\ref{fig:correction:allordererrvscorr} 
+could be used to choose an ``optimal'' value of $c$
+for a given dataset. Here, optimal means in some way trying to minimise 
+the overall uncertainty, which arises from some combination of 
+the bias and the statistical error.
+It is clear that such an optimal value will change with the
 amount of data as the
 statistical errors will become smaller but the offset will stay the same and
 hence lower values of $c$ will be favoured for larger data volumes.

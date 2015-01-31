@@ -1,9 +1,44 @@
-\section{Conclusions} % 1 page
+\section{Discussion and conclusions} % 1 page
 \label{sec:conclusions}
+The actual CMS
+Higgs to two photon analysis~\cite{ref:introduction:legacy}
+is significantly more
+complex than the simpler method discussed above. In particular, the 2011 
+and 2012 data
+samples are split into eleven and fourteen categories, respectively, which have
+differing signal to background ratios.
+Because the categories (by definition) have different selection criteria,
+they can have different background shapes.
+There is no {\it a priori} reason to make any assumptions that the functions
+used in each category should be the same. Hence, each category should be
+tested with all functions, in a similar way to the above.
 
-A method of treating the uncertainty due to the choice of background function
+A major complication then arises because there are common systematic effects
+across the categories, arising from nuisance parameters in the signal
+model.
+In the absence of these common nuisance parameters,
+the different categories could be profiled independently, each using the
+minimum envelope technique to produce an envelope curve per category.
+These could then
+be summed to give the overall profile curve. However, with common
+nuisance parameters, all categories must be profiled at the same time.
+Since minimisation code to handle the 
+discrete nuisance parameter identifying the
+function seems difficult, in practical terms, this means that all possible
+combinations of each function in each category must be fitted.
+The minimum envelope made from the results of all these combinations would
+then be found. While this is conceptually straightforward, the actual
+naive implementation is prohibitive and approximations were taken in practise,
+while retaining the core of the method.
+
+In conclusion,
+a method of treating the uncertainty due to the choice of background function
 as a discrete nuisance parameter has been shown to give good coverage and
 small (potentially minimal) bias.
+Although described in terms of a particular application, the method can be
+applied very widely as the general type of problem for which this method
+is relevant is very common.
+
 There is an uncertainty about how to penalise functions with higher numbers
 of parameters. The results indicate that a penalty based on the p-value
 is less biased and gives slightly better coverage than one based on the
