@@ -5,7 +5,8 @@
 \label{sec:correction:corrections}
 
 The \nll calculated from the fit of a function to a dataset is purely a measure
-of the agreement of the function and the data; the number of parameters
+of the agreement of the function and the data; the 
+number of parameters $N_{\rm par}$
 used in the function has no impact. Hence, at least for nested families of
 functions (such as polynomials of varying order), then the lowest \nll will
 always be given by the highest order considered.
@@ -28,7 +29,7 @@ correcting for the differing number of parameters
 (or equivalently differing number of degrees of freedom) in
 the fit functions. Specifically here, where applied, the correction is
 done so as to get a value equivalent to a function with no parameters, so
-the number of degrees of freedom is the number of bins used.
+the number of degrees of freedom is the number of bins $N_{\rm bin}$ used.
 Two methods were considered, based on the
 $\chi^2$ p-value and the Akaike information
 criterion~\cite{ref:correction:akaike}.
@@ -38,22 +39,22 @@ For a binned fit using the expression for the \nll ratio
 for each bin specified in equation~\ref{eqn:introduction:def2NLL}, then for
 the large statistics case, the \nll becomes equivalent to a $\chi^2$ for the
 fit. In this case, it is meaningful to find the p-value of the $\chi^2$ value,
-which also depends on the number of degrees of freedom, $N_{\mathrm{dof}}$.
+which also depends on the number of degrees of freedom.
 A new $\chi^{\prime 2}$
 value can now be obtained, namely that which would give the same p-value but
-with a different number of degrees of freedom $N_{\mathrm{dof}}^\prime$,
+with a different number of degrees of freedom,
 equal to the number of bins.
 Explicitly, the p-value $p$ is the upper 
 tail integral of the $\chi^2$ probability
 distribution which we write as
 \begin{displaymath}
-p = F(\chi^2,N_{\mathrm{dof}})\qquad\mathrm{so}\qquad
-\chi^2 = F^{-1}(p,N_{\mathrm{dof}}),
+p = F(\chi^2,N_{\mathrm{bin}}-N_{\mathrm{par}})\qquad\mathrm{so}\qquad
+\chi^2 = F^{-1}(p,N_{\mathrm{bin}}-N_{\mathrm{par}}),
 \end{displaymath}
-Hence, the new $\chi^{\prime 2}$ value which gives the same p-value with the
-new $N_{\mathrm{dof}}^\prime$ is given by
+Hence, the new $\chi^{\prime 2}$ which gives the same p-value with
+$N_{\rm bin}$ degrees of freedom is given by
 \begin{displaymath}
-\chi^{\prime 2} = F^{-1}(p,N_{\mathrm{dof}}^\prime)
+\chi^{\prime 2} = F^{-1}(p,N_{\rm bin})
 \end{displaymath}
 and the corrected \nll is then given by
 \begin{displaymath}

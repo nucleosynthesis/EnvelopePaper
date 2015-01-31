@@ -1,0 +1,38 @@
+1) [I think we decided this meant the ratio of the likelihoods at the true
+value and the best fit value. We separate the latter by right and wrong 
+functions, while the former is the value on the envelope, irrespective of
+the function which is contributing. Nick or Matt will produce a plot of this.]
+
+2) [Matt will try going up to N_par=8, so adding two more polynomial and 
+Laurent functions and one more power law and exponential function. We also
+need to make a note to the editor, as follows.]
+
+We think that the suggestion in paragraph 2 to add an extra uncertainty for
+functions which were not considered is not in the spirit of the method described
+in the paper. It would not be quantifiable and so and value could not be
+defended. This goes against our aim of reducing arbitrary choices, as stated in
+Sec 1 of the paper. We believe we have a reasonable range of functions to 
+describe the data well; others were tried but gave poor fits and so were not
+used in practise (although by definition they would have not contributed to the
+envelope if they had been included anyway). Hence, since we know of no way to 
+give a value to a non-contributing-function uncertainty, we prefer not to 
+include this in the paper.
+
+3) The meaning of optimal has been explained further. Text has been added to
+Sec 4.5 in paragraphs 1 and 4.
+
+4) [This was left to think about before deciding on our response.]
+
+5) The text in Sec 5 has been shortened considerably. Since this section then
+because very short, it was merged with Sec 6 to make a combined "Discussion and
+conclusions" section.
+
+6) Some discussion on the biases in Figure 12 has been added on Sec 4.4, 
+resulting in changes to paragraphs 1 and 2.
+
+7) List item 1 in Sec 4.1 has been rewritten to give more detail on the method
+for calculating chi^prime-squared.
+
+8) [Nick will find the best fit parameter values and add them to the text.]
+
+9) [Nick will fix Fig 8 but removing "+ correction" on both y axes.]
