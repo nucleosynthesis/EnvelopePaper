@@ -33,6 +33,7 @@ resulting in changes to paragraphs 1 and 2.
 7) List item 1 in Sec 4.1 has been rewritten to give more detail on the method
 for calculating chi^prime-squared.
 
-8) [Nick will find the best fit parameter values and add them to the text.]
+8) The best fit values for the two main functions have been added to the text
+in Sec 3.2, in paragraph 3.
 
-9) [Nick will fix Fig 8 but removing "+ correction" on both y axes.]
+9) The "+correction" on the y axes in figure 8 have been removed.
