@@ -18,8 +18,12 @@ def trimers(gr,exp): # also reverses the points (1-coverage)
   y = ROOT.Double(0);
   for n in range(np):
    gr.GetPoint(n,x,y);
-   gr.SetPointError(n,gr.GetErrorX(n)/2,gr.GetErrorY(n)/exp);
-   gr.SetPoint(n,x,(1-y)/exp);
+   new_y = ROOT.RooStats.PValueToSignificance(0.5*(y))
+   print x, y, new_y
+   gr.SetPoint(n,x,new_y)
+   gr.SetPointError(n,gr.GetErrorX(n)/2, ROOT.TMath.Abs(ROOT.RooStats.PValueToSignificance(0.5*(y+gr.GetErrorY(n)))-new_y))
+   #gr.SetPointError(n,gr.GetErrorX(n)/2,gr.GetErrorY(n)/exp);
+   #gr.SetPoint(n,x,(1-y)/exp);
 
 #fil = ROOT.TFile.Open("biastoys.root")
 #fil = ROOT.TFile.Open("BiasNarrowRangeSummary.root")
@@ -78,13 +82,17 @@ for i,c in enumerate(cvals):
 	dh = ROOT.TH1F("hd%s","hd",1,-1.,2.2);
 	#dh.GetYaxis().SetRangeUser(0.99,1.01);
 	if c=="0.5":
-		dh.GetYaxis().SetRangeUser(0.81,1.27);
+		#dh.GetYaxis().SetRangeUser(0.81,1.27);
+		dh.GetYaxis().SetRangeUser(0.4,0.6);
 	elif c=="1.":
-		dh.GetYaxis().SetRangeUser(0.86,1.19);
+		#dh.GetYaxis().SetRangeUser(0.86,1.19);
+		dh.GetYaxis().SetRangeUser(0.8,1.2);
 	elif c=="2.":
-		dh.GetYaxis().SetRangeUser(0.95,1.051);
+		#dh.GetYaxis().SetRangeUser(0.95,1.051);
+		dh.GetYaxis().SetRangeUser(1.6,2.4);
 	elif c=="3.":
-		dh.GetYaxis().SetRangeUser(0.993,1.007);
+		#dh.GetYaxis().SetRangeUser(0.993,1.007);
+		dh.GetYaxis().SetRangeUser(2.6,3.4);
 
 	#dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
 	#dh.GetXaxis().SetTitle("#mu");
@@ -98,7 +106,7 @@ for i,c in enumerate(cvals):
 	#for c in cvals:
 	prob = (1 -  ROOT.Math.chisquared_cdf_c(float(c)*float(c),1))
 	print prob
-	line = ROOT.TLine(dh.GetXaxis().GetXmin(),1,dh.GetXaxis().GetXmax(),1)
+	line = ROOT.TLine(dh.GetXaxis().GetXmin(),float(c),dh.GetXaxis().GetXmax(),float(c))
 	line.SetLineColor(1)
 	line.SetLineStyle(2)
 	lines.append(line)
