@@ -56,6 +56,7 @@ class ProfileMultiplePdfs {
 		double getEnvelopeBestFitValue();
 		string getEnvelopeBestFitName();
 		double getEnvelopeBestFitNll();
+    double getEnvelopeNllAtVal(double val);
 		double getEnvelopeErrorUp(double sigma);
 		double getEnvelopeErrorDn(double sigma);
 
