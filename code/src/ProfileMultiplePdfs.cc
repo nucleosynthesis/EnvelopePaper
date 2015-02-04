@@ -391,6 +391,10 @@ double ProfileMultiplePdfs::getEnvelopeBestFitNll(){
 	return envelopeMinNll_;
 }
 
+double ProfileMultiplePdfs::getEnvelopeNllAtVal(double val){
+  return envelope_->Eval(val);
+}
+
 double ProfileMultiplePdfs::getEnvelopeErrorUp(double sigma){
 
 	TGraph *shiftedEnv = shiftGraph(envelope_,envelopeMinNll_);

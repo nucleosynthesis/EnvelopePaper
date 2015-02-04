@@ -33,6 +33,10 @@ class biasComputer:
 			self.errsUp.append(a.array('d',[-999.]))
 			self.errsDown.append(a.array('d',[-999.]))
 		self.corr = a.array('d',[-999.])
+		self.is_fit_pdf_gen_pdf = a.array('i',[-999])
+		self.fit_pdf_ind = a.array('i',[-999])
+		self.fit_nll = a.array('d',[-999.])
+		self.gen_nll = a.array('d',[-999.])
 
 		# set branches
 		self.tree = tree
@@ -42,6 +46,10 @@ class biasComputer:
 			self.tree.Branch("mu_err_up_cov%3.1f"%cov,self.errsUp[i],"mu_err_up_cov%3.1f/Double_t"%cov)
 			self.tree.Branch("mu_err_down_cov%3.1f"%cov,self.errsDown[i],"mu_err_down_cov%3.1f/Double_t"%cov)
 		self.tree.Branch("corr",self.corr,"corr/Double_t")
+		self.tree.Branch("is_fit_pdf_gen_pdf",self.is_fit_pdf_gen_pdf,"is_fit_pdf_gen_pdf/Int_t")
+		self.tree.Branch("fit_pdf_ind",self.fit_pdf_ind,"fit_pdf_ind/Int_t")
+		self.tree.Branch("fit_nll",self.fit_nll,"fit_nll/Double_t")
+		self.tree.Branch("gen_nll",self.gen_nll,"gen_nll/Double_t")
 
 	def printCoverageInfo(self):
 		print 'nToys Tot: ', self.ntoys
@@ -317,6 +325,9 @@ class biasComputer:
 					fit_val = profiler.getEnvelopeBestFitValue()
 					fit_pdf = profiler.getEnvelopeBestFitName()
 
+					self.fit_nll[0] = profiler.getEnvelopeBestFitNll()
+					self.gen_nll[0] = profiler.getEnvelopeNllAtVal(self.mu_val)
+
 					self.mu_gen[0] = self.mu_val
 					self.mu_fit[0] = fit_val
 					if self.correction == 'P':
@@ -343,8 +354,16 @@ class biasComputer:
 							self.coverage_hist.Fill(cov_ind)
 
 					# which pdf
-					fit_pdf_ind = self.whichpdf_dict[str(fit_pdf).split('_toy')[0]]
+					the_fit_pdf = str(fit_pdf).split('_toy')[0]
+					fit_pdf_ind = self.whichpdf_dict[the_fit_pdf]
 					self.whichpdf_hist.Fill(fit_pdf_ind)
+					self.fit_pdf_ind[0] = fit_pdf_ind
+					print the_fit_pdf.replace('sb_',''), ' -- ', self.gen_pdf
+					if the_fit_pdf.replace('sb_','')==self.gen_pdf:
+						self.is_fit_pdf_gen_pdf[0] = 1
+					else:
+						self.is_fit_pdf_gen_pdf[0] = 0
+
 					toyn += 1
 					self.ntoys += 1
 
