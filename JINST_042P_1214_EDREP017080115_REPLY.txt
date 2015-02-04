@@ -24,7 +24,7 @@ Sec 4.5 in paragraphs 1 and 4.
 4) [This was left to think about before deciding on our response.]
 
 5) The text in Sec 5 has been shortened considerably. Since this section then
-because very short, it was merged with Sec 6 to make a combined "Discussion and
+became very short, it was merged with Sec 6 to make a combined "Discussion and
 conclusions" section.
 
 6) Some discussion on the biases in Figure 12 has been added on Sec 4.4, 
