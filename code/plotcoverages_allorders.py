@@ -83,16 +83,16 @@ for i,c in enumerate(cvals):
 	#dh.GetYaxis().SetRangeUser(0.99,1.01);
 	if c=="0.5":
 		#dh.GetYaxis().SetRangeUser(0.81,1.27);
-		dh.GetYaxis().SetRangeUser(0.4,0.6);
+		dh.GetYaxis().SetRangeUser(0.41,0.59);
 	elif c=="1.":
 		#dh.GetYaxis().SetRangeUser(0.86,1.19);
-		dh.GetYaxis().SetRangeUser(0.8,1.2);
+		dh.GetYaxis().SetRangeUser(0.81,1.19);
 	elif c=="2.":
 		#dh.GetYaxis().SetRangeUser(0.95,1.051);
-		dh.GetYaxis().SetRangeUser(1.6,2.4);
+		dh.GetYaxis().SetRangeUser(1.81,2.24);
 	elif c=="3.":
 		#dh.GetYaxis().SetRangeUser(0.993,1.007);
-		dh.GetYaxis().SetRangeUser(2.6,3.4);
+		dh.GetYaxis().SetRangeUser(2.61,3.49);
 
 	#dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
 	#dh.GetXaxis().SetTitle("#mu");
@@ -155,10 +155,11 @@ for i,c in enumerate(cvals):
 	lat = ROOT.TLatex()
 	lat.SetNDC()
 	lat.DrawLatex(0.85,0.012,"#mu")
-        lat.DrawLatex(0.2,0.95,"%2.1f%% Interval"%(100*(1-2*ROOT.RooStats.SignificanceToPValue(float(c)))))
+        #lat.DrawLatex(0.2,0.95,"%2.1f%% Interval"%(100*(1-2*ROOT.RooStats.SignificanceToPValue(float(c)))))
+        lat.DrawLatex(0.2,0.95,"#Delta#Lambda < %2.2f"%(float(c)**2))
 	#lat.DrawLatex(0.2,0.88,"Correction = %s"%cVal)
 	lat.SetTextAngle(90)
-	lat.DrawLatex(0.065,0.45,"Coverage/Expected Coverage")
+	lat.DrawLatex(0.065,0.25,"Standardised |Z|-score in toys ensemble")
 
 	can.SaveAs("../correction/AllOrderFunctions_Coverage_%s_call.pdf"%(c))
 	can.Update()

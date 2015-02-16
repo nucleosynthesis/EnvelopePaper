@@ -15,9 +15,21 @@ def trimers(gr,exp): # also reverses the points (1-coverage)
   y = ROOT.Double(0);
   for n in range(np):
    gr.GetPoint(n,x,y);
+   new_y = ROOT.RooStats.PValueToSignificance(0.5*(y))
+   print x, y, new_y
+   gr.SetPoint(n,x,new_y)
+   gr.SetPointError(n,gr.GetErrorX(n)/2, ROOT.TMath.Abs(ROOT.RooStats.PValueToSignificance(0.5*(y+gr.GetErrorY(n)))-new_y))
+
+"""
+def trimers(gr,exp): # also reverses the points (1-coverage)
+  np = gr.GetN()
+  x = ROOT.Double(0);
+  y = ROOT.Double(0);
+  for n in range(np):
+   gr.GetPoint(n,x,y);
    gr.SetPointError(n,gr.GetErrorX(n)/2,gr.GetErrorY(n)/exp);
    gr.SetPoint(n,x,(1-y)/exp);
-
+"""
 #fil = ROOT.TFile.Open("biastoys.root")
 #fil = ROOT.TFile.Open("BiasNarrowRangeSummary.root")
 fil = ROOT.TFile.Open("BiasFirstOrdersSummary.root")
@@ -52,7 +64,7 @@ covCanvs = []
 for i,c in enumerate(cvals):
   	can = ROOT.TCanvas("c%d"%i,"c%d"%i,600,800)
   	covCanvs.append(can)
-  	leg = ROOT.TLegend(0.55,0.4,0.89,0.89)
+  	leg = ROOT.TLegend(0.52,0.50,0.89,0.89)
   	leg.SetFillColor(0)
 	leg.SetNColumns(2)
 
@@ -61,14 +73,26 @@ for i,c in enumerate(cvals):
 	hists = []
 	dh = ROOT.TH1F("hd%s","hd",1,-1.,2.2);
 	#dh.GetYaxis().SetRangeUser(0.99,1.01);
+#	if c=="0.5":
+#		dh.GetYaxis().SetRangeUser(0.81,1.165);
+#	elif c=="1.":
+#		dh.GetYaxis().SetRangeUser(0.86,1.165);
+#	elif c=="2.":
+#		dh.GetYaxis().SetRangeUser(0.93,1.11);
+#	elif c=="3.":
+#		dh.GetYaxis().SetRangeUser(0.986,1.021);
 	if c=="0.5":
-		dh.GetYaxis().SetRangeUser(0.81,1.165);
+		#dh.GetYaxis().SetRangeUser(0.81,1.27);
+		dh.GetYaxis().SetRangeUser(0.36,0.69);
 	elif c=="1.":
-		dh.GetYaxis().SetRangeUser(0.86,1.165);
+		#dh.GetYaxis().SetRangeUser(0.86,1.19);
+		dh.GetYaxis().SetRangeUser(0.76,1.34);
 	elif c=="2.":
-		dh.GetYaxis().SetRangeUser(0.93,1.11);
+		#dh.GetYaxis().SetRangeUser(0.95,1.051);
+		dh.GetYaxis().SetRangeUser(1.71,2.39);
 	elif c=="3.":
-		dh.GetYaxis().SetRangeUser(0.986,1.021);
+		#dh.GetYaxis().SetRangeUser(0.993,1.007);
+		dh.GetYaxis().SetRangeUser(2.51,3.64);
 
 	#dh.GetYaxis().SetTitle("< (#mu - #hat{#mu})/#sigma >");
 	#dh.GetXaxis().SetTitle("#mu");
@@ -82,7 +106,8 @@ for i,c in enumerate(cvals):
 	#for c in cvals:
 	prob = (1 -  ROOT.Math.chisquared_cdf_c(float(c)*float(c),1))
 	print prob
-	line = ROOT.TLine(dh.GetXaxis().GetXmin(),1,dh.GetXaxis().GetXmax(),1)
+	#line = ROOT.TLine(dh.GetXaxis().GetXmin(),1,dh.GetXaxis().GetXmax(),1)
+	line = ROOT.TLine(dh.GetXaxis().GetXmin(),float(c),dh.GetXaxis().GetXmax(),float(c))
 	line.SetLineColor(1)
 	line.SetLineStyle(2)
 	lines.append(line)
@@ -133,9 +158,9 @@ for i,c in enumerate(cvals):
 	lat = ROOT.TLatex()
 	lat.SetNDC()
 	lat.DrawLatex(0.85,0.012,"#mu")
-        lat.DrawLatex(0.2,0.93,"%2.1f%% Interval"%(100*(1-2*ROOT.RooStats.SignificanceToPValue(float(c)))))
+        lat.DrawLatex(0.2,0.935,"#Delta#Lambda < %2.2f"%(float(c)**2))
 	lat.SetTextAngle(90)
-	lat.DrawLatex(0.065,0.45,"Coverage/Expected Coverage")
+	lat.DrawLatex(0.065,0.25,"Standardised |Z|-score in toys ensemble")
 
 	can.SaveAs("../functions/FirstOrderFunctions_Coverage_%s.pdf"%c)
 	can.Update()
