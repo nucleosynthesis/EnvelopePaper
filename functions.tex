@@ -185,23 +185,30 @@ fitting with the polynomial gives values outside the range of these plots.}
 \label{fig:functions:firstorderbias}
 \end{figure}
 
-The coverage was tested, using the same fits, by determining the frequency with which the difference in \nll between the best fit value $\hat{\mu}$ and the value $\mu$ used to generate the signal was less than 0.25, 1, 4 and 9.
-These frequencies were compared with the expected frequencies, 38.3\%, 68.3\%, 95.4\% and 99.7\% respectively. The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different from the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. The coverage is found to be good,
+The coverage was tested, using the same fits, by determining the frequency with which the difference in \nll between the best fit value $\hat{\mu}$ and the value $\mu$ used to generate the signal was more than 0.25, 1, 4 and 9.
+%These frequencies were compared with the expected frequencies, 38.3\%, 68.3\%, 95.4\% and 99.7\% respectively.
+These were converted to a two-sides scoe $|Z|$ and
+compared with the expected intervals from a Gaussian distribution, namely
+0.5, 1, 2 and 3 times the Gaussian width, respectively.
+The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different from the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. The coverage is found to be good,
 independent of the value of $\mu$ used to generate the signal.
 %
 \begin{figure}[tbp]
 \centering
-  \subfigure[]{\includegraphics[width=0.41\textwidth]{{functions/FirstOrderFunctions_Coverage_0.5}.pdf}
+  \subfigure[]{\includegraphics[width=0.4\textwidth]{{functions/FirstOrderFunctions_Coverage_0.5}.pdf}
 \label{fig:functions:firstordercoverage:a}}
-  \subfigure[]{\includegraphics[width=0.41\textwidth]{{functions/FirstOrderFunctions_Coverage_1.}.pdf}
+  \subfigure[]{\includegraphics[width=0.4\textwidth]{{functions/FirstOrderFunctions_Coverage_1.}.pdf}
 \label{fig:functions:firstordercoverage:b}}\\
-  \subfigure[]{\includegraphics[width=0.41\textwidth]{{functions/FirstOrderFunctions_Coverage_2.}.pdf}
+  \subfigure[]{\includegraphics[width=0.4\textwidth]{{functions/FirstOrderFunctions_Coverage_2.}.pdf}
 \label{fig:functions:firstordercoverage:c}}
-  \subfigure[]{\includegraphics[width=0.41\textwidth]{{functions/FirstOrderFunctions_Coverage_3.}.pdf}
+  \subfigure[]{\includegraphics[width=0.4\textwidth]{{functions/FirstOrderFunctions_Coverage_3.}.pdf}
 \label{fig:functions:firstordercoverage:d}}
-\caption{Fraction of toys in which the fitted value of $\mu$ is within the 38.3\% (a), 68.3\% (b), 95.4\% (c) and
-99.7\% (d) intervals relative to the expected fraction for that interval, 
-fitted using a single
+\caption{Measure of the fraction of the toys which do not contain the generated
+$\mu$ in various specified $\Lambda$ intervals, converted 
+into the two-sided score $|Z|$ in units of the equivalent Gaussian width.
+The intervals are
+$\Delta\Lambda$ of 0.25 (a), 1.0 (b), 4.0 (c) and 9.0 (d).
+These results are obtained by fitting using a single
 function and using the envelope.
 Within each subfigure,
 the first, second and third plots shows the results

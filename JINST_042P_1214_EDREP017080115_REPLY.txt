@@ -41,7 +41,12 @@ include this in the paper.
 3) The meaning of optimal has been explained further. Text has been added to
 Sec 4.5 in paragraphs 1 and 4.
 
-4) [This was left to think about before deciding on our response.]
+4) We agree that the scale for the larger intervals is compressed. Figs 6 and 14
+have been changed to show the "effective number of sigma" which results when
+selecting toys in the ensemble with a given Delta-log-likelihood. This seems to
+be equivalent to the ratio suggested by the referee but is simpler to implement,
+in particular for the point error calculation. The captions for the two figures
+have been modified, as has the last paragraph in Sec 3.3.
 
 5) The text in Sec 5 has been shortened considerably. Since this section then
 became very short, it was merged with Sec 6 to make a combined "Discussion and
