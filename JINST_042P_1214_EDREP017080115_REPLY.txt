@@ -3,9 +3,29 @@ value and the best fit value. We separate the latter by right and wrong
 functions, while the former is the value on the envelope, irrespective of
 the function which is contributing. Nick or Matt will produce a plot of this.]
 
-2) [Matt will try going up to N_par=8, so adding two more polynomial and 
-Laurent functions and one more power law and exponential function. We also
-need to make a note to the editor, as follows.]
+2) One of the desirable properties of the method described is that it will
+"automatically" ignore any functions which do not fit particularly well as they
+do not contribute to the envelope. Hence, in principle, every function which can
+be implemented in the software could be included in the set used. However, many
+of these can be quickly seen to be poor fits and including them further just
+slows down the calculation. Hence, in practice, a quick study is done fitting
+a wide range of functions to determine which give a poor fit. Such functions 
+are the dropped and not fit explicitly later as it is known they do not 
+contribute to the envelope. This is the reason why functions with more than six
+parameters are not included; they were found to give no significant improvement
+over those with six or less and hence gave no contribution when corrected for
+the number of parameters. In fact, as shown in Fig 9, the 5 and 6 parameter
+polynomials which were retained only contribute beyond the 68.3% interval for 
+the correction used. Hence, including higher order functions will have no effect
+on the result unless we are interested in going out beyond the 95.4% interval.
+We have added a sentence to the first paragraph of Sec 4.3 to this effect.
+
+Using such hgher order functions to generate toy datasets is therefore quite an
+extreme case, and as shown in Fig 12, they do then give some bias. However, if
+the original dataset had had a more complex shape, and hence required higher
+order functions, then a wider range would have been used and this bias would 
+have disappeared. This is now mentioned in the text as specified under the
+reply to item 6) below.
 
 We think that the suggestion in paragraph 2 to add an extra uncertainty for
 functions which were not considered is not in the spirit of the method described
@@ -27,7 +47,7 @@ Sec 4.5 in paragraphs 1 and 4.
 became very short, it was merged with Sec 6 to make a combined "Discussion and
 conclusions" section.
 
-6) Some discussion on the biases in Figure 12 has been added on Sec 4.4, 
+6) Some discussion on the biases in Figure 12 has been added in Sec 4.4, 
 resulting in changes to paragraphs 1 and 2.
 
 7) List item 1 in Sec 4.1 has been rewritten to give more detail on the method
