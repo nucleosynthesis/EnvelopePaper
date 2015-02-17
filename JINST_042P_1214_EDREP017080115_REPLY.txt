@@ -1,7 +1,8 @@
-1) [I think we decided this meant the ratio of the likelihoods at the true
-value and the best fit value. We separate the latter by right and wrong
-functions, while the former is the value on the envelope, irrespective of
-the function which is contributing. Nick or Matt will produce a plot of this.]
+1) Two new figures, now numbered 5 and 13, have been added to show examples of
+the chi2 distributions explicitly. This has resulted in changes to the text
+in Sec. 3.3, paragraphs 1 and 4, and in Sec. 4.4, paragraphs 1 and 2. These
+figures show that the non-chi2 terms do indeed appear to be negligible, as the
+referee suggested would be the case.
 
 2) One of the desirable properties of the method described is that it will
 "automatically" ignore any functions which do not fit particularly well as they
@@ -14,51 +15,54 @@ are then dropped and not fit explicitly later as it is known they do not
 contribute to the envelope. This is the reason why functions with more than six
 parameters are not included; they were found to give no significant improvement
 over those with six or less and hence gave no contribution when corrected for
-the number of parameters. In fact, as shown in Fig. 9, the 5 and 6 parameter
-polynomials which were retained only contribute beyond the 68.3% interval for
-the correction used. Hence, including higher order functions will have no effect
-on the result unless we are interested in going out beyond the 95.4% interval.
-We have added a sentence to the first paragraph of Sec 4.3 to this effect.
+the number of parameters. In fact, as shown in Fig. 10 (previously Fig. 9), the
+5 and 6 parameter polynomials which were retained only contribute beyond the 
+68.3% interval for the correction used. Hence, including higher order functions
+will have no effect on the result unless we are interested in going out beyond
+the 95.4% interval. We have added a sentence to the first paragraph of Sec. 4.3 
+to this effect.
 
 Using such higher order functions to generate toy datasets is therefore quite an
-extreme case, and as shown in Fig. 12, they do then give some bias. However, if
-the original dataset had had a more complex shape, and hence required higher
-order functions, then a wider range would have been used and this bias would
-have disappeared. This is now mentioned in the text as specified under the
-reply to item 6) below.
+extreme case, and as shown in Fig. 14 (previously Fig. 12), they do then give 
+some bias. However, if the original dataset had had a more complex shape, and 
+hence required higher order functions, then a wider range would have been used 
+and this bias would have disappeared. This is now mentioned in the text as 
+specified under the reply to item 6) below.
 
-We think that the suggestion in paragraph 2 to add an extra uncertainty for
-functions which were not considered is not in the spirit of the method described
-in the paper. It would not be quantifiable and so any value could not be
-defended. This goes against our aim of reducing arbitrary choices, as stated in
-Sec 1 of the paper. We believe we have a reasonable range of functions to
-describe the data well; others were tried but gave poor fits and so were not
-used in practice (although by definition they would have not contributed to the
-envelope if they had been included anyway). Hence, since we know of no way to
-give a value to a non-contributing-function uncertainty, we prefer not to
-include this in the paper.
+We think that the suggestion in the referee's paragraph 2 to add an extra 
+uncertainty for functions which were not considered is not in the spirit of the
+method described in the paper. It would not be quantifiable and so any value 
+could not be defended. This goes against our aim of reducing arbitrary choices,
+as stated in Sec. 1 of the paper. We believe we have a reasonable range of 
+functions to describe the data well; others were tried but gave poor fits and 
+so were not used in practice (although by definition they would have not 
+contributed to the envelope if they had been included anyway). Hence, since we 
+know of no way to give a value to a non-contributing-function uncertainty, we 
+prefer not to include this in the paper.
 
-3) The meaning of optimal has been explained further. Text has been added to
-Sec 4.5 in paragraphs 1 and 4.
+3) The meaning of "optimal" has been explained further. Text has been added to
+Sec. 4.5 in paragraphs 1 and 4.
 
-4) We agree that the scale for the larger intervals is compressed. Figs 6 and 14
-have been changed to show the "effective number of sigma" which results when
-selecting toys in the ensemble with a given Delta-log-likelihood. This seems to
-be equivalent to the ratio suggested by the referee but is simpler to implement,
-in particular for the point error calculation. The captions for the two figures
-have been modified, as has the last paragraph in Sec 3.3.
+4) We agree that the scale for the larger intervals is compressed. Figs. 7 and 
+15 (previously Figs. 6 and 13) have been changed to show the "effective number 
+of sigma" which results when selecting toys in the ensemble with a given 
+Delta-log-likelihood. This seems to be equivalent to the ratio suggested by the
+referee but is simpler to implement, in particular for the point error 
+calculation. The captions for the two figures have been modified, as has the 
+last paragraph in Sec 3.3.
 
-5) The text in Sec 5 has been shortened considerably. Since this section then
+5) The text in Sec. 5 has been shortened considerably. Since this section then
 became very short, it was merged with Sec 6 to make a combined "Discussion and
 conclusions" section.
 
-6) Some discussion on the biases in Fig. 12 has been added in Sec 4.4,
-resulting in changes to paragraphs 1 and 2.
+6) Some discussion on the biases in Fig. 14 (previous Fig. 12) has been added 
+in Sec. 4.4, resulting in changes to paragraphs 1 and 2.
 
-7) List item 1 in Sec 4.1 has been rewritten to give more detail on the method
-for calculating chi^prime-squared.
+7) The first list item in Sec. 4.1 has been rewritten to give more detail on 
+the method for calculating chi^prime-squared.
 
 8) The best fit values for the two main functions have been added to the text
-in Sec 3.2, in paragraph 3.
+in Sec. 3.2, in paragraph 3.
 
-9) The "+correction" on the y axes in Fig. 8 have been removed.
+9) The "+correction" on the y axes in Fig. 9 (previously Fig. 8) have been 
+removed.

@@ -144,14 +144,20 @@ curve which would be obtained using just the power law function.}
 \end{figure}
 
 
-\subsection{Bias and coverage}
+%\subsection{Bias and coverage}
+\subsection{Checks of the method}
 \label{sec:functions:coverage}
 
-The bias and coverage properties of this method were tested
+%The bias and coverage
+Properties of this method were studied
 using a large ensemble of
 pseudo-experiments (``toys''). In each pseudo-experiment, a
 dataset including signal and background events was generated using a Monte Carlo technique.
-Ensembles were generated, and consequently the bias and coverage properties tested, under various different background hypotheses and for different values of the signal strength, $\mu$. The background function from which the Monte Carlo events were generated was chosen to be one of the power law,
+Ensembles were generated %, and consequently the bias and coverage properties tested, 
+under various different background hypotheses and for different values of the signal strength, $\mu$.
+The resulting toy datasets are treated identically to the original dataset.
+
+The background function from which the Monte Carlo events were generated was chosen to be one of the power law,
 exponential or Laurent two-parameter functions discussed in
 Section~\ref{sec:functions:function}. The background parameters for generating the toys are set to their best fit values for the given value of $\mu$.
 
@@ -163,7 +169,33 @@ Conceptually, this method again
 treats the choice of function as a discrete nuisance parameter and so picks the
 best fit values of {\em all\/} nuisance parameters for each $\mu$ value.
 
-The resulting toy datasets are now treated identically to the original dataset. The bias and coverage are assessed by calculating the fitted signal strength, $\mu$, and its error, $\sigma$, for each toy when using different background models. The background functions fitted to the toy datasets were the four two-parameter functions discussed.
+Using the toy ensembles, a check was made of the change of the value of \nll between the best fit value and the value at the true value of $\mu$.
+Under the asymptotic approximation, this difference would be the same as a $\chi^2$ 
+distribution with one degree of freedom.
+Figure~\ref{fig:functions:chisq} shows an example of such a distribution. It is seen that it is close to the
+expected $\chi^2$ distribution, whether the best fit yields the same function as used to generate the toy dataset
+or yields a different function. It is seen this is true even though the best fit function is more often different from the generated function rather than being
+the same.
+This example is typical; checking all the functions used to generate the toy datasets, the toy fits give the same conclusion.
+This indicates that the actual function which contributes to the envelope is not
+an important factor in obtaining a correct result, 
+and hence treating the function used as a nuisance parameter (i.e.~one for 
+which the value is not important) is a sensible approach. 
+%
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=0.46\textwidth]{functions/gen_pow1_mu1_bias_hists_2parfamily_Correcion_0.pdf}
+\caption{Distribution of the difference of \nll between the \nll value with $\mu$ fixed to its true value and \nll at the best fit value
+of $\mu$. These values are from fits to toy datasets generated with the power law function, for which the parameters are fixed to the best fit values as described in the previous section.
+%as described in Sec.~\ref{sec:functions:example}. 
+The black data points are from the toy dataset fits and the green function
+shows the expected $\chi^2$ distribution for one degree of freedom. The blue and red histograms show the toy values separated into
+cases where the best fit uses the same or different functions, respectively, compared with the function used to generate the toys.}
+\label{fig:functions:chisq}
+\end{figure}
+
+The same toy datasets are also used to check the bias and coverage.
+These are assessed by calculating the fitted signal strength, $\mu$, and its error, $\sigma$, for each toy when using different background models. The background functions fitted to the toy datasets were the four two-parameter functions discussed.
 We define the bias as the mean of the pull distribution, where the pull for an individual toy dataset is defined as
 \begin{displaymath}
 	p(\mu,\sigma) = \frac{\hat{\mu}-\mu}{\sigma},

@@ -294,6 +294,37 @@ were generated using various individual functions and also the best fit
 functions for each $\mu$ value. The individual functions chosen were those
 which gave the lowest corrected \nll values in
 figure~\ref{fig:correction:profiles-pval}.
+
+Figure~\ref{fig:correction:chisq} shows examples of
+the distribution of the difference
+in \nll between the true and best fit values of $\mu$. These are shown for the
+three correction methods considered. In each case, the function used to generate
+the toy datasets was the one giving the best fit as determined from the 
+envelopes in figures~\ref{fig:correction:profiles-no} to 
+\ref{fig:correction:profiles-akaike}.
+Similarly to figure~\ref{fig:functions:chisq}, these indicate that the
+change in \nll is similar to the expected $\chi^2$ distribution and so
+is a reasonable basis on which to estimate the uncertainty using an
+asymptotic approximation.
+%
+\begin{figure}[tbp]
+\centering
+ \subfigure[]{\includegraphics[width=0.32\textwidth]{correction/gen_bern5_mu1_bias_hists_Correcion_0.pdf}
+\label{fig:correction:chiSq:a}}
+ \subfigure[]{\includegraphics[width=0.32\textwidth]{correction/gen_pow1_mu1_bias_hists_Correcion_1.pdf}
+\label{fig:correction:chiSq:b}}
+ \subfigure[]{\includegraphics[width=0.32\textwidth]{correction/gen_pow1_mu1_bias_hists_Correcion_2.pdf}
+\label{fig:correction:chiSq:c}}
+\caption{Distribution of the difference of \nll between the \nll value with $\mu$ fixed to its true value and \nll at the best fit value
+of $\mu$, (a) with no correction to \nll, (b) with the approximate p-value
+correction, and (c) with the Akaike correction.
+The black data points are from the toy dataset fits and the green function
+shows the expected $\chi^2$ distribution for one degree of freedom. The blue and red histograms show the toy values separated into
+cases where the best fit uses the same or different functions, respectively, compared with the function used to generate the toys.}
+\label{fig:correction:chisq}
+\end{figure}
+
+
 Figure~\ref{fig:correction:allorderbias} shows the average pull vs $\mu$
 for each choice of generating function, with the envelope based on the
 three correction methods considered, i.e.~approximate p-value, p-value
