@@ -1,5 +1,5 @@
 1) [I think we decided this meant the ratio of the likelihoods at the true
-value and the best fit value. We separate the latter by right and wrong 
+value and the best fit value. We separate the latter by right and wrong
 functions, while the former is the value on the envelope, irrespective of
 the function which is contributing. Nick or Matt will produce a plot of this.]
 
@@ -9,33 +9,33 @@ do not contribute to the envelope. Hence, in principle, every function which can
 be implemented in the software could be included in the set used. However, many
 of these can be quickly seen to be poor fits and including them further just
 slows down the calculation. Hence, in practice, a quick study is done fitting
-a wide range of functions to determine which give a poor fit. Such functions 
-are the dropped and not fit explicitly later as it is known they do not 
+a wide range of functions to determine which give a poor fit. Such functions
+are then dropped and not fit explicitly later as it is known they do not
 contribute to the envelope. This is the reason why functions with more than six
 parameters are not included; they were found to give no significant improvement
 over those with six or less and hence gave no contribution when corrected for
-the number of parameters. In fact, as shown in Fig 9, the 5 and 6 parameter
-polynomials which were retained only contribute beyond the 68.3% interval for 
+the number of parameters. In fact, as shown in Fig. 9, the 5 and 6 parameter
+polynomials which were retained only contribute beyond the 68.3% interval for
 the correction used. Hence, including higher order functions will have no effect
 on the result unless we are interested in going out beyond the 95.4% interval.
 We have added a sentence to the first paragraph of Sec 4.3 to this effect.
 
-Using such hgher order functions to generate toy datasets is therefore quite an
-extreme case, and as shown in Fig 12, they do then give some bias. However, if
+Using such higher order functions to generate toy datasets is therefore quite an
+extreme case, and as shown in Fig. 12, they do then give some bias. However, if
 the original dataset had had a more complex shape, and hence required higher
-order functions, then a wider range would have been used and this bias would 
+order functions, then a wider range would have been used and this bias would
 have disappeared. This is now mentioned in the text as specified under the
 reply to item 6) below.
 
 We think that the suggestion in paragraph 2 to add an extra uncertainty for
 functions which were not considered is not in the spirit of the method described
-in the paper. It would not be quantifiable and so and value could not be
+in the paper. It would not be quantifiable and so any value could not be
 defended. This goes against our aim of reducing arbitrary choices, as stated in
-Sec 1 of the paper. We believe we have a reasonable range of functions to 
+Sec 1 of the paper. We believe we have a reasonable range of functions to
 describe the data well; others were tried but gave poor fits and so were not
-used in practise (although by definition they would have not contributed to the
-envelope if they had been included anyway). Hence, since we know of no way to 
-give a value to a non-contributing-function uncertainty, we prefer not to 
+used in practice (although by definition they would have not contributed to the
+envelope if they had been included anyway). Hence, since we know of no way to
+give a value to a non-contributing-function uncertainty, we prefer not to
 include this in the paper.
 
 3) The meaning of optimal has been explained further. Text has been added to
@@ -52,7 +52,7 @@ have been modified, as has the last paragraph in Sec 3.3.
 became very short, it was merged with Sec 6 to make a combined "Discussion and
 conclusions" section.
 
-6) Some discussion on the biases in Figure 12 has been added in Sec 4.4, 
+6) Some discussion on the biases in Fig. 12 has been added in Sec 4.4,
 resulting in changes to paragraphs 1 and 2.
 
 7) List item 1 in Sec 4.1 has been rewritten to give more detail on the method
@@ -61,4 +61,4 @@ for calculating chi^prime-squared.
 8) The best fit values for the two main functions have been added to the text
 in Sec 3.2, in paragraph 3.
 
-9) The "+correction" on the y axes in figure 8 have been removed.
+9) The "+correction" on the y axes in Fig. 8 have been removed.

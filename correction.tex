@@ -5,7 +5,7 @@
 \label{sec:correction:corrections}
 
 The \nll calculated from the fit of a function to a dataset is purely a measure
-of the agreement of the function and the data; the 
+of the agreement of the function and the data; the
 number of parameters $N_{\rm par}$
 used in the function has no impact. Hence, at least for nested families of
 functions (such as polynomials of varying order), then the lowest \nll will
@@ -44,7 +44,7 @@ A new $\chi^{\prime 2}$
 value can now be obtained, namely that which would give the same p-value but
 with a different number of degrees of freedom,
 equal to the number of bins.
-Explicitly, the p-value $p$ is the upper 
+Explicitly, the p-value $p$ is the upper
 tail integral of the $\chi^2$ probability
 distribution which we write as
 \begin{displaymath}
@@ -60,7 +60,7 @@ and the corrected \nll is then given by
 \begin{displaymath}
 \Lambda_{\mathrm{corr}} = \textrm{\nll} + (\chi^{\prime 2} - \chi^2).
 \end{displaymath}
-In the work presented here, 
+In the work presented here,
 this correction was applied even though some bins in the fits
 have lower statistics,
 such that the \nll is not a particularly good approximation to the $\chi^2$.
@@ -124,7 +124,7 @@ For finite samples, then it is modified to
 \end{displaymath}
 where $n$ is the sample size, i.e.~the number of bins (for a binned likelihood
 fit) or events (for an unbinned likelihood fit). For large $n$, the original
-formula is clearly regained. 
+formula is clearly regained.
 Also the correction does not depend on the \nll value and
 so is a simple shift of
 the whole profile curve, without changing its shape.
@@ -242,9 +242,9 @@ reasonable description of the data.
 \caption{(a) Profiled \nll curves for all of the functions considered. The \nll value for each profile curve has been corrected using the Akaike correction of 2 per background parameter. The labels indicate the function and the value of $N_{\rm par}$. (b) Minimum envelope of the functions after applying a correction of 2 per background parameter to each \nll curve. The \nll scan when only considering the best fit function is shown in red.}
 \label{fig:correction:profiles-akaike}
 \end{figure}
- 
 
-In contrast, the case with no correction to \nll, shown in figure
+
+In contrast, the case with no correction to \nll, shown in
 figure~\ref{fig:correction:profiles-no}, shows that the highest order polynomial
 function used, with $N_{\rm par}=6$, defines the envelope across the whole
 range of $\mu$. This domination of the functions with the highest numbers of
@@ -296,14 +296,14 @@ which gave the lowest corrected \nll values in
 figure~\ref{fig:correction:profiles-pval}.
 Figure~\ref{fig:correction:allorderbias} shows the average pull vs $\mu$
 for each choice of generating function, with the envelope based on the
-three correction methods considered, i.e.~approximate p-value, p-value 
-and Akaike. 
+three correction methods considered, i.e.~approximate p-value, p-value
+and Akaike.
 Some obvious biases are seen, in particular for the cases when
 generating with polynomials of five or six parameters. It seems that in these
 cases, which are among the functions with the highest numbers of parameters,
 the generated data are too complex to be described well by the lower order
 functions. The choice of the Akaike correction makes the bias worse, as it
-tends to emphasise the contribution of lower order function to the envelope.
+tends to emphasise the contribution of lower order functions to the envelope.
 This effect could be reduced by working with even higher order functions, but
 these were not found to be needed to describe the original data and so were
 not included.
@@ -311,7 +311,7 @@ not included.
 However,
 even with the bias being a significant fraction of the error for some functions,
 it is seen that the approximate p-value and p-value corrections give
-effectively identical results. It is also found 
+effectively identical results. It is also found
 that the p-value corrections always give less bias than the Akaike correction.
 %
 \begin{figure}[tbp]
@@ -361,7 +361,7 @@ Akaike correction.
 }
 \caption{
 Measure of the fraction of the toys which do not contain the generated
-$\mu$ in various specified $\Lambda$ intervals, converted 
+$\mu$ in various specified $\Lambda$ intervals, converted
 into the two-sided score $|Z|$ in units of the equivalent Gaussian width,
 when correcting
 with the different \nll correction schemes.
@@ -436,15 +436,15 @@ Figure~\ref{fig:correction:allordererrvscorr} shows the mean of the difference
 between the best fit $\mu$ value and the true $\mu$, and also the 68.3\%
 statistical uncertainty on $\mu$ from the fit, calculated from the toy
 samples discussed above, as a function of $c$,
-both for the true $\mu=0$ and 1. It is seen that the $\mu$ offset
+for generated values of $\mu=0$ and 1. It is seen that the $\mu$ offset
 is generally small but increases with the correction value $c$. This is
-because lower order functions are favoured for large $c$ and these cannot
-necessarily describe more complicated shapes as well. Note the largest
+because lower order functions are favoured for large $c$ and these are not as good at
+describing more complicated shapes. Note the largest
 offset is found when generating with the six-parameter polynomial, as there
 are no other functions being used in this study which have a similar number
 of parameters.
 Conversely, the
-statistical error gets smaller for large $c$ as there tend to be less parameters
+statistical error gets smaller for large $c$ as there tend to be fewer parameters
 in the functions that contribute to the envelope.
 
 Clearly there is a trade off between statistical power and systematic bias. Furthermore, the
@@ -452,10 +452,10 @@ size of this effect is somewhat hidden by the fact that the highest order functi
 in this example only go up to six free parameters. If even higher order functions were considered
 the statistical uncertainty at low values of $c$ would become unnecessarily large.
 
-In principle, the results of figure~\ref{fig:correction:allordererrvscorr} 
+In principle, the results of figure~\ref{fig:correction:allordererrvscorr}
 could be used to choose an ``optimal'' value of $c$
-for a given dataset. Here, optimal means in some way trying to minimise 
-the overall uncertainty, which arises from some combination of 
+for a given dataset. Here, optimal means in some way trying to minimise
+the overall uncertainty, which arises from some combination of
 the bias and the statistical error.
 It is clear that such an optimal value will change with the
 amount of data as the
@@ -465,7 +465,7 @@ However, defining how to optimise the value is somewhat arbitrary. It depends
 on whether accurately knowing the true uncertainty on $\mu$ is critically
 important. The statistical error will be well known but the bias depends on the
 underlying background shape which is by definition not well known. Hence,
-how to weigh the relative important of these two contributions is not uniquely
+how to weigh the relative importance of these two contributions is not uniquely
 defined. For example, the offset and statistical error could be added in
 quadrature to give an estimate of the overall error. For the case of
 figure~\ref{fig:correction:allordererrvscorr}, this has its smallest
