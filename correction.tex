@@ -168,6 +168,9 @@ The profile curves from the fits of these functions are shown in
 figures~\ref{fig:correction:profiles-no},~\ref{fig:correction:profiles-pval} and~\ref{fig:correction:profiles-akaike} where results for three different
 corrections to \nll have been shown, namely no correction, the approximate
 p-value correction, and the Akaike correction respectively.
+These figures also show the 68.3\% and
+95.4\% confidence intervals which would be determined from the
+profile envelope. 
 
 Consider the example case of the approximate p-value correction,
 i.e.~correcting by one unit per background function parameter,
@@ -186,9 +189,8 @@ the $N_{\rm par}=5$ polynomial is the lowest function in the profile,
 while for $\mu > 1.68$,
 the $N_{\rm par}=6$ polynomial is lowest.
 Hence, the envelope is formed from four different functions in this
-case. Figures~\ref{fig:correction:profiles-no},~\ref{fig:correction:profiles-pval} and~\ref{fig:correction:profiles-akaike} also show the 68.3\% and
-95.4\% confidence intervals which would be determined from the
-profile envelope. The 68.3\% region is identical to that found using
+case. 
+The 68.3\% region is identical to that found using
 just the two-parameter functions (see Section~\ref{sec:functions:example}), but
 when including higher order functions, the 95.4\% confidence interval
 on $\mu$ is $-0.18 < \mu < 2.11$,
@@ -291,16 +293,15 @@ used, as long as $c \gtrsim 1$.
 
 In a similar way to Section~\ref{sec:functions:coverage}, toy datasets
 were generated using various individual functions and also the best fit
-functions for each $\mu$ value. The individual functions chosen were those
-which gave the lowest corrected \nll values in
-figure~\ref{fig:correction:profiles-pval}.
+functions for each $\mu$ value.
 
 Figure~\ref{fig:correction:chisq} shows examples of
 the distribution of the difference
 in \nll between the true and best fit values of $\mu$. These are shown for the
 three correction methods considered. In each case, the function used to generate
 the toy datasets was the one giving the best fit as determined from the 
-envelopes in figures~\ref{fig:correction:profiles-no} to 
+envelopes in figures~\ref{fig:correction:profiles-no}, 
+\ref{fig:correction:profiles-pval} and
 \ref{fig:correction:profiles-akaike}.
 Similarly to figure~\ref{fig:functions:chisq}, these indicate that the
 change in \nll is similar to the expected $\chi^2$ distribution and so
@@ -315,7 +316,7 @@ asymptotic approximation.
 \label{fig:correction:chiSq:b}}
  \subfigure[]{\includegraphics[width=0.32\textwidth]{correction/gen_pow1_mu1_bias_hists_Correcion_2.pdf}
 \label{fig:correction:chiSq:c}}
-\caption{Distribution of the difference of \nll between the \nll value with $\mu$ fixed to its true value and \nll at the best fit value
+\caption{Distribution of the difference $\Delta\nll$ between the \nll value with $\mu$ fixed to its true value and \nll at the best fit value
 of $\mu$, (a) with no correction to \nll, (b) with the approximate p-value
 correction, and (c) with the Akaike correction.
 The black data points are from the toy dataset fits and the green function
@@ -329,6 +330,9 @@ Figure~\ref{fig:correction:allorderbias} shows the average pull vs $\mu$
 for each choice of generating function, with the envelope based on the
 three correction methods considered, i.e.~approximate p-value, p-value
 and Akaike.
+The generating functions chosen were those
+which gave the lowest corrected \nll values in
+figure~\ref{fig:correction:profiles-pval}.
 Some obvious biases are seen, in particular for the cases when
 generating with polynomials of five or six parameters. It seems that in these
 cases, which are among the functions with the highest numbers of parameters,
@@ -472,7 +476,7 @@ is generally small but increases with the correction value $c$. This is
 because lower order functions are favoured for large $c$ and these are not as good at
 describing more complicated shapes. Note the largest
 offset is found when generating with the six-parameter polynomial, as there
-are no other functions being used in this study which have a similar number
+are few other functions being used in this study which have a similar number
 of parameters.
 Conversely, the
 statistical error gets smaller for large $c$ as there tend to be fewer parameters

@@ -70,7 +70,7 @@ The Laurent function is effectively identical to the power law function
 and so is hidden underneath the power law line.
 Note, for clarity in this plot, the
 data have been rebinned into 40 bins, although the fits were performed with
-finer binning of 160 bins.}
+a finer binning of 160 bins.}
 \label{fig:functions:bestfits}
 \end{figure}
 
@@ -172,10 +172,13 @@ best fit values of {\em all\/} nuisance parameters for each $\mu$ value.
 %Using the toy ensembles, a check was made of the change of the value of \nll between the best fit value and the value at the true value of $\mu$.
 %Under the asymptotic approximation, this difference would be the same as a $\chi^2$ 
 %distribution with one degree of freedom.
-The difference between \nll at the true (generating) value of $\mu$ and at the best fit value ($\Delta\nll$) is expected to be distributed, in the 
+
+The difference $\Delta\nll$  between \nll at the true (generating) value of $\mu$ and at the best fit value is expected to be distributed, in the 
 asymptotic limit, as a $\chi^{2}$ with one degree of freedom when considering a single function.
-Figure~\ref{fig:functions:chisq} shows an example of the distribution of $\Delta\nll$ in one of the ensemble of toys where for generating the toy datasets, 
-the power law is used as the background and $\mu=1$. The distribution is split into two cases; the toys for which the minimum of \nll is achieved with the 
+Figure~\ref{fig:functions:chisq} shows an example of the distribution of $\Delta\nll$ in one of the ensemble of toys, for which $\mu=1$ and
+the power law is used as the background function
+for generating the toy datasets.
+The distribution is split into two cases; the toys for which the minimum of \nll is achieved with the 
 power law (same function) and the toys for which one of the other three functions provides the minimum \nll.
 It is seen that the distribution in toys agrees well with a $\chi^2$ distribution in both cases separately and for the whole ensemble. 
 This is true even though the best fit function is more often different from the generated function rather than being the same.
@@ -186,8 +189,10 @@ and hence treating the function used as a nuisance parameter (i.e.~one for which
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.46\textwidth]{functions/gen_pow1_mu1_bias_hists_2parfamily_Correcion_0.pdf}
-\caption{Distribution of the difference of \nll between the \nll value with $\mu$ fixed to its true value and \nll at the best fit value
-of $\mu$. These values are from fits to toy datasets generated with the power law function, for which the parameters are fixed to the best fit values as described in the previous section.
+\caption{Distribution of the difference $\Delta\nll$
+between the \nll value with $\mu$ fixed to its true value and \nll at the best fit value
+of $\mu$. These values are from fits to toy datasets generated with 
+$\mu=1$ and with the power law function, for which the parameters are fixed to the best fit values as described in the previous section.
 %as described in Sec.~\ref{sec:functions:example}. 
 The black data points are from the toy dataset fits and the green function
 shows the expected $\chi^2$ distribution for one degree of freedom. The blue and red histograms show the distributions from the toys 
@@ -202,7 +207,9 @@ We define the bias as the mean of the pull distribution, where the pull for an i
 \begin{displaymath}
 	p(\mu,\sigma) = \frac{\hat{\mu}-\mu}{\sigma},
 \end{displaymath}
-where $\mu$ is the generated value of the signal strength, $\hat{\mu}$ is the fitted value of $\mu$ per toy and $\sigma$ is the positive error on $\hat{\mu}$ if $\hat{\mu} < \mu$ and is the negative error on $\hat{\mu}$ if $\hat{\mu} > \mu$. The results of the mean pull as a function of the generated signal strength are shown in figure~\ref{fig:functions:firstorderbias}. It can be seen, as one would expect, that when fitting back with the same background function as used to generate the toy dataset, the bias is negligible. It is also shown that the bias is not dependent on the value of $\mu$ used to generate the signal. However, when fitting back with a different background function the bias can be large; here giving a mean pull up to 0.5.
+where $\mu$ is the generated value of the signal strength, $\hat{\mu}$ is the fitted value of $\mu$ per toy and $\sigma$ is the positive error on $\hat{\mu}$ if $\hat{\mu} < \mu$ and is the negative error on $\hat{\mu}$ if $\hat{\mu} > \mu$. The results of the mean pull as a function of the generated signal strength are shown in figure~\ref{fig:functions:firstorderbias}. It can be seen, as one would expect, that when fitting with the same background function as used to generate the toy dataset, the bias is negligible.
+%It is also shown that the bias is not dependent on the value of $\mu$ used to generate the signal. NOTE TRUE FOR PROFILED CASE!
+However, when fitting with a different background function the bias can be large; here giving a mean pull up to 0.5.
 The discrete profiling method provides a medium between these two in which the bias is small (a mean pull of around 0.1) regardless of the generating function used. This is important given that this method is to be applied when the true underlying function is unknown.
 %
 \begin{figure}[tbp]
@@ -214,17 +221,19 @@ when the generating background function is the power law, exponential and Lauren
 respectively. Panel (d) shows the result when the best-fit function at each
 value of $\mu$ is used to generate toys; this means the exponential function
 below $\mu = 0.55$ and the power law function above this value. Within each panel the different
-points correspond to a different fitting function: Laurent (solid green), power law (open blue), exponential (open red) and the envelope of all four two-parameter functions (solid black). In all cases,
+points correspond to a different fitting function: Laurent (solid green), power law (open blue), exponential (open red) and the envelope of all four two-parameter functions (solid black). The power law values are effectively identical
+to those for the Laurent.
+In all cases,
 fitting with the polynomial gives values outside the range of these plots.}
 \label{fig:functions:firstorderbias}
 \end{figure}
 
 The coverage was tested, using the same fits, by determining the frequency with which the difference in \nll between the best fit value $\hat{\mu}$ and the value $\mu$ used to generate the signal was more than 0.25, 1, 4 and 9.
 %These frequencies were compared with the expected frequencies, 38.3\%, 68.3\%, 95.4\% and 99.7\% respectively.
-These were converted to a two-sided score, $|Z|$, and
+These were converted to a two-sided score $|Z|$, and
 compared with the expected values, namely
 0.5, 1, 2 and 3, respectively.
-The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different from the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. The coverage is found to be good,
+The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different from the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. This good coverage property is found to be
 independent of the value of $\mu$ used to generate the signal.
 %
 \begin{figure}[tbp]

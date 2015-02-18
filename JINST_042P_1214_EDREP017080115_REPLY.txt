@@ -1,3 +1,12 @@
+Dear Editor,
+Thank you for the comments from the referee to our paper, which were useful.
+Please find our responses to these comments below. The item numbering is the 
+same as that used by the referee. We have made modifications to the paper for 
+each of the nine issues raised, although we disagreed with one of the
+suggestions in item 2), as discussed below. The details of the changes are as 
+follows.
+
+
 1) Two new figures, now numbered 5 and 13, have been added to show examples of
 the chi2 distributions explicitly. This has resulted in changes to the text
 in Sec. 3.3, paragraphs 1 and 4, and in Sec. 4.4, paragraphs 1 and 2. These
@@ -17,7 +26,7 @@ parameters are not included; they were found to give no significant improvement
 over those with six or less and hence gave no contribution when corrected for
 the number of parameters. In fact, as shown in Fig. 10 (previously Fig. 9), the
 5 and 6 parameter polynomials which were retained only contribute beyond the 
-68.3% interval for the correction used. Hence, including higher order functions
+68.3% interval for the correction used. Including higher order functions
 will have no effect on the result unless we are interested in going out beyond
 the 95.4% interval. We have added a sentence to the first paragraph of Sec. 4.3 
 to this effect.
@@ -32,24 +41,24 @@ specified under the reply to item 6) below.
 We think that the suggestion in the referee's paragraph 2 to add an extra 
 uncertainty for functions which were not considered is not in the spirit of the
 method described in the paper. It would not be quantifiable and so any value 
-could not be defended. This goes against our aim of reducing arbitrary choices,
-as stated in Sec. 1 of the paper. We believe we have a reasonable range of 
-functions to describe the data well; others were tried but gave poor fits and 
-so were not used in practice (although by definition they would have not 
-contributed to the envelope if they had been included anyway). Hence, since we 
-know of no way to give a value to a non-contributing-function uncertainty, we 
-prefer not to include this in the paper.
+chosen could not be defended. This goes against our aim of reducing arbitrary 
+choices, as stated in Sec. 1 of the paper. We believe we have a reasonable 
+range of functions to describe the data well; others were tried but gave poor 
+fits and so were not used in practice (although by definition they would have 
+not contributed to the envelope if they had been included anyway). Hence, since
+we know of no way to give a value to a "non-contributing-function" uncertainty,
+we prefer not to include this in the paper.
 
 3) The meaning of "optimal" has been explained further. Text has been added to
 Sec. 4.5 in paragraphs 1 and 4.
 
-4) We agree that the scale for the larger intervals is compressed. Figs. 7 and 
-15 (previously Figs. 6 and 13) have been changed to show the "effective number 
-of sigma" which results when selecting toys in the ensemble with a given 
-Delta-log-likelihood. This seems to be equivalent to the ratio suggested by the
-referee but is simpler to implement, in particular for the point error 
-calculation. The captions for the two figures have been modified, as has the 
-last paragraph in Sec 3.3.
+4) We agree that the scale for the larger intervals is artificially compressed
+by the choice of this y axis variable. Figs. 7 and 15 (previously Figs. 6 and 
+13) have been changed to show the "effective number of sigma" which results 
+when selecting toys in the ensemble with a given Delta-log-likelihood. This 
+allows a more linear spread of the y axis scale. This seems to be equivalent to
+the ratio suggested by the referee. The captions for the two figures have been 
+modified, as has the last paragraph in Sec 3.3.
 
 5) The text in Sec. 5 has been shortened considerably. Since this section then
 became very short, it was merged with Sec 6 to make a combined "Discussion and
