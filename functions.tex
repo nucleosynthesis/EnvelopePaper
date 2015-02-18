@@ -169,18 +169,19 @@ Conceptually, this method again
 treats the choice of function as a discrete nuisance parameter and so picks the
 best fit values of {\em all\/} nuisance parameters for each $\mu$ value.
 
-Using the toy ensembles, a check was made of the change of the value of \nll between the best fit value and the value at the true value of $\mu$.
-Under the asymptotic approximation, this difference would be the same as a $\chi^2$ 
-distribution with one degree of freedom.
-Figure~\ref{fig:functions:chisq} shows an example of such a distribution. It is seen that it is close to the
-expected $\chi^2$ distribution, whether the best fit yields the same function as used to generate the toy dataset
-or yields a different function. It is seen this is true even though the best fit function is more often different from the generated function rather than being
-the same.
-This example is typical; checking all the functions used to generate the toy datasets, the toy fits give the same conclusion.
-This indicates that the actual function which contributes to the envelope is not
-an important factor in obtaining a correct result, 
-and hence treating the function used as a nuisance parameter (i.e.~one for 
-which the value is not important) is a sensible approach. 
+%Using the toy ensembles, a check was made of the change of the value of \nll between the best fit value and the value at the true value of $\mu$.
+%Under the asymptotic approximation, this difference would be the same as a $\chi^2$ 
+%distribution with one degree of freedom.
+The difference between \nll at the true (generating) value of $\mu$ and at the best fit value ($\Delta\nll$) is expected to be distributed, in the 
+asymptotic limit, as a $\chi^{2}$ with one degree of freedom when considering a single function.
+Figure~\ref{fig:functions:chisq} shows an example of the distribution of $\Delta\nll$ in one of the ensemble of toys where for generating the toy datasets, 
+the power law is used as the background and $\mu=1$. The distribution is split into two cases; the toys for which the minimum of \nll is achieved with the 
+power law (same function) and the toys for which one of the other three functions provides the minimum \nll.
+It is seen that the distribution in toys agrees well with a $\chi^2$ distribution in both cases separately and for the whole ensemble. 
+This is true even though the best fit function is more often different from the generated function rather than being the same.
+This example is typical; for all the functions used to generate the toy datasets, the distributions of $\Delta\nll$ give the same conclusion.
+This indicates that the actual function which contributes to the envelope is not an important factor in obtaining the correct result
+and hence treating the function used as a nuisance parameter (i.e.~one for which the value is not important) is a sensible approach. 
 %
 \begin{figure}[tbp]
 \centering
@@ -189,12 +190,13 @@ which the value is not important) is a sensible approach.
 of $\mu$. These values are from fits to toy datasets generated with the power law function, for which the parameters are fixed to the best fit values as described in the previous section.
 %as described in Sec.~\ref{sec:functions:example}. 
 The black data points are from the toy dataset fits and the green function
-shows the expected $\chi^2$ distribution for one degree of freedom. The blue and red histograms show the toy values separated into
-cases where the best fit uses the same or different functions, respectively, compared with the function used to generate the toys.}
+shows the expected $\chi^2$ distribution for one degree of freedom. The blue and red histograms show the distributions from the toys 
+separated into cases where the best fit uses the same or different functions, respectively, compared with the function used to generate the toys. 
+The dashed red and blue lines are $\chi^{2}$ distributions with one degree of freedom normalized to the number of toys in the red and blue histograms respectively.}
 \label{fig:functions:chisq}
 \end{figure}
 
-The same toy datasets are also used to check the bias and coverage.
+The same toy datasets were also used to check the bias and coverage.
 These are assessed by calculating the fitted signal strength, $\mu$, and its error, $\sigma$, for each toy when using different background models. The background functions fitted to the toy datasets were the four two-parameter functions discussed.
 We define the bias as the mean of the pull distribution, where the pull for an individual toy dataset is defined as
 \begin{displaymath}
@@ -219,9 +221,9 @@ fitting with the polynomial gives values outside the range of these plots.}
 
 The coverage was tested, using the same fits, by determining the frequency with which the difference in \nll between the best fit value $\hat{\mu}$ and the value $\mu$ used to generate the signal was more than 0.25, 1, 4 and 9.
 %These frequencies were compared with the expected frequencies, 38.3\%, 68.3\%, 95.4\% and 99.7\% respectively.
-These were converted to a two-sides scoe $|Z|$ and
-compared with the expected intervals from a Gaussian distribution, namely
-0.5, 1, 2 and 3 times the Gaussian width, respectively.
+These were converted to a two-sided score, $|Z|$, and
+compared with the expected values, namely
+0.5, 1, 2 and 3, respectively.
 The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different from the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. The coverage is found to be good,
 independent of the value of $\mu$ used to generate the signal.
 %
@@ -237,7 +239,7 @@ independent of the value of $\mu$ used to generate the signal.
 \label{fig:functions:firstordercoverage:d}}
 \caption{Measure of the fraction of the toys which do not contain the generated
 $\mu$ in various specified $\Lambda$ intervals, converted
-into the two-sided score $|Z|$ in units of the equivalent Gaussian width.
+into the two-sided score $|Z|$.
 The intervals are
 $\Delta\Lambda$ of 0.25 (a), 1.0 (b), 4.0 (c) and 9.0 (d).
 These results are obtained by fitting using a single
