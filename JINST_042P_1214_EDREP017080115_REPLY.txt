@@ -2,9 +2,7 @@ Dear Editor,
 Thank you for the comments from the referee to our paper, which were useful.
 Please find our responses to these comments below. The item numbering is the 
 same as that used by the referee. We have made modifications to the paper for 
-each of the nine issues raised, although we disagreed with one of the
-suggestions in item 2), as discussed below. The details of the changes are as 
-follows.
+each of the nine issues raised. The details of the changes are as follows.
 
 
 1) Two new figures, now numbered 5 and 13, have been added to show examples of
@@ -55,17 +53,17 @@ Sec. 4.5 in paragraphs 1 and 4.
 4) We agree that the scale for the larger intervals is artificially compressed
 by the choice of this y axis variable. Figs. 7 and 15 (previously Figs. 6 and 
 13) have been changed to show the "effective number of sigma" which results 
-when selecting toys in the ensemble with a given Delta-log-likelihood. This 
+when selecting toys in the ensemble with a given delta-log-likelihood. This 
 allows a more linear spread of the y axis scale. This seems to be equivalent to
 the ratio suggested by the referee. The captions for the two figures have been 
 modified, as has the last paragraph in Sec 3.3.
 
-5) The text in Sec. 5 has been shortened considerably. Since this section then
-became very short, it was merged with Sec 6 to make a combined "Discussion and
-conclusions" section.
+5) The text in Sec. 5 has been shortened considerably, as suggested. Since this
+section then became very short, it was merged with Sec 6 to make a combined 
+"Discussion and conclusions" section.
 
 6) Some discussion on the biases in Fig. 14 (previous Fig. 12) has been added 
-in Sec. 4.4, resulting in changes to paragraphs 1 and 2.
+in Sec. 4.4, resulting in changes to paragraphs 1 and 3 (previously 1 and 2).
 
 7) The first list item in Sec. 4.1 has been rewritten to give more detail on 
 the method for calculating chi^prime-squared.
