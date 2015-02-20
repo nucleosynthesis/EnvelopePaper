@@ -189,7 +189,7 @@ and hence treating the function used as a nuisance parameter (i.e.~one for which
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=0.46\textwidth]{functions/gen_pow1_mu1_bias_hists_2parfamily_Correcion_0.pdf}
-\caption{Distribution of the difference $\Delta\nll$
+\caption{Distribution of  $\Delta\nll$, the difference
 between the \nll value with $\mu$ fixed to its true value and \nll at the best fit value
 of $\mu$. These values are from fits to toy datasets generated with 
 $\mu=1$ and with the power law function, for which the parameters are fixed to the best fit values as described in the previous section.
@@ -214,7 +214,7 @@ The discrete profiling method provides a medium between these two in which the b
 %
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.8\textwidth]{functions/FirstOrderFunctions.pdf}
+\includegraphics[width=0.7\textwidth]{functions/FirstOrderFunctions.pdf}
 \caption{Average pull when fitting with each function as background and when
 using the discrete profiling method. Panels (a), (b) and (c) show the results
 when the generating background function is the power law, exponential and Laurent,
@@ -230,9 +230,10 @@ fitting with the polynomial gives values outside the range of these plots.}
 
 The coverage was tested, using the same fits, by determining the frequency with which the difference in \nll between the best fit value $\hat{\mu}$ and the value $\mu$ used to generate the signal was more than 0.25, 1, 4 and 9.
 %These frequencies were compared with the expected frequencies, 38.3\%, 68.3\%, 95.4\% and 99.7\% respectively.
-These were converted to a two-sided score $|Z|$, and
+These were converted to the modulus of a two-sided $Z$-score $|Z|$, and
 compared with the expected values, namely
-0.5, 1, 2 and 3, respectively.
+0.5, 1, 2 and 3, respectively~\footnote{These correspond to the areas outside
+the corresponding numbers of standard deviations for a normal distribution.}.
 The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different from the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. This good coverage property is found to be
 independent of the value of $\mu$ used to generate the signal.
 %
