@@ -1,0 +1,47 @@
+Consistency error:
+
+Page 7, line 5:
+Old
+"(i.e.~the function minimizing \nll)"
+New
+"(i.e.~the function minimising \nll)"
+
+Grammatical error:
+
+Page 13, Sec 4.3, line 13:
+Old
+"Indeed, comparison to figure 3"
+New
+"Indeed, comparison with figure 3"
+
+
+Changes in response to the second set of referee's comments:
+
+Page 8, caption of figure 5: requested to add more information
+Old
+"compared with the function used to generate the toys.
+The dashed red and blue lines are"
+New
+"compared with the function used to generate the toys. The power law
+(same function) was the best fit function in 34.1\% of the toys, 
+while the Laurent and exponential were the best fit functions in 
+36.5\% and 29.4\% of the toys, respectively. The dashed red and 
+blue lines are"
+
+
+Page 8, footnote: for clarity, reword footnote and move its position 
+in the text.
+
+Wording of footnote:
+Old
+"These correspond to the areas outside the corresponding numbers of 
+standard deviations for a normal distribution."
+New
+"These correspond to toys which lie outside the corresponding standard
+deviations for a normal distribution."
+
+Position of footnote:
+Old position
+"namely 0.5, 1, 2 and 3, respectively^[footnote]."
+New position at end of previous sentence
+"used to generate the signal was more than 0.25, 1, 4 and 9^[footnote]."
