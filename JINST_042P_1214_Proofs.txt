@@ -1,6 +1,6 @@
 Consistency error:
 
-Page 7, line 5:
+Page 7, paragraph 2, line 2:
 Old
 "(i.e.~the function minimizing \nll)"
 New
@@ -8,7 +8,7 @@ New
 
 Grammatical error:
 
-Page 13, Sec 4.3, line 13:
+Page 13, paragraph 3, line 5:
 Old
 "Indeed, comparison to figure 3"
 New
@@ -17,7 +17,7 @@ New
 
 Changes in response to the second set of referee's comments:
 
-Page 8, caption of figure 5: requested to add more information
+Page 8, caption of figure 5, line 7: requested to add more information
 Old
 "compared with the function used to generate the toys.
 The dashed red and blue lines are"
@@ -41,7 +41,7 @@ New
 deviations for a normal distribution."
 
 Position of footnote:
-Old position
+Old position, paragraph 2, line 4
 "namely 0.5, 1, 2 and 3, respectively^[footnote]."
-New position at end of previous sentence
+New position at end of previous sentence, paragraph 2, line 3
 "used to generate the signal was more than 0.25, 1, 4 and 9^[footnote]."
