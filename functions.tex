@@ -162,7 +162,7 @@ exponential or Laurent two-parameter functions discussed in
 Section~\ref{sec:functions:function}. The background parameters for generating the toys are set to their best fit values for the given value of $\mu$.
 
 In addition, a further ensemble of toy datasets was generated, for which the background function itself, as well
-as its parameters, was chosen according to the best fit (i.e.~the function minimizing \nll) for each value of $\mu$.
+as its parameters, was chosen according to the best fit (i.e.~the function minimising \nll) for each value of $\mu$.
 As can be seen from figure~\ref{fig:functions:profiles}, this means that for values of $\mu < 0.55$ the exponential background
 function will be used and it will be a power law function otherwise.
 Conceptually, this method again
@@ -197,6 +197,10 @@ $\mu=1$ and with the power law function, for which the parameters are fixed to t
 The black data points are from the toy dataset fits and the green function
 shows the expected $\chi^2$ distribution for one degree of freedom. The blue and red histograms show the distributions from the toys 
 separated into cases where the best fit uses the same or different functions, respectively, compared with the function used to generate the toys. 
+The power law
+(same function) was the best fit function in 34.1\% of the toys, 
+while the Laurent and exponential were the best fit functions in 
+36.5\% and 29.4\% of the toys, respectively.
 The dashed red and blue lines are $\chi^{2}$ distributions with one degree of freedom normalized to the number of toys in the red and blue histograms respectively.}
 \label{fig:functions:chisq}
 \end{figure}
@@ -228,12 +232,13 @@ fitting with the polynomial gives values outside the range of these plots.}
 \label{fig:functions:firstorderbias}
 \end{figure}
 
-The coverage was tested, using the same fits, by determining the frequency with which the difference in \nll between the best fit value $\hat{\mu}$ and the value $\mu$ used to generate the signal was more than 0.25, 1, 4 and 9.
+The coverage was tested, using the same fits, by determining the frequency with which the difference in \nll between the best fit value $\hat{\mu}$ and the value $\mu$ used to generate the signal was more than 0.25, 1, 4 and 
+9~\footnote{These correspond to toys which lie outside the corresponding
+standard deviations for a normal distribution.}.
 %These frequencies were compared with the expected frequencies, 38.3\%, 68.3\%, 95.4\% and 99.7\% respectively.
 These were converted to the modulus of a two-sided $Z$-score $|Z|$, and
 compared with the expected values, namely
-0.5, 1, 2 and 3, respectively~\footnote{These correspond to the areas outside
-the corresponding numbers of standard deviations for a normal distribution.}.
+0.5, 1, 2 and 3, respectively.
 The results for these are shown in figure~\ref{fig:functions:firstordercoverage}. It can be seen that when the fitting function is different from the generating function the calculated confidence interval can undercover, whereas when using the discrete profiling method the coverage is good regardless of the generating function. This good coverage property is found to be
 independent of the value of $\mu$ used to generate the signal.
 %
